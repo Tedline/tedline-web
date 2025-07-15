@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white dark:bg-zinc-900">
     <div class="relative isolate overflow-hidden bg-gradient-to-b from-zinc-100/20 dark:from-zinc-900/20">
-      <div class="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:py-40">
+      <div class="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:pt-40 lg:pb-20">
         <div class="px-6 lg:px-0 lg:pt-4 rtl:float-left ltr:float-right">
           <div class="mx-auto max-w-2xl">
             <div class="max-w-lg">
@@ -45,7 +45,7 @@
                       </svg>
                     </div>
                     <input type="search" id="default-search"
-                      class="block w-full p-4 rtl:pr-10 ltr:pl-24  text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 dark:focus:ring-blue-400 dark:focus:border-blue-400"
+                      class="block w-full p-4 rtl:pr-10 ltr:pl-24  text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800/60 dark:text-gray-100 dark:border-gray-800 dark:focus:ring-blue-400 dark:focus:border-blue-400"
                       :placeholder="$t('searchPlaceholder')" required />
                     <button type="submit"
                       class="text-white absolute rtl:end-2.5 ltr:start-2.5 bottom-2.5 bg-gradient-to-tl from-blue-600 to-blue-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:from-blue-700 dark:to-blue-500 dark:hover:bg-blue-900 dark:focus:ring-blue-700">{{ $t('search') }}</button>
