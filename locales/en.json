@@ -7,5 +7,13 @@
   "searchButton": "Search",
   "errorOccurred": "An error occurred",
   "tedline" : "Tedline",
-  "home": "Home"
+  "home": "Home",
+  "feature": {
+    "studentTitle": "For Students",
+    "studentDesc": "Start learning and expand your knowledge at any level. Every small step brings you closer to big achievements, and it’s never too late to learn.",
+    "teacherTitle": "For Teachers",
+    "teacherDesc": "Share your expertise and grow your knowledge. Teaching others strengthens your own understanding and expands your professional network.",
+    "instituteTitle": "For Institutes",
+    "instituteDesc": "Empower your team and build a culture of learning. Continuous improvement and knowledge sharing drive organizational success."
+  }
 }
