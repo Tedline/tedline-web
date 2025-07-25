@@ -15,9 +15,11 @@
     </Head>
 
     <!-- App layout -->
+  <UApp>
     <NuxtLayout class="dark:bg-black">
       <NuxtPage />
     </NuxtLayout>
+  </UApp>
 
 </template>
 

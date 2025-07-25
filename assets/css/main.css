@@ -1,10 +1,10 @@
 @import "tailwindcss";
+@import "@nuxt/ui";
 @config "../../tailwind.config.js";
 
 * {
     font-family: "IRANSansX";
 }
-
 
 .ltr {
     direction: ltr;

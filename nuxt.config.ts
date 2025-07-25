@@ -7,16 +7,19 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css','~/assets/css/fonts.css'],
   vite: {
     plugins: [
-      tailwindcss(),
+     
     ],
   },
+  ui: {
+    fonts: false
+  },
   modules: [
+    '@nuxt/ui',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     'nuxt-headlessui',
     'nuxt-swiper',
     '@nuxtjs/color-mode',
-    'nuxt-marquee'
   ],
   i18n: {
     locales: [
