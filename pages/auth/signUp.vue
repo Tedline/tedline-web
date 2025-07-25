@@ -1,36 +1,5 @@
 <template>
     <div>
-        <div v-if="active_section == 'get_number'">
-            <LoginForm :phoneNumber="phoneNumber" :error="error" :loading="loading"
-                @update:phoneNumber="val => phoneNumber = val" @update:loading="val => loading = val"
-                @loginSmsSent="onLoginSmsSent" @error="onError" />
-            <div class="mt-10 pb-6 flex rtl flex-items-center">
-                <p class=" text-sm text-center leading-6 ps-2 text-gray-500 ">
-                    اکانت ندارید؟
-                </p>
-                <p @click="active_section = 'register'"
-                    class="font-semibold text-sm text-center cursor-pointer leading-6 ps-2 text-indigo-600 hover:text-indigo-500">
-                    ثبت نام کنید</p>
-            </div>
-        </div>
-        <div v-if="active_section == 'get_code'">
-            <CodeEntry :phoneNumber="phoneNumber" :code="code" :error="error" :loading="loading"
-                @update:code="val => code = val" @update:loading="val => loading = val" @codeChecked="onCodeChecked"
-                @error="onError" />
-            <div v-if="isCooldownActive" class="text-indigo-500 flex  justify-center pt-5">
-                {{ Math.floor(cooldownTime / 60) }}:{{ ('0' + cooldownTime % 60).slice(-2) }} تا ارسال مجدد
-            </div>
-            <div v-else class="text-indigo-600 flex cursor-pointer justify-center pt-5">
-                <p @click="resendLoginSms">
-                    ارسال مجدد
-                </p>
-            </div>
-            <div class="mt-10 pb-6 flex ">
-                <p @click="active_section = 'get_number'"
-                    class="font-semibold text-center leading-6 cursor-pointer ps-2 text-indigo-600 hover:text-indigo-500">
-                    برگشت</p>
-            </div>
-        </div>
         <div v-if="active_section == 'register'">
             <SignupForm :first_name="first_name" :last_name="last_name" :email="email" :phoneNumber="phoneNumber"
                 :error="error" :loading="loading" @update:first_name="val => first_name = val"
@@ -50,8 +19,8 @@
             <SignupCodeEntry :phoneNumber="phoneNumber" :code="code" :error="error" :loading="loading"
                 @update:code="val => code = val" @update:loading="val => loading = val"
                 @signupCodeChecked="onSignupCodeChecked" @error="onError" />
-            <div v-if="isCooldownActive" class="text-indigo-500 flex  justify-center pt-5">
-                {{ Math.floor(cooldownTime / 60) }}:{{ ('0' + cooldownTime % 60).slice(-2) }} تا ارسال مجدد
+            <div v-if="isCountDownActive" class="text-indigo-500 flex  justify-center pt-5">
+                {{ Math.floor(countDownTime / 60) }}:{{ ('0' + countDownTime % 60).slice(-2) }} تا ارسال مجدد
             </div>
             <div v-else class="text-indigo-600 flex cursor-pointer justify-center pt-5">
                 <p @click="resendSignupSms">
@@ -81,9 +50,9 @@ export default {
     data() {
         return {
             error: null,
-            isCooldownActive: false,
-            cooldownInterval: null,
-            cooldownTime: 120, // 2 minutes in seconds
+            isCountDownActive: false,
+            countDownInterval: null,
+            countDownTime: 120, // 2 minutes in seconds
             active_section: 'get_number',
             first_name: '',
             last_name: '',
@@ -94,35 +63,24 @@ export default {
         }
     },
     methods: {
-        startCooldown() {
-            this.cooldownInterval = setInterval(() => {
-                if (this.cooldownTime > 0) {
-                    this.cooldownTime -= 1;
+        startCountDown() {
+            this.countDownInterval = setInterval(() => {
+                if (this.countDownTime > 0) {
+                    this.countDownTime -= 1;
                 } else {
-                    this.isCooldownActive = false;
-                    this.cooldownTime = 120;
-                    clearInterval(this.cooldownInterval);
+                    this.isCountDownActive = false;
+                    this.countDownTime = 120;
+                    clearInterval(this.countDownInterval);
                 }
             }, 1000);
-        },
-        onLoginSmsSent() {
-            this.active_section = 'get_code';
-            this.loading = false;
-            this.cooldownTime = 120;
-            clearInterval(this.cooldownInterval);
-            this.isCooldownActive = true;
-            this.startCooldown();
         },
         onSignupSmsSent() {
             this.active_section = 'get_code_signup';
             this.loading = false;
-            this.cooldownTime = 120;
-            clearInterval(this.cooldownInterval);
-            this.isCooldownActive = true;
-            this.startCooldown();
-        },
-        onCodeChecked() {
-            this.$router.go(this.$router.currentRoute);
+            this.countDownTime = 120;
+            clearInterval(this.countDownInterval);
+            this.isCountDownActive = true;
+            this.startCountDown();
         },
         onSignupCodeChecked() {
             this.$router.go(this.$router.currentRoute);
@@ -130,9 +88,6 @@ export default {
         onError(msg) {
             this.error = msg;
             this.loading = false;
-        },
-        resendLoginSms() {
-            this.active_section = 'get_number';
         },
         resendSignupSms() {
             this.active_section = 'register';

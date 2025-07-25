@@ -16,9 +16,9 @@
       </div>
     </div>
     <div>
-      <button type="submit" class="w-full bg-blue-600 text-white py-1.5 rounded-xl dark:bg-blue-700 dark:text-gray-100" :disabled="loading">
+      <UButton type="submit" class="w-full bg-blue-600 cursor-pointer justify-center rounded-xl" size="lg" :loading="loading">
         تایید
-      </button>
+      </UButton>
       <div v-if="loading">
         <svg aria-hidden="true" role="status" class="inline w-5 h-5 me-3 text-white animate-spin dark:text-gray-200" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill="#E5E7EB" />

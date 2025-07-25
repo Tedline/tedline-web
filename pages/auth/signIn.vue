@@ -6,8 +6,7 @@
                 <p class=" text-sm text-center leading-6 ps-2 text-gray-500 ">
                     اکانت ندارید؟
                 </p>
-                <p 
-                    class="text-sm text-center cursor-pointer leading-6 ps-2 text-blue-600 hover:text-blue-500">
+                <p class="text-sm text-center cursor-pointer leading-6 ps-2 text-blue-600 hover:text-blue-500">
                     ثبت نام کنید</p>
             </div>
         </div>
@@ -15,14 +14,14 @@
             <LoginForm :phoneNumber="phoneNumber" :error="error" :loading="loading"
                 @update:phoneNumber="val => phoneNumber = val" @update:loading="val => loading = val"
                 @loginSmsSent="onLoginSmsSent" @error="onError" />
-            
+
         </div>
         <div v-if="active_section == 'get_code'">
             <CodeEntry :phoneNumber="phoneNumber" :code="code" :error="error" :loading="loading"
                 @update:code="val => code = val" @update:loading="val => loading = val" @codeChecked="onCodeChecked"
                 @error="onError" />
-            <div v-if="isCooldownActive" class="text-indigo-500 flex  justify-center pt-5">
-                {{ Math.floor(cooldownTime / 60) }}:{{ ('0' + cooldownTime % 60).slice(-2) }} تا ارسال مجدد
+            <div v-if="isCountdownActive" class="text-indigo-500 flex  justify-center pt-5">
+                {{ Math.floor(countDownTime / 60) }}:{{ ('0' + countDownTime % 60).slice(-2) }} تا ارسال مجدد
             </div>
             <div v-else class="text-indigo-600 flex cursor-pointer justify-center pt-5">
                 <p @click="resendLoginSms">
@@ -42,14 +41,12 @@
 import { ref, onUnmounted } from 'vue'
 import LoginForm from '~/components/shared/auth/LoginForm.vue'
 import CodeEntry from '~/components/shared/auth/CodeEntry.vue'
-import SignupForm from '~/components/shared/auth/SignupForm.vue'
-import SignupCodeEntry from '~/components/shared/auth/SignupCodeEntry.vue'
 import { useRouter } from 'vue-router'
 
 const error = ref(null)
-const isCooldownActive = ref(false)
-const cooldownInterval = ref(null)
-const cooldownTime = ref(120) // 2 minutes in seconds
+const isCountdownActive = ref(false)
+const countDownInterval = ref(null)
+const countDownTime = ref(120) // 2 minutes in seconds
 const active_section = ref('get_number')
 const phoneNumber = ref('')
 const code = ref('')
@@ -58,13 +55,13 @@ const loading = ref(false)
 const router = useRouter()
 
 function startCooldown() {
-    cooldownInterval.value = setInterval(() => {
-        if (cooldownTime.value > 0) {
-            cooldownTime.value -= 1;
+    countDownInterval.value = setInterval(() => {
+        if (countDownTime.value > 0) {
+            countDownTime.value -= 1;
         } else {
-            isCooldownActive.value = false;
-            cooldownTime.value = 120;
-            clearInterval(cooldownInterval.value);
+            isCountdownActive.value = false;
+            countDownTime.value = 120;
+            clearInterval(countDownInterval.value);
         }
     }, 1000);
 }
@@ -80,9 +77,9 @@ useHead({
 function onLoginSmsSent() {
     active_section.value = 'get_code';
     loading.value = false;
-    cooldownTime.value = 120;
-    clearInterval(cooldownInterval.value);
-    isCooldownActive.value = true;
+    countDownTime.value = 120;
+    clearInterval(countDownInterval.value);
+    isCountdownActive.value = true;
     startCooldown();
 }
 
@@ -100,9 +97,8 @@ function resendLoginSms() {
 }
 
 onUnmounted(() => {
-    if (cooldownInterval.value) {
-        clearInterval(cooldownInterval.value);
+    if (countDownInterval.value) {
+        clearInterval(countDownInterval.value);
     }
 })
 </script>
-

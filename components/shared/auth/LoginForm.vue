@@ -18,9 +18,9 @@
       </div>
     </div>
     <div>
-      <button type="submit" class="w-full rounded-xl bg-blue-600 dark:bg-blue-700 text-white py-1.5" :disabled="loading">
+      <UButton type="submit" class="w-full cursor-pointer justify-center rounded-xl" size="lg" :loading="loading">
         {{$t('login.getCode')}}
-      </button>
+      </UButton>
       <div v-if="loading">
         <svg aria-hidden="true" role="status" class="inline w-5 h-5 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill="#E5E7EB" />
