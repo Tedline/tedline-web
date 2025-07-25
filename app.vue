@@ -1,5 +1,5 @@
 <template>
-  <div class="dark:bg-black">
+ 
     <!-- Fullscreen loading until app is ready -->
     <div v-if="!appLoaded" class="progress-bar-container">
       <div class="loader"></div>
@@ -11,14 +11,14 @@
 
     <!-- App Head -->
     <Head>
-      <Title>تدلاین</Title>
+      <Title>{{ $t('tedline') }}</Title>
     </Head>
 
     <!-- App layout -->
-    <NuxtLayout>
+    <NuxtLayout class="dark:bg-black">
       <NuxtPage />
     </NuxtLayout>
-  </div>
+
 </template>
 
 <script setup>

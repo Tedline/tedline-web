@@ -4,3 +4,8 @@
 * {
     font-family: "IRANSansX";
 }
+
+
+.ltr {
+    direction: ltr;
+}

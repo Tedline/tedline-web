@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     'nuxt-headlessui',
     'nuxt-swiper',
     '@nuxtjs/color-mode',
+    'nuxt-marquee'
   ],
   i18n: {
     locales: [

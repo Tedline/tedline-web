@@ -18,6 +18,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.10.0",
     "nuxt": "^3.17.5",
+    "nuxt-marquee": "^1.0.4",
     "nuxt-swiper": "^2.0.1",
     "pinia": "^3.0.3",
     "tailwindcss": "^4.1.11",

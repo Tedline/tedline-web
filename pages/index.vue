@@ -2,7 +2,7 @@
   <div>
    
     <SectionHomeHero />
-    <div class="container mx-auto">
+    <div class="container mx-auto max-w-7xl">
     <SectionHomeFeature />
       <SectionHomeSwiperCourses />
       <SectionHomeBlog />

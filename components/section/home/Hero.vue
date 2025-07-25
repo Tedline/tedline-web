@@ -28,7 +28,7 @@
                     {{ $t('title') }}
                   </span>
                 </span>
-                {{ $t('tedline') }}
+                {{ $t('tedline_hero') }}
               </h1>
               <p class="mt-6 text-md leading-8 text-gray-600 dark:text-gray-300">{{ $t('description') }}</p>
               <div class="mt-10 ">
@@ -45,15 +45,15 @@
                       </svg>
                     </div>
                     <input type="search" id="default-search"
-                      class="block w-full p-4 rtl:pr-10 ltr:pl-24  text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800/60 dark:text-gray-100 dark:border-gray-800 dark:focus:ring-blue-400 dark:focus:border-blue-400"
+                      class="block w-full p-4 rtl:pr-10 ltr:pl-24  text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800/60 dark:text-gray-100 dark:border-gray-800 focus:dark:ring-1 dark:focus:ring-blue-400 dark:focus:border-blue-400 focus:outline-none"
                       :placeholder="$t('searchPlaceholder')" required />
                     <button type="submit"
-                      class="text-white absolute rtl:end-2.5 ltr:start-2.5 bottom-2.5 bg-gradient-to-tl from-blue-600 to-blue-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:from-blue-700 dark:to-blue-500 dark:hover:bg-blue-900 dark:focus:ring-blue-700">{{ $t('search') }}</button>
+                      class="text-white absolute rtl:end-2.5 ltr:start-2.5 bottom-2.5 bg-gradient-to-tl from-blue-600 to-blue-400 hover:bg-blue-800 focus:ring-4  focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 dark:from-blue-700 dark:to-blue-500 dark:hover:bg-blue-900 dark:focus:ring-blue-700 focus:outline-none">{{ $t('search') }}</button>
                   </div>
                 </form>
 
                 <div v-if="pending"></div>
-                <div v-else-if="error" class="text-red-600 dark:text-red-400">An error occurred: {{ error.message }}</div>
+                <div v-else-if="error" class="max-w-md"> <UiError/></div>
                 <div v-else class="flex flex-wrap mt-2">
                   <span v-for="item in data" :key="item.id"
                     class="rounded-full mx-1 bg-slate-400/10 px-3 py-1 text-xs leading-5 text-slate-600 ring-1 ring-inset ring-slate-600/10 dark:bg-slate-700/20 dark:text-slate-200 dark:ring-slate-400/20">

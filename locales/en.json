@@ -6,8 +6,9 @@
   "searchPlaceholder": "Search among courses...",
   "searchButton": "Search",
   "errorOccurred": "An error occurred",
-  "tedline" : "Tedline",
+  "tedline_hero" : "Tedline",
   "home": "Home",
+  "more":"more",
   "feature": {
     "studentTitle": "For Students",
     "studentDesc": "Start learning and expand your knowledge at any level. Every small step brings you closer to big achievements, and it’s never too late to learn.",
@@ -15,5 +16,17 @@
     "teacherDesc": "Share your expertise and grow your knowledge. Teaching others strengthens your own understanding and expands your professional network.",
     "instituteTitle": "For Institutes",
     "instituteDesc": "Empower your team and build a culture of learning. Continuous improvement and knowledge sharing drive organizational success."
+  },
+  "coursesList": {
+    "bestSeller": "Best Seller",
+    "mostPopular": "Most Popular",
+    "discounted": "Discounted"
+  },
+  "login": {
+    "phoneNumber": "Phone Number",
+    "phonePlaceholder": "09 -- -- -- -- -- -- -- ",
+    "getCode": "Get Code",
+    "noUserError": "No user found with this number",
+    "noPhoneError": "Phone number is required"
   }
 }

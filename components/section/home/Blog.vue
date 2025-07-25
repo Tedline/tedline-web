@@ -1,5 +1,5 @@
 <template>
-    <div class=" py-24 sm:py-10 mx-10">
+    <div class=" py-24 sm:py-10">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="flex items-center justify-between">
                 <h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
@@ -91,7 +91,7 @@ const posts = [
             role: 'متخصص آموزش',
             href: '#',
             imageUrl:
-                'https://example.com',
+                '',
         },
     },
     {
@@ -109,7 +109,7 @@ const posts = [
             role: 'کارشناس آموزش',
             href: '#',
             imageUrl:
-                'https://example.com',
+                '',
         },
     },
     {
@@ -118,7 +118,7 @@ const posts = [
         href: '#',
         description:
             'با افزایش محبوبیت دوره‌های آنلاین، موفقیت در این دوره‌ها اهمیت زیادی پیدا کرده است. در این مقاله به روش‌های افزایش بهره‌وری و یادگیری مؤثر می‌پردازیم.',
-        imageUrl: '/images/2.jpg',
+        imageUrl: '',
         date: '20 اسفند 1402',
         datetime: '2024-03-10',
         category: { title: 'آموزش آنلاین', href: '#' },
@@ -127,7 +127,7 @@ const posts = [
             role: 'مدرس آنلاین',
             href: '#',
             imageUrl:
-                'https://example.com',
+                '',
         },
     },
 ];

@@ -1,7 +1,7 @@
 <template>
-    <div class="mx-auto grid max-w-7xl grid-cols-3 gap-x-4 px-6 pb-20 xl:gap-x-8">
+    <div class="mx-auto grid max-w-7xl grid-cols-3 gap-x-4 px-6 pb-20 xl:gap-x-8 ">
         <div v-for="item in products" :key="item.name"
-            class="group relative rounded-xl p-6 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-gray-900/60  dark:bg-stone-900/50">
+            class="group relative rounded-xl p-6 text-sm leading-6 hover:bg-gray-50  dark:border dark:border-stone-900 hover:dark:border-gray-900 dark:hover:bg-gray-900/60  dark:bg-stone-900/50 dark:hover:bg-gradient-to-br dark:hover:from-[#5242b8]/10 dark:hover:from-5% dark:hover:via-transparent dark:hover:via-50% dark:hover:to-transparent transition-colors duration-300">
             <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-50 group-hover:bg-white dark:bg-stone-800 dark:group-hover:bg-gray-900">
                 <component :is="item.icon" class="h-6 w-6 text-gray-600 group-hover:text-indigo-600 dark:text-gray-300 dark:group-hover:text-indigo-400"
                     aria-hidden="true" />
