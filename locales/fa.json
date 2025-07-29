@@ -25,9 +25,11 @@
   },
   "login": {
     "phoneNumber": "شماره موبایل",
-    "phonePlaceholder": "09 -- -- -- -- -- -- -- ",
+    "phonePlaceholder": "09 - - - - - - - ",
     "getCode": "دریافت کد",
     "noUserError": "کاربری با این شماره وجود ندارد",
-    "noPhoneError": "شماره موبایل وارد نشده است"
+    "noPhoneError": "شماره موبایل وارد نشده است",
+    "phoneLengthError": "شماره موبایل باید 11 رقم باشد",
+    "phoneFormatError": "شماره موبایل باید با 09 شروع شود"
   }
 }

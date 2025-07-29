@@ -12,9 +12,6 @@
           class="block w-full rounded-lg border-0 py-1.5 px-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 "
         />
       </div>
-      <div v-if="error">
-        <p class="text-red-600 text-xs pe-3 pt-3">{{ error }}</p>
-      </div>
     </div>
     <div>
       <button type="submit" class="w-full rounded-lg bg-blue-600 text-white py-2" :disabled="loading">
@@ -33,10 +30,12 @@
 import { useUserStore } from '~/store/user';
 import { useApi } from '~/composables/useApi';
 export default {
-  props: ['phoneNumber', 'code', 'error', 'loading'],
-  emits: ['update:code', 'signupCodeChecked', 'error'],
+  props: ['phoneNumber', 'code', 'loading'],
+  emits: ['update:code', 'signupCodeChecked', 'update:loading'],
   methods: {
     checkSignupCode() {
+      const toast = useToast();
+      
       if (this.code) {
         const api = useApi();
         this.$emit('update:loading', true);
@@ -56,11 +55,21 @@ export default {
           this.$emit('update:loading', false);
         })
         .catch(() => {
-          this.$emit('error', 'کد معتبر نیست');
+          toast.add({
+            title: 'خطا',
+            description: 'کد معتبر نیست',
+            color: 'red',
+            icon: 'i-heroicons-exclamation-triangle'
+          });
           this.$emit('update:loading', false);
         });
       } else {
-        this.$emit('error', 'کد وارد نشده است');
+        toast.add({
+          title: 'خطا',
+          description: 'کد وارد نشده است',
+          color: 'red',
+          icon: 'i-heroicons-exclamation-triangle'
+        });
       }
     }
   }

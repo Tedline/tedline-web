@@ -185,13 +185,13 @@ function closeLogin() {
             </PopoverGroup>
 
             <div class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right">
-                <nuxt-link to="/auth/signIn" @click.prevent="openLogin"
+                <NuxtLinkLocale to="/auth/signIn" @click.prevent="openLogin"
                     class="rounded-xl bg-gray-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0379e7] dark:bg-blue-600 dark:hover:bg-gray-700">
                     ورود
-                </nuxt-link>
-                <a href="#" class="text-sm font-semibold mx-3 leading-6 text-gray-900 dark:text-gray-100">
+                </NuxtLinkLocale>
+                <NuxtLinkLocale to="/auth/signUp" class="text-sm font-semibold mx-3 leading-6 text-gray-900 dark:text-gray-100">
                     ثبت نام
-                </a>
+                </NuxtLinkLocale>
             </div>
         </nav>
 

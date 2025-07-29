@@ -6,18 +6,14 @@
     <nav class="mt-8">
       <ul role="list" class="flex flex-col items-center space-y-1">
         <li v-for="item in navigation" :key="item.name">
-          <a
-            :href="item.href"
-            :class="[
-              item.current
-                ? 'bg-gray-500/20 text-white'
-                : 'text-gray-400 hover:text-white hover:bg-gray-500/50',
-              'group flex gap-x-3 rounded-xl p-3 text-sm leading-6 font-semibold ltr:float-left rtl:float-right'
-            ]"
+          <NuxtLinkLocale
+            :to="item.href"
+            active-class="bg-gray-500/20 text-white"
+            class= 'text-gray-400 hover:text-white hover:bg-gray-500/50 group flex gap-x-3 rounded-xl p-3 text-sm leading-6 font-semibold ltr:float-left rtl:float-right'
           >
             <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
             <span class="sr-only">{{ item.name }}</span>
-          </a>
+          </NuxtLinkLocale>
         </li>
       </ul>
     </nav>
@@ -43,7 +39,7 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const navigation = [
-    { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
+    { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
     { name: 'Team', href: '#', icon: UsersIcon, current: false },
     { name: 'Projects', href: '#', icon: FolderIcon, current: false },
     { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },

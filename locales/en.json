@@ -24,9 +24,11 @@
   },
   "login": {
     "phoneNumber": "Phone Number",
-    "phonePlaceholder": "09 -- -- -- -- -- -- -- ",
+    "phonePlaceholder": "09 - - - - - - - ",
     "getCode": "Get Code",
     "noUserError": "No user found with this number",
-    "noPhoneError": "Phone number is required"
+    "noPhoneError": "Phone number is required",
+    "phoneLengthError": "Your phone number must be 11 digits",
+    "phoneFormatError": "Your phone number must start with 09"
   }
 }

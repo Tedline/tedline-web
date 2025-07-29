@@ -50,10 +50,12 @@
 <script>
 import { useApi } from '~/composables/useApi';
 export default {
-  props: ['first_name', 'last_name', 'email', 'phoneNumber', 'error', 'loading'],
-  emits: ['update:first_name', 'update:last_name', 'update:email', 'update:phoneNumber', 'signupSmsSent', 'error'],
+  props: ['first_name', 'last_name', 'email', 'phoneNumber', 'loading'],
+  emits: ['update:first_name', 'update:last_name', 'update:email', 'update:phoneNumber', 'signupSmsSent', 'update:loading'],
   methods: {
     sendSignupSms() {
+      const toast = useToast();
+      
       if (this.phoneNumber) {
         const api = useApi();
         this.$emit('update:loading', true);
@@ -71,11 +73,21 @@ export default {
           this.$emit('update:loading', false);
         })
         .catch(() => {
-          this.$emit('error', 'ارسال پیامک ثبت نام ناموفق بود');
+          toast.add({
+            title: 'خطا',
+            description: 'ارسال پیامک ثبت نام ناموفق بود',
+            color: 'red',
+            icon: 'i-heroicons-exclamation-triangle'
+          });
           this.$emit('update:loading', false);
         });
       } else {
-        this.$emit('error', 'شماره موبایل وارد نشده است');
+        toast.add({
+          title: 'خطا',
+          description: 'شماره موبایل وارد نشده است',
+          color: 'red',
+          icon: 'i-heroicons-exclamation-triangle'
+        });
       }
     }
   }

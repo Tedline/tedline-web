@@ -1,18 +1,13 @@
 <template>
   <form @submit.prevent="checkCode" class="space-y-6">
     <div >
-      <div class="relative mt-2 rounded-xl shadow-sm">
-        <input
-          type="text"
-          placeholder="کد پیامک شده"
-          :value="code"
-          @input="$emit('update:code', $event.target.value)"
-          name="code"
-          id="code"
-          class="block w-full rounded-xl border-0 py-1.5 px-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 dark:bg-zinc-900 dark:text-gray-100 dark:ring-zinc-700 dark:placeholder:text-gray-400" />
-      </div>
-      <div v-if="error">
-        <p class="text-red-600 text-xs pe-3 pt-3 dark:text-red-400">{{ error }}</p>
+      <div class="flex justify-center mt-2 rounded-xl shadow-sm">
+        <UPinInput
+          size="xl"
+          :length="5"
+          v-model="codeValue"
+          otp
+        />
       </div>
     </div>
     <div>
@@ -32,11 +27,23 @@
 import { useUserStore } from '~/store/user';
 import { useApi } from '~/composables/useApi';
 export default {
-  props: ['phoneNumber', 'code', 'error', 'loading'],
-  emits: ['update:code', 'codeChecked', 'error'],
+  props: ['phoneNumber', 'code', 'loading'],
+  emits: ['update:code', 'codeChecked', 'update:loading'],
+  computed: {
+    codeValue: {
+      get() {
+        return this.code;
+      },
+      set(value) {
+        this.$emit('update:code', value);
+      }
+    }
+  },
   methods: {
     checkCode() {
-      if (this.code) {
+      const toast = useToast();
+      
+      if (this.code && this.code.length === 5) {
         const api = useApi();
         this.$emit('update:loading', true);
         api('/api/account/code_check/', {
@@ -55,11 +62,21 @@ export default {
           this.$emit('update:loading', false);
         })
         .catch(() => {
-          this.$emit('error', 'کد معتبر نیست');
+          toast.add({
+            title: 'خطا',
+            description: 'کد معتبر نیست',
+            color: 'red',
+            icon: 'i-heroicons-exclamation-triangle'
+          });
           this.$emit('update:loading', false);
         });
       } else {
-        this.$emit('error', 'کد وارد نشده است');
+        toast.add({
+          title: 'خطا',
+          description: 'کد 5 رقمی وارد نشده است',
+          color: 'red',
+          icon: 'i-heroicons-exclamation-triangle'
+        });
       }
     }
   }

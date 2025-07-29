@@ -11,15 +11,14 @@
             </div>
         </div>
         <div v-if="active_section == 'get_number'">
-            <LoginForm :phoneNumber="phoneNumber" :error="error" :loading="loading"
+            <LoginForm :phoneNumber="phoneNumber" :loading="loading"
                 @update:phoneNumber="val => phoneNumber = val" @update:loading="val => loading = val"
-                @loginSmsSent="onLoginSmsSent" @error="onError" />
+                @loginSmsSent="onLoginSmsSent" />
 
         </div>
         <div v-if="active_section == 'get_code'">
-            <CodeEntry :phoneNumber="phoneNumber" :code="code" :error="error" :loading="loading"
-                @update:code="val => code = val" @update:loading="val => loading = val" @codeChecked="onCodeChecked"
-                @error="onError" />
+            <CodeEntry :phoneNumber="phoneNumber" :code="code" :loading="loading"
+                @update:code="val => code = val" @update:loading="val => loading = val" @codeChecked="onCodeChecked" />
             <div v-if="isCountdownActive" class="text-indigo-500 flex  justify-center pt-5">
                 {{ Math.floor(countDownTime / 60) }}:{{ ('0' + countDownTime % 60).slice(-2) }} تا ارسال مجدد
             </div>
@@ -43,7 +42,6 @@ import LoginForm from '~/components/shared/auth/LoginForm.vue'
 import CodeEntry from '~/components/shared/auth/CodeEntry.vue'
 import { useRouter } from 'vue-router'
 
-const error = ref(null)
 const isCountdownActive = ref(false)
 const countDownInterval = ref(null)
 const countDownTime = ref(120) // 2 minutes in seconds
@@ -85,11 +83,6 @@ function onLoginSmsSent() {
 
 function onCodeChecked() {
     router.go(router.currentRoute.value)
-}
-
-function onError(msg) {
-    error.value = msg;
-    loading.value = false;
 }
 
 function resendLoginSms() {

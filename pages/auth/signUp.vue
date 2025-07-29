@@ -2,10 +2,10 @@
     <div>
         <div v-if="active_section == 'register'">
             <SignupForm :first_name="first_name" :last_name="last_name" :email="email" :phoneNumber="phoneNumber"
-                :error="error" :loading="loading" @update:first_name="val => first_name = val"
+                :loading="loading" @update:first_name="val => first_name = val"
                 @update:last_name="val => last_name = val" @update:email="val => email = val"
                 @update:phoneNumber="val => phoneNumber = val" @update:loading="val => loading = val"
-                @signupSmsSent="onSignupSmsSent" @error="onError" />
+                @signupSmsSent="onSignupSmsSent" />
             <div class="mt-10 pb-6 flex  flex-items-center">
                 <p class=" text-sm text-center leading-6 ps-2 text-gray-500 ">
                     اکانت دارید؟
@@ -16,9 +16,9 @@
             </div>
         </div>
         <div v-if="active_section == 'get_code_signup'">
-            <SignupCodeEntry :phoneNumber="phoneNumber" :code="code" :error="error" :loading="loading"
+            <SignupCodeEntry :phoneNumber="phoneNumber" :code="code" :loading="loading"
                 @update:code="val => code = val" @update:loading="val => loading = val"
-                @signupCodeChecked="onSignupCodeChecked" @error="onError" />
+                @signupCodeChecked="onSignupCodeChecked" />
             <div v-if="isCountDownActive" class="text-indigo-500 flex  justify-center pt-5">
                 {{ Math.floor(countDownTime / 60) }}:{{ ('0' + countDownTime % 60).slice(-2) }} تا ارسال مجدد
             </div>
@@ -49,7 +49,6 @@ export default {
     components: { ref, Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot, ExclamationTriangleIcon, LoginForm, CodeEntry, SignupForm, SignupCodeEntry },
     data() {
         return {
-            error: null,
             isCountDownActive: false,
             countDownInterval: null,
             countDownTime: 120, // 2 minutes in seconds
@@ -84,10 +83,6 @@ export default {
         },
         onSignupCodeChecked() {
             this.$router.go(this.$router.currentRoute);
-        },
-        onError(msg) {
-            this.error = msg;
-            this.loading = false;
         },
         resendSignupSms() {
             this.active_section = 'register';
