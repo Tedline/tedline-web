@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="`/shop/${course.id}`"
+  <NuxtLinkLocale :to="`/shop/${course.id}`"
     class="relative group transform transition-transform duration-300 hover:scale-[0.98] flex h-[330px] mb-5 flex-col justify-end overflow-hidden rounded-3xl">
     <img :src="course.image" alt="" class="absolute inset-x-0 top-0 bottom-0 w-full h-full object-cover" />
     <div aria-hidden="true"
@@ -26,7 +26,7 @@
         </div>
       </figcaption>
     </figure>
-  </NuxtLink>
+  </NuxtLinkLocale>
 </template>
 
 <script setup lang="ts">

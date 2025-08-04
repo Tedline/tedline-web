@@ -1,5 +1,5 @@
 <template>
-<div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-gray-900 dark:bg-gradient-to-t dark:from-[#110c2c] dark:from-70% dark:to-[#141651]   lg:pb-4 ltr:left-0 rtl:right-0">
+<div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:block lg:w-18 lg:overflow-y-auto lg:bg-gray-900 dark:bg-gradient-to-t dark:from-[#110c2c] dark:from-70% dark:to-[#141651]   lg:pb-4 ltr:left-0 rtl:right-0">
   <div class="flex h-full flex-col justify-between">
     
     <!-- Top section (nav buttons) -->

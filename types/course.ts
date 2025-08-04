@@ -6,7 +6,7 @@ export interface CourseListItem {
   id: number
   title: string
   progress_percent: string
-  registered: string
+  registered: boolean | string
   description: string
   price: number
   discount: number | null
@@ -17,4 +17,22 @@ export interface CourseListItem {
   teacher: Teacher
   institute: Institute
   session: Session[]
+}
+
+export interface CourseDetail extends CourseListItem {
+  skill: Skill[]
+  teachers: Teacher[]
+  prerequisite: CourseListItem[]
+  registered: boolean
+}
+
+export interface Skill {
+  id: number
+  title: string
+}
+
+export interface DiscountCode {
+  valid: boolean
+  is_percentage: boolean
+  amount: number
 }

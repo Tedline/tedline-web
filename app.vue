@@ -15,7 +15,7 @@
     </Head>
 
     <!-- App layout -->
-  <UApp>
+  <UApp >
     <NuxtLayout class="dark:bg-black">
       <NuxtPage />
     </NuxtLayout>
@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 const config = useRuntimeConfig()

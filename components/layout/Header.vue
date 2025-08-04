@@ -10,11 +10,7 @@ import {
 } from "@headlessui/vue";
 import {
     Bars3Icon,
-    ChartPieIcon,
     SquaresPlusIcon,
-    CursorArrowRaysIcon,
-    FingerPrintIcon,
-    ArrowPathIcon,
     XMarkIcon,
     AcademicCapIcon,
     BookOpenIcon,
@@ -27,6 +23,14 @@ import {
 
 } from "@heroicons/vue/20/solid";
 import { useRoute, useRouter } from "vue-router";
+
+// Props
+const props = defineProps({
+    hideUntilScroll: {
+        type: Boolean,
+        default: false
+    }
+});
 
 // محصولات مربوط به آموزش آنلاین
 const products = [
@@ -100,10 +104,10 @@ function closeLogin() {
     :class="[
         'fixed transition-all duration-500 z-50 w-full',
         isScrolled
-            ? 'bg-white border-b-1 border-gray-100 dark:bg-black dark:border-neutral-900 dark:shadow-xl'
-            : 'border-gray-50 dark:border-gray-900',
+            ? 'bg-white border-b-1 border-gray-100  dark:backdrop-blur-lg dark:bg-black/60 dark:border-neutral-700/20 dark:shadow-xl'
+            : hideUntilScroll ? 'sr-only border-gray-50/10 dark:border-gray-900/10' : 'border-gray-50 dark:border-gray-900/10',
     ]">
-        <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 py-4 lg:px-8" aria-label="Global">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 py-3 lg:px-8" aria-label="Global">
             <div class="flex lg:flex-1 rtl:float-left ltr:float-right">
                 <a href="#" class="-m-1.5 p-1.5">
                     <span class="sr-only">Tedline</span>
@@ -120,12 +124,12 @@ function closeLogin() {
                 </button>
             </div>
 
-            <PopoverGroup class="hidden lg:flex lg:gap-x-12 rtl:float-left ltr:float-right">
+            <PopoverGroup class="hidden lg:flex lg:gap-x-12 rtl:float-left ltr:float-right ">
                 <Popover class="relative">
                     <PopoverButton
-                        class="flex items-center gap-x-1 text-sm font-semibold leading-6 focus:ring-0 focus:border-0 focus:outline-none text-gray-900 dark:text-gray-100">
+                        class="flex items-center gap-x-1 text-sm leading-6 focus:ring-0 focus:border-0 focus:outline-none text-gray-900 dark:text-gray-100">
                         ابزار ها
-                        <ChevronDownIcon class="h-5 w-5 flex-none text-gray-400 dark:text-gray-300" aria-hidden="true" />
+                        <ChevronDownIcon class="h-5 w-5 flex-none text-gray-400 dark:text-gray-200" aria-hidden="true" />
                     </PopoverButton>
 
                     <Transition enter-active-class="transition ease-out duration-200"
@@ -133,14 +137,14 @@ function closeLogin() {
                         leave-active-class="transition ease-in duration-150"
                         leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
                         <PopoverPanel
-                            class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 dark:bg-gray-900 dark:ring-gray-700/50 rtl:left-8 ltr:-left-8">
-                            <div class="p-4">
+                            class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden bg-white rounded-3xl  shadow-lg     dark:bg-stone-900/70    rtl:left-8 ltr:-left-8">
+                            <div class="p-4 backdrop-blur-lg ">
                                 <div v-for="item in products" :key="item.name"
-                                    class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-gray-800">
+                                    class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-black/10 ">
                                     <div
-                                        class="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white dark:bg-gray-800 dark:group-hover:bg-gray-900">
+                                        class="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white dark:bg-stone-800 dark:group-hover:bg-stone-900">
                                         <component :is="item.icon"
-                                            class="h-6 w-6 text-gray-600 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-blue-400"
+                                            class="h-6 w-6 text-gray-600 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white"
                                             aria-hidden="true" />
                                     </div>
                                     <div class="flex-auto">
@@ -156,32 +160,27 @@ function closeLogin() {
                     </Transition>
                 </Popover>
 
-                <router-link to="/blogs" :class="[
-                    'text-sm font-semibold leading-6',
-                    pathname === '/blogs'
-                        ? 'text-[#0379e7] dark:text-blue-400'
-                        : 'text-gray-900 dark:text-gray-100',
+                <NuxtLinkLocale to="/blogs"
+                active-class="text-[#0379e7] dark:text-blue-400"
+                :class="[
+                    'text-sm  leading-6','text-gray-900 dark:text-gray-100',
                 ]">
                     وبلاگ
-                </router-link>
+                </NuxtLinkLocale>
 
-                <router-link to="/contact" :class="[
-                    'text-sm font-semibold leading-6',
-                    pathname === '/contact'
-                        ? 'text-[#0379e7] dark:text-blue-400'
-                        : 'text-gray-900 dark:text-gray-100',
+                <NuxtLinkLocale to="/contact" active-class="text-[#0379e7] dark:text-blue-400"
+                :class="[
+                    'text-sm  leading-6','text-gray-900 dark:text-gray-100',
                 ]">
                     تماس با ما
-                </router-link>
+                </NuxtLinkLocale>
 
-                <router-link to="/" :class="[
-                    'text-sm font-semibold leading-6',
-                    pathname === '/'
-                        ? 'text-[#0379e7] dark:text-blue-400'
-                        : 'text-gray-900 dark:text-gray-100',
+                <NuxtLinkLocale to="/" active-class="text-[#0379e7] dark:text-blue-400"
+                :class="[
+                    'text-sm  leading-6','text-gray-900 dark:text-gray-100',
                 ]">
                     صفحه ی اصلی
-                </router-link>
+                </NuxtLinkLocale>
             </PopoverGroup>
 
             <div class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right">

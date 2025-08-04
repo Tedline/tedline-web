@@ -26,7 +26,7 @@
     <!-- Static sidebar for desktop -->
     <LayoutSlideshow />
 
-    <div class="lg:rtl:pr-20 lg:ltr:pl-20">
+    <div class="lg:rtl:pr-18 lg:ltr:pl-18">
 
 
       <main>

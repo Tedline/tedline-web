@@ -17,29 +17,21 @@
     </div>
 
     <div class="px-4 sm:px-10">
-      <Swiper
-        :modules="[Navigation, Pagination]"
-        :spaceBetween="20"
-        :slides-per-view="1"
-        :breakpoints="{
-          640: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 4 },
-          1500: { slidesPerView: 5 },
-        }"
-        navigation
-        :pagination="{ clickable: true }"
-        class="w-full"
-        dir="rtl"
+      <UCarousel
+        :items="data"
+        loop
+        arrows
+        :ui="{ item: 'basis-1/4' ,}"
+        :autoplay="{ delay: 4000 }"
+        class="w-full ltr"
+        
       >
-        <SwiperSlide
-          v-for="item in data"
-          :key="item.id"
-          class="p-4"
-        >
-          <SharedCourseSecondCard :course="item" />
-        </SwiperSlide>
-      </Swiper>
+        <template #default="{ item }">
+          <div class="p-4" v-if="item">
+            <SharedCourseSecondCard :course="item as CourseListItem" />
+          </div>
+        </template>
+      </UCarousel>
     </div>
    
     <UiLoading v-if="pending" class="my-20" />
@@ -49,16 +41,11 @@
 
 
 <script setup lang="ts">
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Navigation, Pagination } from 'swiper/modules'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/vue/24/solid'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 import { useAsyncData } from 'nuxt/app';
 import axios from 'axios';
 import { useRuntimeConfig, useRoute } from '#app';
-
+import type { CourseListItem } from '~/types/course';
 
 // Access runtime config to get the baseURL from environment variables
 const config = useRuntimeConfig();
