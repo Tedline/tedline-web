@@ -4,8 +4,14 @@
 
 * {
     font-family: "IRANSansX";
+    
 }
 
 .ltr {
     direction: ltr;
+}
+
+
+.dark {
+  --ui-bg: var(--ui-color-dark,#000000);
 }

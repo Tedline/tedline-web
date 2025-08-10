@@ -90,13 +90,6 @@ export default {
         value = value.slice(0, 11);
       }
       
-      // Format the phone number with spaces for better readability
-      if (value.length >= 4) {
-        value = value.slice(0, 4) + ' ' + value.slice(4);
-      }
-      if (value.length >= 8) {
-        value = value.slice(0, 8) + ' ' + value.slice(8);
-      }
       
       // Validate and set error message
       if (value && value.replace(/\s/g, '').length > 0) {

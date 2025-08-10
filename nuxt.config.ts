@@ -38,7 +38,7 @@ export default defineNuxtConfig({
         dir: 'ltr', // Left-to-right for English
       },
     ],
-  
+    lazy:true,
     defaultLocale: 'fa', // Set Persian as default
     langDir: '../locales/', // Directory for translation files
     strategy: 'prefix_except_default', // URLs will have /en for English, but no prefix for Persian
@@ -56,7 +56,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       debug: process.env.DEBUG === 'true',
-      apiUrl: process.env.API_URL
+      apiUrl: process.env.API_URL,
+      apiImageProxyUrl: process.env.IMAGE_PROXY_API_URL
     }
   }
 })

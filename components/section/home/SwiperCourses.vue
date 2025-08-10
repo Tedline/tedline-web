@@ -4,6 +4,7 @@
       <h3 class="font-semibold flex text-gray-900 dark:text-gray-100">   
         {{ $t('coursesList.bestSeller') }}  
       </h3>
+      
       <div>
       <button class="mx-5 flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
        {{ $t('more') }}
@@ -42,18 +43,13 @@
 
 <script setup lang="ts">
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/vue/24/solid'
-import { useAsyncData } from 'nuxt/app';
-import axios from 'axios';
-import { useRuntimeConfig, useRoute } from '#app';
+import { useApi } from '~/composables/useApi'
+import { useAsyncData } from '#app'
 import type { CourseListItem } from '~/types/course';
 
-// Access runtime config to get the baseURL from environment variables
-const config = useRuntimeConfig();
-const route = useRoute();
+const api = useApi(false)  // false = optional token, true = require token
 
-// Use useAsyncData for server-side data fetching
-const { data, pending, error } = await useAsyncData('getCourseData', async () => {
-  const response = await axios.get(`https://tedline.org/api/course/HomeCourses/?ordering=?`);
-  return response.data.results;
-});
+const { data, pending, error } = await useLazyAsyncData('getCourseData', () => 
+api('/course/HomeCourses/?ordering=?').then((res: any) => res.results),
+)
 </script>

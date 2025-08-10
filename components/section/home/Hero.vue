@@ -96,7 +96,7 @@
 <script setup>
 import axios from 'axios';
 
-const { data, pending, error } = await useAsyncData('getCategoryData', async () => {
+const { data, pending, error } = await useLazyAsyncData('getCategoryData', async () => {
   const response = await axios.get(`https://tedline.org/api/course/CourseCategoryPopular/`);
   return response.data.slice(0, 4);;
 });

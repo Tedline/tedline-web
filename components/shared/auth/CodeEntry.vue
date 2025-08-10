@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="checkCode" class="space-y-6">
     <div >
-      <div class="flex justify-center mt-2 rounded-xl shadow-sm">
+      <div class="flex justify-center mt-2 rounded-xl ">
         <UPinInput
           size="xl"
           :length="5"
@@ -14,17 +14,10 @@
       <UButton type="submit" class="w-full bg-blue-600 cursor-pointer justify-center rounded-xl" size="lg" :loading="loading">
         تایید
       </UButton>
-      <div v-if="loading">
-        <svg aria-hidden="true" role="status" class="inline w-5 h-5 me-3 text-white animate-spin dark:text-gray-200" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#E5E7EB" />
-          <path fill="currentColor" />
-        </svg>
-      </div>
     </div>
   </form>
 </template>
 <script>
-import { useUserStore } from '~/store/user';
 import { useApi } from '~/composables/useApi';
 export default {
   props: ['phoneNumber', 'code', 'loading'],
@@ -46,9 +39,9 @@ export default {
       if (this.code && this.code.length === 5) {
         const api = useApi();
         this.$emit('update:loading', true);
-        api('/api/account/code_check/', {
+        api('/api/v1/account/login-code/', {
           method: 'POST',
-          body: { number: this.phoneNumber, code: this.code },
+          body: { number: this.phoneNumber, code: this.codeValue.join('') },
         })
         .then(response => {
           const userStore = useUserStore();

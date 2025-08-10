@@ -27,7 +27,6 @@
   </form>
 </template>
 <script>
-import { useUserStore } from '~/store/user';
 import { useApi } from '~/composables/useApi';
 export default {
   props: ['phoneNumber', 'code', 'loading'],

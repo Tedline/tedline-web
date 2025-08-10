@@ -21,7 +21,7 @@
                 </template>
             <UAvatar icon="lets-icons-user"
                 :src="
-                !course.institute ? `${useRuntimeConfig().public.apiUrl}/api/account/user_profile_image/${course.teacher.username}`
+                !course.institute ? `${useRuntimeConfig().public.apiImageProxyUrl}/api/account/user_profile_image/${course.teacher.username}`
                  : course.institute.image! "
                 size="sm"
                 :class="[ course.institute ? 'rounded-lg ring-white' :'rounded-full ring-white',' h-8.5 w-8.5 items-center justify-center   ring-2  dark:ring-gray-900 text-white']" />
