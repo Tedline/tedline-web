@@ -35,6 +35,9 @@
           <slot/>
         </div>
       </main>
+      <LayoutBottomNavigation />
+      <LayoutFooter />
+
     </div>
   </div>
 </template>

@@ -15,11 +15,13 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxt/ui',
+    'nuxt-time',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     'nuxt-headlessui',
     'nuxt-swiper',
     '@nuxtjs/color-mode',
+    '@nuxt/image'
   ],
   i18n: {
     locales: [
@@ -38,6 +40,7 @@ export default defineNuxtConfig({
         dir: 'ltr', // Left-to-right for English
       },
     ],
+
     lazy:true,
     defaultLocale: 'fa', // Set Persian as default
     langDir: '../locales/', // Directory for translation files
@@ -58,6 +61,22 @@ export default defineNuxtConfig({
       debug: process.env.DEBUG === 'true',
       apiUrl: process.env.API_URL,
       apiImageProxyUrl: process.env.IMAGE_PROXY_API_URL
+    }
+  },
+  image: {
+    // Use IPX (Nuxt’s built-in image optimizer)
+    provider: 'ipx',
+    domains: ['tedline.org'], 
+    // optional: define defaults
+    presets: {
+      thumbnail: {
+        modifiers: {
+          format: 'webp', // compress to WebP
+          quality: 70,    // reduce quality for compression
+          width: 600,     // resize
+        }
+      },
+      avatar_large: { modifiers: { width: 200, quality: 100, format: 'jpg' } }
     }
   }
 })

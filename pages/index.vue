@@ -3,9 +3,12 @@
    
     <SectionHomeHero />
     <div class="container mx-auto max-w-7xl">
-    <SectionHomeFeature />
-      <SectionHomeSwiperCourses />
-      <SectionHomeBlog />
+      <SectionHomeFeature />
+      <SectionHomeLink />
+      <SectionHomeMarketing />
+      <SectionHomeCourses :title="$t('coursesList.bestSeller')" />
+      <SectionHomeCategory />
+      <SectionHomeCourses :title="$t('coursesList.skill')" api-url="/course/HomeCourses/?ordering=?&exclude_category_slug=تحصیلی" />
   </div>
   </div>
 </template>

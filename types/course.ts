@@ -36,3 +36,8 @@ export interface DiscountCode {
   is_percentage: boolean
   amount: number
 }
+
+export interface Category {
+  id: number
+  title: string
+}

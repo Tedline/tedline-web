@@ -1,13 +1,13 @@
 <template>
     <NuxtLinkLocale :to="`/course/${course.id}`"
-        class="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-gray-100 transition-all duration-300 hover:scale-99  hover:border-gray-200 dark:bg-stone-900/70 dark:border-stone-900 dark:hover:bg-gray-900/60 dark:hover:border-gray-900">
+        class="group relative flex flex-col overflow-hidden rounded-3xl bg-white border border-gray-100 transition-all duration-300 hover:scale-99  hover:border-gray-200 dark:bg-stone-900/50 dark:border-stone-900 dark:hover:bg-gray-900/60 dark:hover:border-gray-900">
         <!-- Image Container -->
         <div class="relative aspect-[5/3] overflow-hidden">
-            <img :src="course.image" :alt="course.title"
-                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <NuxtImg :src="course.image" :alt="course.title" preset="thumbnail" loading="lazy"
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-103" />
             <!-- Teacher Avatar -->
             <div
-                class="absolute bg-white/40 rounded-lg backdrop-blur-md py-1 px-2 bottom-3 start-3 flex items-center text-[10px] text-gray-800 dark:bg-black/30 dark:text-gray-100">
+                class="absolute bg-white/60 rounded-full backdrop-blur-xs py-1 px-2 bottom-3 start-3 flex items-center text-[10px] text-gray-800 dark:bg-black/40 dark:text-gray-100">
                 <ClockIcon class="me-1 h-3 w-3" />
                 <span>{{ formatDuration(course.duration) }}</span>
             </div>
@@ -24,7 +24,7 @@
                 !course.institute ? `${useRuntimeConfig().public.apiImageProxyUrl}/api/account/user_profile_image/${course.teacher.username}`
                  : course.institute.image! "
                 size="sm"
-                :class="[ course.institute ? 'rounded-lg ring-white' :'rounded-full ring-white',' h-8.5 w-8.5 items-center justify-center   ring-2  dark:ring-gray-900 text-white']" />
+                :class="[ course.institute ? 'rounded-lg ring-white' :'rounded-full ring-white',' h-8.5 w-8.5 items-center justify-center   ring-3  dark:ring-gray-900 text-white']" />
             </UChip>
 
             <!-- Course Title -->

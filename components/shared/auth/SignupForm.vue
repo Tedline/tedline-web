@@ -57,9 +57,9 @@ export default {
       const toast = useToast();
       
       if (this.phoneNumber) {
-        const api = useApi();
+        const api = useApi(false);
         this.$emit('update:loading', true);
-        api('/api/account/sign-up-sms/', {
+        api('/account/sign-up-sms/', {
           method: 'POST',
           body: {
             first_name: this.first_name,

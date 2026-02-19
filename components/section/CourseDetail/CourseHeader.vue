@@ -9,7 +9,7 @@
       />
       
       <!-- Space-themed gradient overlay -->
-      <div class="absolute inset-0 bg-gradient-to-t  backdrop-blur-lg from-white via-white/60 dark:from-black dark:via-black/60 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t  dark:backdrop-blur-lg from-white via-white/60 dark:from-black dark:via-black/60 to-transparent"></div>
       <div class="absolute inset-0 bg-gradient-to-r from-white/40 dark:from-black/40 via-transparent to-white/20 dark:to-black/50"></div>
       <div class="absolute inset-0 bg-gradient-to-l from-white/40 dark:from-black/40 via-transparent to-white/20 dark:to-black/50"></div>
       
@@ -21,19 +21,19 @@
           <!-- Main Content Grid -->
           <div class="grid lg:grid-cols-4 gap-6 items-end">
             <!-- Course Info (3 columns) -->
-            <div class="lg:col-span-3 space-y-4">
+            <div class="lg:col-span-3 md:space-y-4">
               <!-- Course Title -->
               <div class="space-y-3">
-                <h1 class="text-xl  lg:text-3xl font-bold text-black dark:text-white leading-tight">
+                <h1 class="text-xl  lg:text-3xl font-bold text-center md:text-start text-black dark:text-white leading-tight">
                   {{ course.title }}
                 </h1>
-                <p v-if="course.description" class="text-sm  text-gray-700 dark:text-gray-200 max-w-2xl line-clamp-1 leading-relaxed">
+                <p v-if="course.description" class="text-sm  text-gray-700 text-center md:text-start dark:text-gray-200 max-w-2xl line-clamp-1 leading-relaxed">
                   {{ course.description }}
                 </p>
               </div>
 
               <!-- Course Stats -->
-              <div class="flex flex-wrap gap-4">
+              <div class="flex justify-center md:justify-start flex-wrap gap-4">
                 <div class="flex items-center gap-2 text-black/80 dark:text-white/80 ">
                   <UIcon name="i-heroicons-users" class="w-4 h-4 text-blue-400" />
                   <span class="text-xs font-medium">{{ course.session?.length || 0 }} {{ $t('courseDetail.session') }}</span>
@@ -49,7 +49,7 @@
               </div>
 
               <!-- Action Buttons -->
-              <div class="flex gap-3 pt-2">
+              <div class="flex gap-3 pt-2 justify-center md:justify-start">
                 <!-- Register Button -->
                 <UButton
                   v-if="!course.registered && course.session.length > 0"
@@ -57,7 +57,7 @@
                   :disabled="loadingRegister"
                   @click="handleRegister"
                   size="lg"
-                  class="font-semibold rounded-xl shadow-lg "
+                  class="font-semibold rounded-full shadow-lg "
                 >
                   <UIcon name="i-heroicons-user-plus" class="w-5 h-5 me-2" />
                   {{ $t('courseDetail.registerInCourse') }}
@@ -66,12 +66,24 @@
                 <!-- View Lessons Button -->
                 <UButton
                   v-if="course.registered && course.session.length > 0"
-                  :to="`/course/learn/${course.id}/${course.session[0].id}`"
+                  :to="localePath(`/course/learn/${course.id}/${course.session[0].id}`)"
                   size="lg"
                   variant="solid"
-                  class="font-semibold rounded-xl"
+                  class="font-semibold rounded-full"
                 >
                   <UIcon name="i-heroicons-play" class="w-5 h-5 me-2" />
+                  {{ $t('courseDetail.viewLessons') }}
+                </UButton>
+
+                <!-- Share Button -->
+                <UButton
+                  v-if="!course.registered"
+                  :to="localePath(`/course/learn/${course.id}/${course.session[0].id}`)"
+                  size="lg"
+                  variant="ghost"
+                  class="rounded-full"
+                >
+                  <UIcon name="i-heroicons-play" class="w-5 h-5 mr-2" />
                   {{ $t('courseDetail.viewLessons') }}
                 </UButton>
 
@@ -80,7 +92,7 @@
                   @click="shareCourse"
                   size="lg"
                   variant="ghost"
-                  class="rounded-xl"
+                  class="rounded-full"
                 >
                   <UIcon name="i-heroicons-share" class="w-5 h-5 mr-2" />
                   {{ $t('courseDetail.share') }}
@@ -97,27 +109,8 @@
                 {{ $t('courseDetail.courseUpdating') }}
               </UAlert>
 
-              <!-- Registration Success Alert -->
-              <UAlert
-                v-if="course.registered && course.session.length > 0"
-                icon="i-heroicons-check-circle"
-                color="success"
-                variant="soft"
-                class="bg-green-500/20 border-green-500/30 text-green-800 dark:text-green-100 text-sm"
-              >
-                <div class="flex items-center justify-between">
-                  <span>{{ $t('courseDetail.alreadyRegistered') }}</span>
-                  <UButton
-                    :to="`/course/learn/${course.id}/${course.session[0].id}`"
-                    size="sm"
-                    color="success"
-                    variant="solid"
-                    class="rounded-xl"
-                  >
-                    {{ $t('courseDetail.view') }}
-                  </UButton>
-                </div>
-              </UAlert>
+              
+      
             </div>
 
             <!-- Side Panel (1 column) -->
@@ -172,6 +165,8 @@
 
 <script setup lang="ts">
 import type { CourseDetail } from '~/types/course'
+import { useLocalePath } from '#i18n'
+const localePath = useLocalePath()
 
 interface Props {
   course: CourseDetail
@@ -187,16 +182,6 @@ const emit = defineEmits<{
   share: []
 }>()
 
-function formatPrice(amount: number) {
-    if (amount === 0) return 'Free'
-    return amount.toLocaleString('en-US')
-}
-
-const calculateFinalPrice = () => {
-  if (props.course.price === 0) return 0
-  if (!props.course.discount) return props.course.price
-  return Math.round(props.course.price - (props.course.price * props.course.discount / 100))
-}
 
 const getInstructorImage = () => {
   if (props.course.institute?.image) return props.course.institute.image
@@ -218,9 +203,9 @@ const getInstructorName = () => {
 
 const navigateToInstructor = () => {
   if (props.course.institute) {
-    navigateTo(`/i/${props.course.institute.username}`)
+    navigateTo(localePath(localePath(`/i/${props.course.institute.username}`)))
   } else if (props.course.teacher) {
-    navigateTo(`/profile/${props.course.teacher.username}`)
+    navigateTo(localePath(`/profile/${props.course.teacher.username}`))
   }
 }
 

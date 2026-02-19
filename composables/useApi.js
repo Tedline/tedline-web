@@ -31,7 +31,7 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
       } else if (requireAuth) {
         // No token at all for a required-auth API → redirect immediately
         const localePath = useLocalePath()
-        router.push(localePath(`/login?redirect=${router.currentRoute.value.fullPath}`))
+        router.push(localePath(`/auth/signIn?redirect=${router.currentRoute.value.fullPath}`))
       }
     },
 
@@ -43,7 +43,7 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
         token.value = null
         refreshToken.value = null
         const localePath = useLocalePath()
-        if (requireAuth) router.push(localePath(`/login?redirect=${router.currentRoute.value.fullPath}`))
+        if (requireAuth) router.push(localePath(`/auth/signIn?redirect=${router.currentRoute.value.fullPath}`))
       }
     },
   })

@@ -1,96 +1,82 @@
 <template>
+  <Head>
+    <Title v-if="course">دوره {{ course!.title }}</Title>
+  </Head>
 
+  <LayoutHeader :hide-until-scroll="true" />
 
-    <Head>
-      <Title v-if="course.title">دوره {{ course.title }}</Title>
-    </Head>
+  <!-- Loading State -->
+  <div v-if="loading" class="min-h-screen ">
+    <USkeleton class="h-96 md:h-[390px]   mb-8"></USkeleton>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+      <!-- Hero Skeleton -->
 
-    <LayoutHeader :hide-until-scroll="true" />
-    
-    <!-- Loading State -->
-    <div v-if="loading" class="min-h-screen ">
-      <USkeleton class="h-96 md:h-[390px]   mb-8"></USkeleton>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-        <!-- Hero Skeleton -->
+      <!-- Tabs Skeleton -->
+      <div class="flex gap-4 mb-8">
+        <USkeleton class="h-10 w-32  rounded-lg "></USkeleton>
+        <USkeleton class="h-10 w-32  rounded-lg "></USkeleton>
+        <USkeleton class="h-10 w-32  rounded-lg "></USkeleton>
+      </div>
 
-        <!-- Tabs Skeleton -->
-        <div class="flex gap-4 mb-8">
-          <USkeleton class="h-10 w-32  rounded-lg "></USkeleton>
-          <USkeleton class="h-10 w-32  rounded-lg "></USkeleton>
-          <USkeleton class="h-10 w-32  rounded-lg "></USkeleton>
+      <!-- Content Skeleton -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-4">
+          <USkeleton class="h-32  rounded-lg "></USkeleton>
+          <USkeleton class="h-32  rounded-lg "></USkeleton>
+          <USkeleton class="h-32  rounded-lg "></USkeleton>
         </div>
-
-        <!-- Content Skeleton -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div class="lg:col-span-2 space-y-4">
-            <USkeleton class="h-32  rounded-lg "></USkeleton>
-            <USkeleton class="h-32  rounded-lg "></USkeleton>
-            <USkeleton class="h-32  rounded-lg "></USkeleton>
-          </div>
-          <div class="space-y-4">
-            <USkeleton class="h-24  rounded-lg "></USkeleton>
-            <USkeleton class="h-24  rounded-lg "></USkeleton>
-          </div>
+        <div class="space-y-4">
+          <USkeleton class="h-24  rounded-lg "></USkeleton>
+          <USkeleton class="h-24  rounded-lg "></USkeleton>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Course Content -->
-    <div v-else class="min-h-screen ">
-      <SectionCourseDetailCourseHeader :course="course" />
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <!-- Course Header -->
+  <!-- Course Content -->
+  <div v-else class="min-h-screen ">
+    <SectionCourseDetailCourseHeader :course="course!" @register="() => {handleRegister()}" />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:pt-8">
 
-        <!-- Tabs -->
-        <div class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-8 pb-10">
-          <div class="lg:col-span-2">
-            <UTabs :dir="currentLocale?.dir" variant="link" :items="tabs.map(tab => ({ ...tab, label: $t(tab.label) }))" class="w-full">
-              <template #details="{ item }">
-                <SectionCourseDetailCourseDetailsTab :course="course" />
-              </template>
-              <template #syllabus="{ item }">
-                <SectionCourseDetailCourseSyllabusTab :course="course" />
-              </template>
-              <template #prerequisites="{ item }">
-                <SectionCourseDetailCoursePrerequisitesTab :course="course" />
-              </template>
-            </UTabs>
-          </div>
-          <div class="lg:col-span-1">
-            <div class="sticky top-20 flex flex-col gap-5">
+
+      <!-- Tabs -->
+      <div class="mt-5 grid grid-cols-1 lg:grid-cols-3 md:gap-8 pb-10">
+        <div class="lg:col-span-1 mb-5">
+          <div class="sticky top-20 grid grid-cols-2 md:grid-cols-1 gap-5 mt-10">
             <div
-              class=" bg-green-400/10 border border-green-400/20 p-4 rounded-2xl hover:bg-green-400/20 hover:border-green-400/30 transition-all duration-200  ">
+              class=" bg-green-400/10 border border-green-400/20 md:p-4 p-2 rounded-2xl hover:bg-green-400/20 hover:border-green-400/30 transition-all duration-200  ">
               <div class="flex items-start justify-between mb-4">
                 <div class="flex items-center gap-3">
                   <div
                     class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
                     <UIcon
-                      :name="course.discount && course.discount > 0 ? 'i-heroicons-tag' : 'i-heroicons-currency-dollar'"
+                      :name="course!.discount && course!.discount > 0 ? 'i-heroicons-tag' : 'i-heroicons-currency-dollar'"
                       class="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $t('courseDetail.coursePrice') }}</h4>
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $t('courseDetail.coursePrice') }}
+                    </h4>
                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t('courseDetail.finalPrice') }}</p>
                   </div>
                 </div>
               </div>
 
-              <div v-if="course.price !== 0" class="space-y-2">
-                <div v-if="course.discount && course.discount > 0"
-                  class="text-sm text-gray-500 dark:text-gray-400 line-through">
-                  {{ formatPrice(course.price) }} تومان
+              <div v-if="course!.price !== 0" class="space-y-2">
+                <div v-if="course!.discount && course!.discount > 0"
+                  class="md:text-sm text-xs text-gray-500 dark:text-gray-400 line-through">
+                  {{ formatPrice(course!.price) }} تومان
                 </div>
-                <div class="text-lg font-bold text-emerald-700 dark:text-emerald-400">
+                <div class="md:text-lg  text-sm font-bold text-emerald-700 dark:text-emerald-400">
                   {{ formatPrice(calculateFinalPrice()) }} تومان
                 </div>
-                <div v-if="course.discount && course.discount > 0"
+                <div v-if="course!.discount && course!.discount > 0"
                   class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700">
                   <UIcon name="i-heroicons-sparkles" class="w-3 h-3 mr-1" />
-                  {{ course.discount }}% {{ $t('courseDetail.discount') }}
+                  {{ course!.discount }}% {{ $t('courseDetail.discount') }}
                 </div>
               </div>
-              <div v-else >
-                <div class="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{{ $t("free") }}</div>
+              <div v-else>
+                <div class="md:text-2xl text-lg font-bold text-emerald-700 dark:text-emerald-400">{{ $t("free") }}</div>
                 <div
                   class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700 mt-2">
                   <UIcon name="i-heroicons-gift" class="w-3 h-3 mr-1" />
@@ -101,7 +87,7 @@
 
             <!-- Duration Card -->
             <div
-              class="bg-blue-400/10 hover:bg-blue-400/20 border border-blue-400/20 hover:border-blue-400/30 rounded-2xl p-4 transition-all duration-200 ">
+              class="bg-blue-400/10 hover:bg-blue-400/20 border border-blue-400/20 hover:border-blue-400/30 rounded-2xl md:p-4 p-2 transition-all duration-200 ">
               <div class="flex items-start justify-between mb-4">
                 <div class="flex items-center gap-3">
                   <div
@@ -109,21 +95,41 @@
                     <UIcon name="i-heroicons-clock" class="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $t('courseDetail.courseDuration') }}</h4>
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ $t('courseDetail.courseDuration')
+                      }}</h4>
                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t('courseDetail.totalContentTime') }}</p>
                   </div>
                 </div>
               </div>
 
-              <div class="text-lg font-bold text-sky-700 dark:text-sky-400">
-                {{ formatDuration(course.duration) }}
+              <div class="md:text-lg text-sm font-bold text-sky-700 dark:text-sky-400">
+                {{ formatDuration(course!.duration) }}
               </div>
             </div>
           </div>
         </div>
+        <div class="lg:col-span-2">
+          <UTabs :dir="currentLocale?.dir" variant="link" :items="tabs.map(tab => ({ ...tab, label: $t(tab.label) }))"
+            class="w-full">
+            <template #details="{ item }">
+              <SectionCourseDetailCourseDetailsTab :course="course!" />
+            </template>
+            <template #syllabus="{ item }">
+              <SectionCourseDetailCourseSyllabusTab :course="course!" />
+            </template>
+            <template #prerequisites="{ item }">
+              <SectionCourseDetailCoursePrerequisitesTab :course="course!" />
+            </template>
+          </UTabs>
+        </div>
+        
       </div>
     </div>
-
+    <SectionCourseDetailRegistrationModal 
+      :course="course!" 
+      v-model:open="showRegistrationModal" 
+      :loadingRegister="loadingRegister" 
+    />
   </div>
 </template>
 
@@ -145,6 +151,7 @@ function formatPrice(amount: number) {
   return amount.toLocaleString('en-US')
 }
 
+const api = useApi(false)
 
 // Get i18n instance
 const { t } = useI18n()
@@ -160,18 +167,19 @@ function formatDuration(minutes: number) {
 
 // Route
 const route = useRoute()
+const localePath = useLocalePath()
 const courseId = route.params.id as string
-
-// State
-const course = ref<CourseDetail>({} as CourseDetail)
-const loading = ref(true)
 const loadingRegister = ref(false)
 const activeTab = ref('details')
 const showRegistrationModal = ref(false)
 const discountAmount = ref(0)
 
 // Store
-const { $toast } = useNuxtApp() as any
+const userStore = useUserStore()
+
+// Toast
+const toast = useToast()
+
 
 // Tabs configuration
 const tabs = [
@@ -195,48 +203,63 @@ const tabs = [
   }
 ]
 
-// Methods
-const fetchCourseData = async () => {
-  try {
-    loading.value = true
+// Fetch course data server-side (SEO-friendly) but only when accessed
+const { data: course, pending: loading, refresh: refreshCourse } = await useLazyAsyncData<CourseDetail>(
+  `course-${courseId}`,
+  () => api(`/course/RetrieveCourses/${courseId}/`),
+  {
+    server: true, // run on server-side render
+  }
+)
 
-    // Use the API composable if token is needed, otherwise use direct fetch
-    const response = await $fetch(`https://tedline.org/api/course/RetrieveCourses/${courseId}/`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    }) as CourseDetail
-
-    course.value = response
-  } catch (error) {
-    console.error('Error fetching course data:', error)
-    $toast.add({
-      title: 'خطا',
-      description: 'خطا در بارگذاری اطلاعات دوره',
-      color: 'red'
+function ShowaAlreadyRegisteredToast(){
+  if (course.value?.registered && course.value?.session.length > 0) {
+    toast.add({
+      description: t('courseDetail.alreadyRegistered'),
+      orientation:"horizontal",
+      actions:
+      [
+        {
+          label: t('courseDetail.view') ,
+          color: 'neutral',
+          variant: 'soft',
+          to: localePath(`/course/learn/${course.value?.id}/${course.value?.session[0].id}`),
+        }
+      ] 
     })
-  } finally {
-    loading.value = false
   }
 }
 
-const handleRegister = () => {
-  // Check if user is authenticated
-  const isAuthenticated = false // Replace with your auth check
+// show in server side
+if (import.meta.client) {
+  ShowaAlreadyRegisteredToast()
+}
 
-  if (!isAuthenticated) {
+// show in client side
+watch(course, (newVal) => {
+  if (newVal) {
+    ShowaAlreadyRegisteredToast()
+  }
+})
+
+
+const handleRegister = () => {
+
+
+  if (!userStore.isAuthenticated) {
     // Redirect to signup with return URL
     navigateTo(`/auth/signUp/?next=${courseId}`)
     return
   }
 
-  if (course.value.price > 0) {
+  if (course.value!.price > 0) {
     showRegistrationModal.value = true
   } else {
     registerFreeCourse()
   }
 }
+
+
 
 const handleRegistration = async (discountCode: string | null) => {
   try {
@@ -249,10 +272,9 @@ const handleRegistration = async (discountCode: string | null) => {
     }
   } catch (error) {
     console.error('Registration error:', error)
-    $toast.add({
+    toast.add({
       title: 'خطا',
       description: 'خطا در ثبت نام',
-      color: 'red'
     })
   } finally {
     loadingRegister.value = false
@@ -261,16 +283,10 @@ const handleRegistration = async (discountCode: string | null) => {
 }
 
 const registerFreeCourse = async () => {
-  const response = await $fetch(`https://tedline.org/api/course/RegisterCourseFree/${courseId}/`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
-  }) as any
+  const response = await api(`/course/RegisterCourseFree/${courseId}/`) as any
 
   // Redirect to first lesson
-  navigateTo(`/course/learn/${course.value.id}/${course.value.session[0].id}`)
+  navigateTo(`/course/learn/${course.value!.id}/${course.value!.session[0].id}`)
 }
 
 const registerPaidCourse = async (discountCode: string | null) => {
@@ -307,24 +323,21 @@ const checkDiscountCode = async (code: string) => {
         discountAmount.value = response.amount
       }
 
-      $toast.add({
+      toast.add({
         title: 'موفق',
         description: 'کد تخفیف اعمال شد',
-        color: 'green'
       })
     } else {
-      $toast.add({
+      toast.add({
         title: 'خطا',
         description: 'کد تخفیف معتبر نیست',
-        color: 'red'
       })
     }
   } catch (error) {
     console.error('Discount code error:', error)
-    $toast.add({
+    toast.add({
       title: 'خطا',
       description: 'مشکلی پیش آمده',
-      color: 'red'
     })
   }
 }
@@ -334,26 +347,25 @@ const shareCourse = () => {
 
   if (navigator.share) {
     navigator.share({
-      title: course.value.title,
-      text: course.value.description,
+      title: course.value!.title,
+      text: course.value!.description,
       url: url
     })
   } else {
     // Fallback to clipboard
     navigator.clipboard.writeText(url).then(() => {
-      $toast.add({
+      toast.add({
         title: 'موفق',
         description: 'لینک کپی شد',
-        color: 'green'
       })
     })
   }
 }
 
 const calculateCoursePrice = () => {
-  if (course.value.price === 0) return 0
-  if (!course.value.discount) return course.value.price
-  return course.value.price - (course.value.price * course.value.discount / 100)
+  if (course.value!.price === 0) return 0
+  if (!course.value!.discount) return course.value!.price
+  return course.value!.price - (course.value!.price * course.value!.discount / 100)
 }
 
 const calculateFinalPrice = () => {
@@ -361,10 +373,7 @@ const calculateFinalPrice = () => {
   return Math.max(0, coursePrice - discountAmount.value)
 }
 
-// Lifecycle
-onMounted(() => {
-  fetchCourseData()
-})
+
 </script>
 
 <style>

@@ -51,10 +51,7 @@
                   <UIcon name="i-heroicons-clock" class="w-4 h-4" />
                   <span>{{ $t('courseDetail.time') }}</span>
                 </div>
-                <div class="flex items-center gap-1">
-                  <UIcon name="i-heroicons-video-camera" class="w-4 h-4" />
-                  <span>{{ $t('courseDetail.video') }}</span>
-                </div>
+                
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@
   <section id="resources" class=" scroll-mt-14 sm:scroll-mt-32 sm:py-5" v-if="pending == false">
     <div class="flex justify-between items-center mx-10">
       <h3 class="font-semibold flex text-gray-900 dark:text-gray-100">   
-        {{ $t('coursesList.bestSeller') }}  
+        {{ title }}  
       </h3>
       
       <div>
@@ -22,7 +22,7 @@
         :items="data"
         loop
         arrows
-        :ui="{ item: 'basis-1/4' ,}"
+        :ui="{ item: 'basis-3/4 sm:basis-2/4 md:basis-1/4' ,}"
         :autoplay="{ delay: 4000 }"
         class="w-full ltr"
         
@@ -44,12 +44,22 @@
 <script setup lang="ts">
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/vue/24/solid'
 import { useApi } from '~/composables/useApi'
-import { useAsyncData } from '#app'
 import type { CourseListItem } from '~/types/course';
+
+// Define props to receive URL and title
+interface Props {
+  apiUrl?: string
+  title?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  apiUrl: '/course/HomeCourses/?ordering=?',
+  title: undefined
+})
 
 const api = useApi(false)  // false = optional token, true = require token
 
 const { data, pending, error } = await useLazyAsyncData('getCourseData', () => 
-api('/course/HomeCourses/?ordering=?').then((res: any) => res.results),
+api(props.apiUrl).then((res: any) => res.results),
 )
 </script>

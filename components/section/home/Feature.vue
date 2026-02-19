@@ -1,16 +1,16 @@
 <template>
-    <div class="mx-auto grid max-w-7xl grid-cols-3 gap-x-4 px-6 pb-20 xl:gap-x-8 ">
+    <div class="mx-auto grid max-w-7xl md:grid-cols-3 gap-x-4 px-6 pb-20 xl:gap-x-8 ">
         <div v-for="item in products" :key="item.name"
-            class="group relative rounded-xl p-6 text-sm leading-6 hover:bg-gray-50  dark:border dark:border-stone-900 hover:dark:border-gray-900 dark:hover:bg-gray-900/60  dark:bg-stone-900/50 dark:hover:bg-gradient-to-br dark:hover:from-[#5242b8]/10 dark:hover:from-5% dark:hover:via-transparent dark:hover:via-50% dark:hover:to-transparent transition-colors duration-300">
-            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-50 group-hover:bg-white dark:bg-stone-800 dark:group-hover:bg-gray-900">
-                <component :is="item.icon" class="h-6 w-6 text-gray-600 group-hover:text-indigo-600 dark:text-gray-300 dark:group-hover:text-indigo-400"
+            class="group relative rounded-3xl p-6 text-sm leading-6 dark:border    dark:border-stone-900 hover:dark:border-gray-900 dark:hover:bg-gray-900/60  dark:bg-stone-900/50 hover:bg-gradient-to-br hover:from-blue-50 dark:hover:from-[#5242b8]/10 hover:to-blue-100 dark:hover:from-5% dark:hover:via-transparent dark:hover:via-50% dark:hover:to-transparent  transition-colors duration-500">
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-50 group-hover:bg-blue-500/10 dark:bg-stone-800 dark:group-hover:bg-gray-900 transition-colors duration-500">
+                <component :is="item.icon" class="h-6 w-6 text-gray-600 group-hover:text-indigo-500 dark:text-gray-300 dark:group-hover:text-blue-600 transition-colors duration-500"
                     aria-hidden="true" />
             </div>
-            <a :href="item.href" class="mt-6 block font-semibold text-gray-900 dark:text-gray-100">
+            <a :href="item.href" class="mt-6 block font-semibold text-gray-900 dark:text-gray-100 ">
                 {{ item.name }}
                 <span class="absolute inset-0" />
             </a>
-            <p class="mt-1 text-gray-600 font-light dark:text-gray-400">{{ item.description }}</p>
+            <p class="mt-1 text-gray-600 font-light dark:text-gray-400 ">{{ item.description }}</p>
         </div>
     </div>
 </template>

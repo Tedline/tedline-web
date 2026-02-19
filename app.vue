@@ -2,7 +2,7 @@
 
     <!-- Nuxt system components -->
     <NuxtLoadingIndicator />
-    <VitePwaManifest />
+    <!-- <VitePwaManifest /> -->
     <!-- App Head -->
     <Head>
       <Title>{{ $t('tedline') }}</Title>

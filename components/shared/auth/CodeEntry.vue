@@ -37,9 +37,9 @@ export default {
       const toast = useToast();
       
       if (this.code && this.code.length === 5) {
-        const api = useApi();
+        const api = useApi(false);
         this.$emit('update:loading', true);
-        api('/api/v1/account/login-code/', {
+        api('/v1/account/login-code/', {
           method: 'POST',
           body: { number: this.phoneNumber, code: this.codeValue.join('') },
         })

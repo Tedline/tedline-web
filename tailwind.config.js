@@ -8,7 +8,13 @@ module.exports = {
     './app.vue',
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+        'spin-slower': 'spin 6s linear infinite',
+        'spin-fast': 'spin 0.5s linear infinite',
+      },
+    },
   },
   plugins: [],
 }

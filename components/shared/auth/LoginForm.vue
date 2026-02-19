@@ -131,13 +131,13 @@ export default {
         return;
       }
       
-      const api = useApi();
+      const api = useApi(false);
       this.$emit('update:loading', true);
       
       // Clean the phone number for API call
       const cleanPhone = this.phoneNumber.replace(/\s/g, '');
       
-      api(`/api/v1/account/login-sms/${cleanPhone}/`, {
+      api(`/v1/account/login-sms/${cleanPhone}/`, {
         method: 'POST',
       })
       .then(() => {

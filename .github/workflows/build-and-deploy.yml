@@ -1,0 +1,73 @@
+name: Build and Deploy Docker
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || 22 }}
+      DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+
+      RELEASE: ${{ secrets.RELEASE }}
+      DEBUG: ${{ secrets.DEBUG }}
+      API_URL: ${{ secrets.API_URL }}
+      IMAGE_PROXY_API_URL: ${{ secrets.IMAGE_PROXY_API_URL }}
+
+      APP_NAME: tedline-web
+      APP_PORT: 3000
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t tedline-web:ci .
+
+      - name: Save image to tar
+        run: |
+          docker save tedline-web:ci -o ./tedline-web-ci.tar
+          chmod 644 ./tedline-web-ci.tar
+
+      - name: Copy image to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
+          password: ${{ env.DEPLOY_PASSWORD }}
+          port: ${{ env.DEPLOY_PORT }}
+          source: tedline-web-ci.tar
+          target: /tmp
+
+      - name: Load and run on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
+          password: ${{ env.DEPLOY_PASSWORD }}
+          port: ${{ env.DEPLOY_PORT }}
+          envs: APP_NAME,APP_PORT,RELEASE,DEBUG,API_URL,IMAGE_PROXY_API_URL
+          script: |
+            set -euo pipefail
+
+            echo "Cleaning up Docker space..."
+            docker image prune -af
+            docker builder prune -af
+
+            echo "Loading new image..."
+            docker load -i /tmp/tedline-web-ci.tar
+            docker rm -f $APP_NAME || true
+            docker run -d --restart unless-stopped \
+              --name $APP_NAME \
+              -p ${APP_PORT}:3000 \
+              -e RELEASE=$RELEASE \
+              -e DEBUG=$DEBUG \
+              -e API_URL=$API_URL \
+              -e IMAGE_PROXY_API_URL=$IMAGE_PROXY_API_URL \
+              tedline-web:ci
+
+            rm -f /tmp/tedline-web-ci.tar
