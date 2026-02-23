@@ -106,6 +106,22 @@
     "mostPopular": "Most Popular",
     "discounted": "Discounted"
   },
+  "calendar": {
+    "badge": "Online Course Events",
+    "title": "Learning Calendar",
+    "subtitle": "Track course sessions and deadlines. Events are read-only for now.",
+    "card": {
+      "course": "Current Course",
+      "courseName": "Frontend Mastery",
+      "courseDesc": "Weekly live sessions + assignments",
+      "timeLeft": "Time Left To Finish",
+      "days": "{count} days",
+      "progress": "{percent} completed",
+      "nextEvent": "Next Event",
+      "nextEventTitle": "Live Q&A Session",
+      "nextEventTime": "Thursday, 18:00 - 19:30"
+    }
+  },
   "login": {
     "phoneNumber": "Phone Number",
     "phonePlaceholder": "09 - - - - - - - ",
@@ -116,14 +132,14 @@
     "phoneFormatError": "Your phone number must start with 09"
   },
   "marketing": {
-    "mobileTitle": "Learn Anywhere",
-    "mobileDesc": "Access your courses on any device, anytime. Our mobile-friendly platform ensures seamless learning whether you're on your phone, tablet, or computer.",
-    "performanceTitle": "Fast & Reliable",
-    "performanceDesc": "Experience lightning-fast loading times and smooth video playback. Our optimized platform ensures uninterrupted learning sessions.",
-    "securityTitle": "Secure Learning",
-    "securityDesc": "Your data and progress are protected with enterprise-grade security. Focus on learning while we handle your privacy and safety.",
-    "apiTitle": "Advanced Features",
-    "apiDesc": "Access powerful learning tools including progress tracking, interactive assessments, and personalized recommendations to enhance your educational journey."
+    "mobileTitle": "Interactive Player",
+    "mobileDesc": "Learn directly inside the video. Ask questions on any moment and get instant AI answers without leaving the lesson.",
+    "performanceTitle": "In-Video Q&A",
+    "performanceDesc": "Jump to the exact section you are stuck on, ask your question there, and keep your focus on the topic. The player can also ask you questions at key moments to reinforce learning.",
+    "securityTitle": "AI Prompts for Recall",
+    "securityDesc": "Take multiple‑choice quizzes and see your score on a live table to compete and improve with others.",
+    "apiTitle": "Flashcards That Match",
+    "apiDesc": "Review related flashcards tied to the current lesson to strengthen memory and speed up revision."
   },
   "profile": {
     "title": "Profile",

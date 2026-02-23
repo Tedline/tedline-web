@@ -1,10 +1,10 @@
 <template>
   <div class=" pb-24 sm:pb-24 ">
-    <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8 ltr">
+    <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8 ">
       <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
         <div class="relative lg:row-span-2">
-          <div class="absolute inset-px rounded-lg bg-white lg:rounded-l-4xl dark:bg-stone-900/50" />
-          <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
+          <div class="absolute inset-px rounded-lg bg-white lg:rounded-s-4xl dark:bg-stone-900/50" />
+          <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] lg:rounded-s-[calc(2rem+1px)]">
             <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
               <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center dark:text-white">{{ $t('marketing.mobileTitle') }}</p>
               <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center dark:text-gray-400">{{ $t('marketing.mobileDesc') }}</p>
@@ -15,7 +15,7 @@
               </div>
             </div>
           </div>
-          <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 lg:rounded-l-4xl dark:outline-white/15" />
+          <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 lg:rounded-s-4xl dark:outline-white/15" />
         </div>
         <div class="relative max-lg:row-start-1">
           <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-4xl dark:bg-stone-900/50" />
@@ -46,18 +46,18 @@
           <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 dark:outline-white/15" />
         </div>
         <div class="relative lg:row-span-2">
-          <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-b-4xl lg:rounded-r-4xl dark:bg-stone-900/50" />
-          <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
+          <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-b-4xl lg:rounded-e-4xl dark:bg-stone-900/50" />
+          <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-e-[calc(2rem+1px)]">
             <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
               <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center dark:text-white">{{ $t('marketing.apiTitle') }}</p>
               <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center dark:text-gray-400">{{ $t('marketing.apiDesc') }}</p>
             </div>
             <div class="relative min-h-120 w-full grow">
-              <div class="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl bg-gray-900 shadow-2xl outline outline-white/10 dark:bg-gray-900/60 dark:shadow-none">
+              <div class="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-ts-xl bg-gray-900 shadow-2xl outline outline-white/10 dark:bg-gray-900/60 dark:shadow-none">
                 <div class="flex bg-gray-900 outline outline-white/5">
                   <div class="-mb-px flex text-sm/6 font-medium text-gray-400">
-                    <div class="border-r border-b border-r-white/10 border-b-white/20 bg-white/5 px-4 py-2 text-white">NotificationSetting.jsx</div>
-                    <div class="border-r border-gray-600/10 px-4 py-2">App.jsx</div>
+                    <div class="border-e border-b border-r-white/10 border-b-white/20 bg-white/5 px-4 py-2 text-white">NotificationSetting.jsx</div>
+                    <div class="border-e border-gray-600/10 px-4 py-2">App.jsx</div>
                   </div>
                 </div>
                 <div class="px-6 pt-6 pb-14">
@@ -66,7 +66,7 @@
               </div>
             </div>
           </div>
-          <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 max-lg:rounded-b-4xl lg:rounded-r-4xl dark:outline-white/15" />
+          <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 max-lg:rounded-b-4xl lg:rounded-e-4xl dark:outline-white/15" />
         </div>
       </div>
     </div>
