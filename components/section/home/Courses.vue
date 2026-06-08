@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="px-4 sm:px-10">
+    <div class=" sm:px-10">
       <UCarousel
         :items="data"
         loop

@@ -18,3 +18,8 @@ html {
 .dark {
   --ui-bg: var(--ui-color-dark,#000000);
 }
+
+
+.card-hover-layout {
+  @apply hover:dark:border-gray-900 dark:hover:bg-gray-900/60  hover:bg-gradient-to-br hover:from-blue-50 dark:hover:from-[#5242b8]/10 hover:to-blue-100 dark:hover:from-5% dark:hover:via-transparent dark:hover:via-50% dark:hover:to-transparent  transition-colors duration-500;
+}

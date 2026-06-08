@@ -31,7 +31,16 @@
     "currency": "USD",
     "newest": "Newest",
     "oldest": "Oldest",
-    "mostLiked": "Most Liked"
+    "mostLiked": "Most Liked",
+    "priceRange": "Price range",
+    "minPrice": "Min price",
+    "maxPrice": "Max price",
+    "durationRange": "Duration range",
+    "minDuration": "Min duration",
+    "maxDuration": "Max duration",
+    "minDiscount": "Minimum discount",
+    "categorySlug": "Category slug",
+    "excludeCategorySlug": "Exclude category slug"
   },
   "courseDetail": {
     "skillsTitle": "Skills Acquired",
@@ -131,6 +140,51 @@
     "phoneLengthError": "Your phone number must be 11 digits",
     "phoneFormatError": "Your phone number must start with 09"
   },
+  "auth": {
+    "common": {
+      "errorTitle": "Error",
+      "verifyPhoneLabel": "Verify phone number",
+      "codeTitle": "Enter the verification code",
+      "stepOne": "Step 1 of 2",
+      "stepTwo": "Step 2 of 2",
+      "codeSentTo": "Enter the 5-digit code sent to {phone}.",
+      "resendIn": "{time} until resend",
+      "resend": "Resend",
+      "changePhone": "Change phone number",
+      "codeLengthError": "The 5-digit code has not been entered",
+      "invalidCode": "The code is not valid"
+    },
+    "layout": {
+      "title": "Online learning, simple and focused",
+      "description": "Sign in to continue your courses, events, and saved learning content.",
+      "courses": "Courses",
+      "learningPlan": "Learning plan",
+      "progress": "Progress"
+    },
+    "login": {
+      "pageTitle": "Sign in",
+      "phoneStepLabel": "Sign in with phone number",
+      "title": "Welcome to Tedline",
+      "description": "Enter the phone number connected to your account to continue.",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one"
+    },
+    "signup": {
+      "pageTitle": "Sign up",
+      "stepLabel": "Create account",
+      "title": "Sign up for Tedline",
+      "description": "Enter your first name, last name, and phone number so we can send your verification code.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "submit": "Sign up and get code",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "confirmAndEnter": "Confirm and enter",
+      "nameRequired": "Enter your first and last name",
+      "invalidPhone": "The phone number is not valid",
+      "smsFailed": "Sending the signup SMS failed"
+    }
+  },
   "marketing": {
     "mobileTitle": "Interactive Player",
     "mobileDesc": "Learn directly inside the video. Ask questions on any moment and get instant AI answers without leaving the lesson.",
@@ -139,7 +193,31 @@
     "securityTitle": "AI Prompts for Recall",
     "securityDesc": "Take multiple‑choice quizzes and see your score on a live table to compete and improve with others.",
     "apiTitle": "Flashcards That Match",
-    "apiDesc": "Review related flashcards tied to the current lesson to strengthen memory and speed up revision."
+    "apiDesc": "Review related flashcards tied to the current lesson to strengthen memory and speed up revision.",
+    "playerCaption": "Kinetic energy changes with the square of speed.",
+    "videoTime": "04:12 / 10:30",
+    "askAi": "Explain more with AI",
+    "playVideo": "Play video",
+    "videoQuestion": "Why does kinetic energy depend on speed squared as an object gets faster?",
+    "questionInitial": "Q",
+    "questionMoment": "Question moment: 02:18",
+    "playQuestionMoment": "Play question moment",
+    "quizTitle": "Physics quiz",
+    "quizScore": "+12 points",
+    "quizQuestion": "Which quantity is measured in newtons?",
+    "answerForce": "Force",
+    "correct": "Correct",
+    "answerEnergy": "Energy",
+    "answerPower": "Power",
+    "todayRank": "Today rank: 4",
+    "totalScore": "Total score: 860",
+    "physicsLesson": "Physics lesson",
+    "flashcardProgress": "3 of 12",
+    "flashcardLabel": "Related flashcard",
+    "flashcardQuestion": "What is kinetic energy?",
+    "flashcardAnswer": "The energy an object has because of its motion, related to mass and the square of speed.",
+    "nextCard": "Next",
+    "reviewed": "Reviewed"
   },
   "profile": {
     "title": "Profile",

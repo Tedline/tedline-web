@@ -40,4 +40,5 @@ export interface DiscountCode {
 export interface Category {
   id: number
   title: string
+  icon: string | null
 }

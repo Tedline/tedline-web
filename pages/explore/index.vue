@@ -28,7 +28,7 @@
             size="xl"
             class="w-3xl"
             :loading="loading"
-            @update:model-value="refreshData!"
+            @update:model-value="resetPage"
           >
             <template #trailing>
               <UButton
@@ -48,7 +48,7 @@
             :ui="{
               base: 'min-w-[140px] rounded-full py-3 px-3 md:block hidden',
             }"
-            @update:model-value="refreshData!"
+            @update:model-value="resetPage"
           />
           <UDrawer v-model:open="isFilterDrawerOpen" :modal="false">
             <UButton
@@ -65,7 +65,7 @@
                   :categories="categories"
                   v-model="filters"
                   :search-categories="searchCategories"
-                  @update:filters="refreshData!"
+                  @update:filters="resetPage"
                 />
               </div>
             </template>
@@ -116,7 +116,7 @@
               :categories="categories"
               v-model="filters"
               :search-categories="searchCategories"
-              @update:filters="refreshData!"
+              @update:filters="resetPage"
             />
           </div>
         </div>
@@ -126,6 +126,7 @@
           <!-- Mobile Filter Button -->
 
           <UTabs
+            v-model="activeTab"
             :items="tabItems.map((tab) => ({ ...tab, label: $t(tab.label) }))"
             variant="link"
             :ui="{ trigger: 'md:px-18 px-10' }"
@@ -162,7 +163,6 @@
               <div v-if="totalPages > 1" class="flex justify-center mt-8">
                 <UPagination
                   v-model:page="page"
-                  @update:page="refreshData!"
                   class="ltr"
                   :items-per-page="12"
                   :total="totalPages * 12"
@@ -221,7 +221,7 @@ defineShortcuts({
 
 const courses = computed(() => coursesData.value?.results || []);
 const totalPages = computed(() => coursesData.value?.total_pages || 1);
-const loading = computed(() => coursesLoading.value && blogsLoading.value);
+const loading = computed(() => coursesLoading.value || blogsLoading.value);
 const blogs = computed(() => blogsData.value?.results || []);
 const categories = ref<{ id: number; title: string }[]>([]);
 
@@ -232,11 +232,33 @@ const sortOptions = [
   { label: t("explore.mostLiked"), value: "most_liked" },
 ];
 
+const sortOrderingMap: Record<string, string> = {
+  newest: "-date_create",
+  oldest: "date_create",
+  most_liked: "-student_count",
+};
+
 const filters = ref({
   selectedCategoryIds: [] as number[],
   isFree: false,
   hasDiscount: false,
+  priceRange: [0, 10_000_000],
+  durationRange: [0, 1_000],
+  minDiscount: 0,
+  categorySlug: "",
+  excludeCategorySlug: "",
 });
+
+// Initial route params setup (SSR-safe)
+const route = useRoute();
+if (route.query.search) searchQuery.value = route.query.search as string;
+if (route.query.tab) activeTab.value = route.query.tab as "courses" | "blogs";
+if (route.query.category) {
+  const categoryId = parseInt(route.query.category as string);
+  if (!isNaN(categoryId)) {
+    filters.value.selectedCategoryIds = [categoryId];
+  }
+}
 
 const currentLocale = computed(() =>
   locales.value.find((l) => l.code === locale.value)
@@ -244,28 +266,32 @@ const currentLocale = computed(() =>
 
 const tabItems = [
   {
-    name: "courses",
+    value: "courses",
     label: t("explore.courses"),
     icon: "i-heroicons-academic-cap",
     slot: "courses" as const,
   },
   {
-    name: "blogs",
+    value: "blogs",
     label: t("explore.blogs"),
     icon: "i-heroicons-document-text",
     slot: "blogs" as const,
   },
 ];
 
-// Unique key for useAsyncData cache & refetch
-const fetchKey = computed(
+const courseFetchKey = computed(
   () =>
-    `${activeTab.value}-${page.value}-${searchQuery.value}-${
-      filters.value.isFree
-    }-${filters.value.hasDiscount}-${filters.value.selectedCategoryIds.join(
+    `${page.value}-${searchQuery.value}-${filters.value.isFree}-${
+      filters.value.hasDiscount
+    }-${filters.value.priceRange.join(
+      ","
+    )}-${filters.value.durationRange.join(",")}-${
+      filters.value.minDiscount
+    }-${filters.value.categorySlug}-${filters.value.excludeCategorySlug}-${filters.value.selectedCategoryIds.join(
       ","
     )}-${sortOption.value}`
 );
+const blogFetchKey = computed(() => searchQuery.value);
 const api = useApi(false); // false = optional token, true = require token
 
 // Main fetch for courses/blogs
@@ -275,35 +301,51 @@ const {
   pending: coursesLoading,
   refresh: refreshCourses,
 } = await useLazyAsyncData(
-  `courses-${page.value}-${searchQuery.value}-${filters.value.isFree}-${
-    filters.value.hasDiscount
-  }-${filters.value.selectedCategoryIds.join(",")}-${sortOption.value}`,
+  "explore-courses",
   async () => {
     const params = new URLSearchParams();
     params.append("page", page.value.toString());
     if (searchQuery.value) params.append("search", searchQuery.value);
     if (filters.value.isFree) params.append("is_free", "true");
     if (filters.value.hasDiscount) params.append("is_discount", "true");
+    if (filters.value.priceRange[0] > 0) {
+      params.append("min_price", filters.value.priceRange[0].toString());
+    }
+    if (filters.value.priceRange[1] < 10_000_000) {
+      params.append("max_price", filters.value.priceRange[1].toString());
+    }
+    if (filters.value.durationRange[0] > 0) {
+      params.append("min_duration", filters.value.durationRange[0].toString());
+    }
+    if (filters.value.durationRange[1] < 1_000) {
+      params.append("max_duration", filters.value.durationRange[1].toString());
+    }
+    if (filters.value.minDiscount > 0) {
+      params.append("min_discount", filters.value.minDiscount.toString());
+    }
+    if (filters.value.categorySlug.trim()) {
+      params.append("category_slug", filters.value.categorySlug.trim());
+    }
+    if (filters.value.excludeCategorySlug.trim()) {
+      params.append(
+        "exclude_category_slug",
+        filters.value.excludeCategorySlug.trim()
+      );
+    }
     if (filters.value.selectedCategoryIds.length > 0) {
       params.append("categories", filters.value.selectedCategoryIds.join(","));
     }
     if (sortOption.value) {
       params.append(
         "ordering",
-        sortOption.value === "newest"
-          ? "-created_at"
-          : sortOption.value === "oldest"
-          ? "created_at"
-          : sortOption.value === "most_liked"
-          ? "-likes_count"
-          : "-created_at"
+        sortOrderingMap[sortOption.value] ?? "-date_create"
       );
     }
     return await api<{ results: CourseListItem[]; total_pages: number }>(
       `/course/SearchCourse/?${params.toString()}`
     );
   },
-  { immediate: activeTab.value === "courses" }
+  { immediate: true, watch: [courseFetchKey] }
 );
 
 // Blogs
@@ -312,18 +354,26 @@ const {
   pending: blogsLoading,
   refresh: refreshBlogs,
 } = await useLazyAsyncData(
-  `blogs-${searchQuery.value}`,
+  "explore-blogs",
   async () => {
     const params = new URLSearchParams();
     if (searchQuery.value) params.append("search", searchQuery.value);
     return await api<{ results: any[] }>(`/blog/?${params.toString()}`);
   },
-  { immediate: true }
+  { immediate: true, watch: [blogFetchKey] }
 );
 
-function refreshData() {
-  refreshCourses();
-  refreshBlogs();
+async function refreshData() {
+  await nextTick();
+  if (activeTab.value === "courses") {
+    refreshCourses();
+  } else {
+    refreshBlogs();
+  }
+}
+
+function resetPage() {
+  page.value = 1;
 }
 // Fetch categories (SSR)
 const { data: categoryData } = useAsyncData("categories", async () => {
@@ -361,11 +411,13 @@ function toggleCategory(id: number) {
   } else {
     filters.value.selectedCategoryIds.splice(index, 1);
   }
+  resetPage();
   refreshData();
 }
 
 function clearSearch() {
   searchQuery.value = "";
+  resetPage();
   refreshData();
 }
 
@@ -374,25 +426,13 @@ function resetFilters() {
     selectedCategoryIds: [],
     isFree: false,
     hasDiscount: false,
+    priceRange: [0, 10_000_000],
+    durationRange: [0, 1_000],
+    minDiscount: 0,
+    categorySlug: "",
+    excludeCategorySlug: "",
   };
+  resetPage();
   refreshData();
-}
-
-// Trigger refetch when filters/tab/page change
-watch(
-  [activeTab, page, searchQuery, sortOption, () => filters.value],
-  () => refreshData(),
-  { deep: true }
-);
-
-// Initial route params setup (SSR-safe)
-const route = useRoute();
-if (route.query.search) searchQuery.value = route.query.search as string;
-if (route.query.tab) activeTab.value = route.query.tab as "courses" | "blogs";
-if (route.query.category) {
-  const categoryId = parseInt(route.query.category as string);
-  if (!isNaN(categoryId)) {
-    filters.value.selectedCategoryIds = [categoryId];
-  }
 }
 </script>
