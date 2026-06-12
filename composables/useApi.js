@@ -3,6 +3,20 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
   const token = useCookie('access_token') // SSR-safe
   const refreshToken = useCookie('refresh_token')
   const router = useRouter()
+  const { locale } = useI18n()
+
+  const applyHeaders = (options = {}) => {
+    options.headers = {
+      ...options.headers,
+      'Accept-Language': locale.value || 'fa',
+    }
+
+    if (token.value) {
+      options.headers.Authorization = `Bearer ${token.value}`
+    }
+
+    return options
+  }
 
   const tryRefreshToken = async () => {
     if (!refreshToken.value) return false
@@ -10,6 +24,9 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
       const { access_token } = await $fetch('/auth/refresh', {
         baseURL: useRuntimeConfig().public.apiUrl + suffixUrl,
         method: 'POST',
+        headers: {
+          'Accept-Language': locale.value || 'fa',
+        },
         body: { refresh_token: refreshToken.value },
       })
       token.value = access_token
@@ -23,12 +40,9 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
     baseURL: useRuntimeConfig().public.apiUrl + suffixUrl,
 
     onRequest({ options }) {
-      if (token.value) {
-        options.headers = {
-          ...options.headers,
-          Authorization: `Bearer ${token.value}`,
-        }
-      } else if (requireAuth) {
+      applyHeaders(options)
+
+      if (!token.value && requireAuth) {
         // No token at all for a required-auth API → redirect immediately
         const localePath = useLocalePath()
         router.push(localePath(`/auth/signIn?redirect=${router.currentRoute.value.fullPath}`))

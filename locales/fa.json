@@ -134,12 +134,12 @@
   },
   "login": {
     "phoneNumber": "شماره موبایل",
-    "phonePlaceholder": "09 - - - - - - - ",
+    "phonePlaceholder": "91 - - - - - - ",
     "getCode": "دریافت کد",
     "noUserError": "کاربری با این شماره وجود ندارد",
     "noPhoneError": "شماره موبایل وارد نشده است",
-    "phoneLengthError": "شماره موبایل باید 11 رقم باشد",
-    "phoneFormatError": "شماره موبایل باید با 09 شروع شود"
+    "phoneLengthError": "شماره موبایل باید 10 رقم باشد",
+    "phoneFormatError": "شماره موبایل باید با 9 شروع شود"
   },
   "auth": {
     "common": {

@@ -76,42 +76,12 @@
                 </UInput>
             </div>
 
-            <div>
-                <label for="signup-phone-number" class="block text-sm font-medium leading-6 text-gray-600 dark:text-gray-300 mb-2"></label>
-                <UInput
-                    id="signup-phone-number"
-                    :value="phoneNumber"
-                    @input="handlePhoneInput"
-                    :placeholder="$t('login.phonePlaceholder')"
-                    autocomplete="tel"
-                    inputmode="numeric"
-                    :error="phoneError"
-                    class="w-full ltr"
-                    size="xl"
-                    :ui="{
-                        base: 'relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 focus:ring-2 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ps-18 rounded-xl',
-                        wrapper: 'relative block w-full',
-                        icon: 'flex-shrink-0 h-4 w-4',
-                        input: 'block w-full border-0 bg-transparent py-1.5 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-0 sm:text-sm sm:leading-6 ltr',
-                        trailing: 'flex items-center'
-                    }"
-                >
-                    <label class="pointer-events-none absolute right-0 -top-2.5 text-highlighted text-xs font-medium px-5 transition-all peer-focus:-top-2.5 peer-focus:text-highlighted peer-focus:text-xs peer-focus:font-medium peer-placeholder-shown:text-sm peer-placeholder-shown:text-dimmed peer-placeholder-shown:top-1.5 peer-placeholder-shown:font-normal">
-                        <span class="inline-flex bg-default px-1">{{ $t('login.phoneNumber') }}</span>
-                    </label>
-                    <template #leading>
-                        <div class="flex items-center gap-2">
-                            <img
-                                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjE2IiBmaWxsPSIjMDA5YzM5Ii8+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSI1LjMzMzMzIiB5PSI1LjMzMzMzIiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIyNCIgaGVpZ2h0PSI1LjMzMzMzIiB5PSIxMC42NjY3IiBmaWxsPSIjZDAxNDFkIi8+CjxyZWN0IHdpZHRoPSIxMiIgaGVpZ2h0PSI4IiBmaWxsPSIjMDA5YzM5Ii8+CjxjaXJjbGUgY3g9IjYiIGN5PSI4IiByPSIyIiBmaWxsPSIjZmZmIi8+CjxwYXRoIGQ9Ik02IDZMMTAgOEw2IDEwVjZaIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPgo="
-                                alt="Iran Flag"
-                                class="w-5 h-4 rounded-sm"
-                            />
-                            <span class="font-medium text-gray-700 dark:text-gray-300">+98</span>
-                        </div>
-                    </template>
-                </UInput>
-                <p v-if="phoneError" class="mt-1 text-xs font-bold text-red-600 dark:text-red-400">{{ phoneError }}</p>
-            </div>
+            <PhoneNumberInput
+                id="signup-phone-number"
+                v-model="phoneNumber"
+                v-model:is-valid="phoneIsValid"
+                v-model:error="phoneError"
+            />
 
             <UButton
                 type="submit"
@@ -191,6 +161,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useApi } from '~/composables/useApi'
 import { useI18n } from 'vue-i18n'
+import PhoneNumberInput from '~/components/shared/auth/PhoneNumberInput.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -202,6 +173,7 @@ const firstName = ref('')
 const lastName = ref('')
 const phoneNumber = ref('')
 const phoneError = ref('')
+const phoneIsValid = ref(false)
 const code = ref([])
 const loading = ref(false)
 const isCountdownActive = ref(false)
@@ -210,9 +182,9 @@ const countDownTime = ref(120)
 const next = ref(null)
 
 const codeValue = computed(() => Array.isArray(code.value) ? code.value.join('') : String(code.value || ''))
-const isValidPhone = computed(() => /^09\d{9}$/.test(phoneNumber.value))
-const canSubmitSignup = computed(() => firstName.value.trim() && lastName.value.trim() && isValidPhone.value && !loading.value)
+const canSubmitSignup = computed(() => firstName.value.trim() && lastName.value.trim() && phoneIsValid.value && !loading.value)
 const formattedCountdown = computed(() => `${Math.floor(countDownTime.value / 60)}:${('0' + countDownTime.value % 60).slice(-2)}`)
+const backendPhoneNumber = computed(() => `0${phoneNumber.value}`)
 
 definePageMeta({
     layout: 'authentication'
@@ -225,21 +197,6 @@ useHead({
 onMounted(() => {
     if (route.query.next != null) next.value = route.query.next
 })
-
-function handlePhoneInput(event) {
-    const value = event.target.value.replace(/[^0-9]/g, '').slice(0, 11)
-    phoneNumber.value = value
-
-    if (!value) {
-        phoneError.value = ''
-    } else if (!value.startsWith('09')) {
-        phoneError.value = t('login.phoneFormatError')
-    } else if (value.length !== 11) {
-        phoneError.value = t('login.phoneLengthError')
-    } else {
-        phoneError.value = ''
-    }
-}
 
 function startCountdown() {
     clearInterval(countDownInterval.value)
@@ -265,7 +222,7 @@ async function sendSignupSms() {
         return
     }
 
-    if (!isValidPhone.value) {
+    if (!phoneIsValid.value) {
         toast.add({
             title: t('auth.common.errorTitle'),
             description: phoneError.value || t('auth.signup.invalidPhone'),
@@ -282,7 +239,7 @@ async function sendSignupSms() {
         const body = new URLSearchParams()
         body.append('first_name', firstName.value)
         body.append('last_name', lastName.value)
-        body.append('number', phoneNumber.value)
+        body.append('number', backendPhoneNumber.value)
 
         await api('/account/sign-up-sms/', {
             method: 'POST',
@@ -322,7 +279,7 @@ async function checkSignupCode() {
 
     try {
         const body = new URLSearchParams()
-        body.append('number', phoneNumber.value)
+        body.append('number', backendPhoneNumber.value)
         body.append('code', codeValue.value)
 
         const response = await api('/account/code-check-sign-up/', {

@@ -23,6 +23,10 @@ export default {
   props: ['phoneNumber', 'code', 'loading'],
   emits: ['update:code', 'codeChecked', 'update:loading'],
   computed: {
+    backendPhoneNumber() {
+      const cleanPhone = String(this.phoneNumber || '').replace(/\D/g, '');
+      return cleanPhone.startsWith('0') ? cleanPhone : `0${cleanPhone}`;
+    },
     codeValue: {
       get() {
         return this.code;
@@ -41,7 +45,7 @@ export default {
         this.$emit('update:loading', true);
         api('/v1/account/login-code/', {
           method: 'POST',
-          body: { number: this.phoneNumber, code: this.codeValue.join('') },
+          body: { number: this.backendPhoneNumber, code: this.codeValue.join('') },
         })
         .then(response => {
           const userStore = useUserStore();

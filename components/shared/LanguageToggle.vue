@@ -7,9 +7,9 @@ const currentLocale = computed(() =>
   locales.value.find((l) => l.code === locale.value)
 )
 
-const toggleLanguage = () => {
+const toggleLanguage = async () => {
   const next = locale.value === 'fa' ? 'en' : 'fa'
-  setLocale(next)
+  await setLocale(next)
 
   // Optional: set lang/dir in <html>
   const selected = locales.value.find((l) => l.code === next)
