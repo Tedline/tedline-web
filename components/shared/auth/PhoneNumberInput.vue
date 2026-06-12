@@ -3,8 +3,8 @@
     <label :for="id" class="block text-sm font-medium leading-6 text-gray-600 dark:text-gray-300 mb-2"></label>
     <UInput
       :id="id"
-      :value="modelValue"
-      @input="handleInput"
+      :model-value="modelValue"
+      @update:model-value="handleInput"
       :placeholder="$t('login.phonePlaceholder')"
       autocomplete="tel"
       inputmode="numeric"
@@ -87,8 +87,8 @@ function syncPhone(value) {
   return normalizedValue
 }
 
-function handleInput(event) {
-  event.target.value = syncPhone(event.target.value)
+function handleInput(value) {
+  syncPhone(value)
 }
 
 watch(

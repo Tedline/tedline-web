@@ -179,7 +179,6 @@ const loading = ref(false)
 const isCountdownActive = ref(false)
 const countDownInterval = ref(null)
 const countDownTime = ref(120)
-const next = ref(null)
 
 const codeValue = computed(() => Array.isArray(code.value) ? code.value.join('') : String(code.value || ''))
 const canSubmitSignup = computed(() => firstName.value.trim() && lastName.value.trim() && phoneIsValid.value && !loading.value)
@@ -192,10 +191,6 @@ definePageMeta({
 
 useHead({
     title: t('auth.signup.pageTitle'),
-})
-
-onMounted(() => {
-    if (route.query.next != null) next.value = route.query.next
 })
 
 function startCountdown() {
@@ -295,11 +290,8 @@ async function checkSignupCode() {
             response.status || ''
         )
 
-        if (next.value != null) {
-            router.push(`/course/${next.value}/?register=true`)
-        } else {
-            router.push('/')
-        }
+        const redirectPath = route.query.next?.toString() || '/'
+        router.push(redirectPath)
     } catch {
         toast.add({
             title: t('auth.common.errorTitle'),

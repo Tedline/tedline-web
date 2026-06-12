@@ -1,5 +1,5 @@
 <template>
-  <UModal v-model:open="isOpen" modal="false" :title="$t('courseDetail.registrationTitle')">
+  <UModal v-model:open="isOpen" :modal="false" :title="$t('courseDetail.registrationTitle')">
     <template #content>
       <UCard>
         <template #header>

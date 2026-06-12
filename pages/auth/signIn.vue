@@ -108,6 +108,7 @@ const code = ref('')
 const loading = ref(false)
 
 const router = useRouter()
+const route = useRoute()
 const { t } = useI18n()
 
 const formattedCountdown = computed(() => `${Math.floor(countDownTime.value / 60)}:${('0' + countDownTime.value % 60).slice(-2)}`)
@@ -142,7 +143,8 @@ function onLoginSmsSent() {
 }
 
 function onCodeChecked() {
-    router.go(router.currentRoute.value)
+    const redirectPath = route.query.next?.toString() || '/'
+    router.push(redirectPath)
 }
 
 function resendLoginSms() {

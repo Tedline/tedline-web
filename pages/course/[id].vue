@@ -126,9 +126,12 @@
       </div>
     </div>
     <SectionCourseDetailRegistrationModal 
+      ref="registrationModalRef"
       :course="course!" 
       v-model:open="showRegistrationModal" 
       :loadingRegister="loadingRegister" 
+      @register="handleRegistration"
+      @check-discount="checkDiscountCode"
     />
   </div>
 </template>
@@ -173,6 +176,7 @@ const loadingRegister = ref(false)
 const activeTab = ref('details')
 const showRegistrationModal = ref(false)
 const discountAmount = ref(0)
+const registrationModalRef = ref<any>(null)
 
 // Store
 const userStore = useUserStore()
@@ -327,6 +331,9 @@ const checkDiscountCode = async (code: string) => {
         title: 'موفق',
         description: 'کد تخفیف اعمال شد',
       })
+
+      // Update the discount amount in the modal component
+      registrationModalRef.value?.updateDiscountAmount(discountAmount.value)
     } else {
       toast.add({
         title: 'خطا',

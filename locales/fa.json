@@ -153,7 +153,8 @@
       "resend": "ارسال مجدد",
       "changePhone": "تغییر شماره موبایل",
       "codeLengthError": "کد 5 رقمی وارد نشده است",
-      "invalidCode": "کد معتبر نیست"
+      "invalidCode": "کد معتبر نیست",
+      "logout": "خروج"
     },
     "layout": {
       "title": "یادگیری آنلاین، ساده و متمرکز",

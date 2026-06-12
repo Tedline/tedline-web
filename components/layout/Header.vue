@@ -24,6 +24,9 @@ import {
 } from "@heroicons/vue/20/solid";
 import { useRoute, useRouter } from "vue-router";
 
+const userStore = useUserStore()
+const { t } = useI18n()
+
 // Props
 const props = defineProps({
     hideUntilScroll: {
@@ -97,6 +100,13 @@ function openLogin() {
 function closeLogin() {
     isLoginOpen.value = false;
 }
+
+async function handleLogout() {
+    // Assuming your userStore has a logout action
+    await userStore.logout();
+    // Optional: redirect to home or login page
+    navigateTo('/');
+}
 </script>
 
 <template>
@@ -123,7 +133,6 @@ function closeLogin() {
                     <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                 </button>
             </div>
-
             <PopoverGroup class="hidden lg:flex lg:gap-x-12 rtl:float-left ltr:float-right ">
                 <Popover class="relative">
                     <PopoverButton
@@ -183,14 +192,20 @@ function closeLogin() {
                 </NuxtLinkLocale>
             </PopoverGroup>
 
-            <div class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right">
+            <div class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right" v-if="!userStore.isAuthenticated">
                 <NuxtLinkLocale to="/auth/signIn" @click.prevent="openLogin"
                     class="rounded-xl bg-gray-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0379e7] dark:bg-blue-600 dark:hover:bg-gray-700">
-                    ورود
+                    {{ t('auth.login.pageTitle') }}
                 </NuxtLinkLocale>
                 <NuxtLinkLocale to="/auth/signUp" class="text-sm font-semibold mx-3 leading-6 text-gray-900 dark:text-gray-100">
-                    ثبت نام
+                    {{ t('auth.signup.pageTitle') }}
                 </NuxtLinkLocale>
+            </div>
+            <div v-else class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right">
+                <button @click="handleLogout"
+                    class="rounded-xl bg-gray-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm ">
+                    {{ t('auth.common.logout') }}
+                </button>
             </div>
         </nav>
 
@@ -256,4 +271,3 @@ function closeLogin() {
         </Dialog>
     </header>
 </template>
-

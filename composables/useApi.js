@@ -3,12 +3,17 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
   const token = useCookie('access_token') // SSR-safe
   const refreshToken = useCookie('refresh_token')
   const router = useRouter()
-  const { locale } = useI18n()
+  const nuxtApp = useNuxtApp()
+
+  const getLocale = () => {
+    const locale = nuxtApp.$i18n?.locale
+    return (locale && typeof locale === 'object' ? locale.value : locale) || 'fa'
+  }
 
   const applyHeaders = (options = {}) => {
     options.headers = {
       ...options.headers,
-      'Accept-Language': locale.value || 'fa',
+      'Accept-Language': getLocale(),
     }
 
     if (token.value) {
@@ -25,7 +30,7 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
         baseURL: useRuntimeConfig().public.apiUrl + suffixUrl,
         method: 'POST',
         headers: {
-          'Accept-Language': locale.value || 'fa',
+          'Accept-Language': getLocale(),
         },
         body: { refresh_token: refreshToken.value },
       })

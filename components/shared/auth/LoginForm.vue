@@ -4,7 +4,7 @@
       :model-value="phoneNumber"
       v-model:is-valid="phoneIsValid"
       v-model:error="phoneError"
-      @update:modelValue="$emit('update:phoneNumber', $event)"
+      @update:model-value="$emit('update:phoneNumber', $event)"
     />
     <div>
       <UButton 
