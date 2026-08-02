@@ -38,40 +38,40 @@ const props = defineProps({
 // محصولات مربوط به آموزش آنلاین
 const products = [
     {
-        name: "دوره‌های آموزشی",
-        description: "دسترسی به انواع دوره‌های آنلاین",
+        name: "header.products.courses.name",
+        description: "header.products.courses.description",
         href: "#",
         icon: AcademicCapIcon,
     },
     {
-        name: "وبینارها",
-        description: "شرکت در وبینارهای تخصصی",
+        name: "header.products.webinars.name",
+        description: "header.products.webinars.description",
         href: "#",
         icon: PlayCircleIcon,
     },
     {
-        name: "کتابخانه منابع",
-        description: "مطالعه کتاب‌ها و مقالات آموزشی",
+        name: "header.products.library.name",
+        description: "header.products.library.description",
         href: "#",
         icon: BookOpenIcon,
     },
     {
-        name: "مدرسان",
-        description: "آشنایی با اساتید و مدرسان دوره‌ها",
+        name: "header.products.instructors.name",
+        description: "header.products.instructors.description",
         href: "#",
         icon: UserGroupIcon,
     },
     {
-        name: "دسته‌بندی‌ها",
-        description: "جستجو بر اساس موضوعات مختلف آموزشی",
+        name: "header.products.categories.name",
+        description: "header.products.categories.description",
         href: "#",
         icon: SquaresPlusIcon,
     },
 ];
 
 const callsToAction = [
-    { name: "تماس با پشتیبانی", href: "#", icon: PhoneIcon },
-    { name: "مشاهده دموی سایت", href: "#", icon: PlayCircleIcon },
+    { name: "header.support", href: "#", icon: PhoneIcon },
+    { name: "header.viewDemo", href: "#", icon: PlayCircleIcon },
 ];
 
 const mobileMenuOpen = ref(false);
@@ -117,10 +117,10 @@ async function handleLogout() {
             ? 'bg-white border-b-1 border-gray-100  dark:backdrop-blur-lg dark:bg-black/60 dark:border-neutral-700/20 dark:shadow-xl'
             : hideUntilScroll ? 'sr-only border-gray-50/10 dark:border-gray-900/10' : 'border-gray-50 dark:border-gray-900/10',
     ]">
-        <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 py-3 lg:px-8" aria-label="Global">
-            <div class="flex lg:flex-1 rtl:float-left ltr:float-right">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 py-3 lg:px-8" :aria-label="t('header.globalNavigation')">
+            <div v-if="!userStore.isAuthenticated" class="flex lg:flex-1 rtl:float-left ltr:float-right">
                 <a href="#" class="-m-1.5 p-1.5">
-                    <span class="sr-only">Tedline</span>
+                    <span class="sr-only">{{ t('header.company') }}</span>
                     <img class="h-8 w-auto" src="/images/icon2.png" alt="" />
                 </a>
             </div>
@@ -129,7 +129,7 @@ async function handleLogout() {
                 <button type="button"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200"
                     @click="mobileMenuOpen = true">
-                    <span class="sr-only">Open main menu</span>
+                    <span class="sr-only">{{ t('header.openMenu') }}</span>
                     <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                 </button>
             </div>
@@ -137,7 +137,7 @@ async function handleLogout() {
                 <Popover class="relative">
                     <PopoverButton
                         class="flex items-center gap-x-1 text-sm leading-6 focus:ring-0 focus:border-0 focus:outline-none text-gray-900 dark:text-gray-100">
-                        ابزار ها
+                        {{ t('header.tools') }}
                         <ChevronDownIcon class="h-5 w-5 flex-none text-gray-400 dark:text-gray-200" aria-hidden="true" />
                     </PopoverButton>
 
@@ -146,7 +146,7 @@ async function handleLogout() {
                         leave-active-class="transition ease-in duration-150"
                         leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
                         <PopoverPanel
-                            class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden bg-white rounded-3xl  shadow-lg     dark:bg-stone-900/70    rtl:left-8 ltr:-left-8">
+                            class="absolute top-full z-10 mt-3 w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ltr:left-0 rtl:right-0 dark:bg-stone-900/70">
                             <div class="p-4 backdrop-blur-lg ">
                                 <div v-for="item in products" :key="item.name"
                                     class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-black/10 ">
@@ -158,10 +158,10 @@ async function handleLogout() {
                                     </div>
                                     <div class="flex-auto">
                                         <a :href="item.href" class="block font-semibold text-gray-900 dark:text-gray-100 relative">
-                                            {{ item.name }}
+                                            {{ t(item.name) }}
                                             <span class="absolute inset-0"></span>
                                         </a>
-                                        <p class="mt-1 text-gray-600 dark:text-gray-300">{{ item.description }}</p>
+                                        <p class="mt-1 text-gray-600 dark:text-gray-300">{{ t(item.description) }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -174,25 +174,32 @@ async function handleLogout() {
                 :class="[
                     'text-sm  leading-6','text-gray-900 dark:text-gray-100',
                 ]">
-                    وبلاگ
+                    {{ t('header.blog') }}
+                </NuxtLinkLocale>
+
+                <NuxtLinkLocale to="/terms" active-class="text-[#0379e7] dark:text-blue-400"
+                :class="[
+                    'text-sm  leading-6','text-gray-900 dark:text-gray-100',
+                ]">
+                    {{ t('footer.terms') }}
                 </NuxtLinkLocale>
 
                 <NuxtLinkLocale to="/contact" active-class="text-[#0379e7] dark:text-blue-400"
                 :class="[
                     'text-sm  leading-6','text-gray-900 dark:text-gray-100',
                 ]">
-                    تماس با ما
+                    {{ t('header.contact') }}
                 </NuxtLinkLocale>
 
                 <NuxtLinkLocale to="/" active-class="text-[#0379e7] dark:text-blue-400"
                 :class="[
                     'text-sm  leading-6','text-gray-900 dark:text-gray-100',
                 ]">
-                    صفحه ی اصلی
+                    {{ t('header.home') }}
                 </NuxtLinkLocale>
             </PopoverGroup>
 
-            <div class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right" v-if="!userStore.isAuthenticated">
+            <div v-if="!userStore.isAuthenticated" class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right" >
                 <NuxtLinkLocale to="/auth/signIn" @click.prevent="openLogin"
                     class="rounded-xl bg-gray-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0379e7] dark:bg-blue-600 dark:hover:bg-gray-700">
                     {{ t('auth.login.pageTitle') }}
@@ -202,10 +209,10 @@ async function handleLogout() {
                 </NuxtLinkLocale>
             </div>
             <div v-else class="hidden lg:flex lg:flex-1 items-center lg:justify-end rtl:float-left ltr:float-right">
-                <button @click="handleLogout"
-                    class="rounded-xl bg-gray-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm ">
-                    {{ t('auth.common.logout') }}
-                </button>
+                <a href="#" class="-m-1.5 p-1.5">
+                    <span class="sr-only">{{ t('header.company') }}</span>
+                    <img class="h-8 w-auto" src="/images/icon2.png" alt="" />
+                </a>
             </div>
         </nav>
 
@@ -217,13 +224,13 @@ async function handleLogout() {
                 <div class="p-6">
                     <div class="flex items-center justify-between">
                         <a href="#" class="-m-1.5 p-1.5">
-                            <span class="sr-only">Your Company</span>
+                            <span class="sr-only">{{ t('header.company') }}</span>
                             <img class="h-8 w-auto"
                                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
                         </a>
                         <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-200"
                             @click="mobileMenuOpen = false">
-                            <span class="sr-only">Close menu</span>
+                            <span class="sr-only">{{ t('header.closeMenu') }}</span>
                             <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                         </button>
                     </div>
@@ -238,23 +245,20 @@ async function handleLogout() {
                                             class="h-6 w-6 text-gray-600 group-hover:text-indigo-600 dark:text-gray-300 dark:group-hover:text-blue-400"
                                             aria-hidden="true" />
                                     </div>
-                                    {{ item.name }}
+                                    {{ t(item.name) }}
                                 </a>
                             </div>
                             <div class="space-y-2 py-6">
-                                <a href="#"
+                                <NuxtLinkLocale to="/terms"
+                                    @click="mobileMenuOpen = false"
                                     class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    Features
-                                </a>
-                                <a href="#"
-                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    Marketplace
-                                </a>
+                                    {{ t('footer.terms') }}
+                                </NuxtLinkLocale>
                             </div>
                             <div class="py-6">
                                 <a href="#"
                                     class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    Log in
+                                    {{ t('auth.login.pageTitle') }}
                                 </a>
                             </div>
                         </div>
@@ -264,7 +268,7 @@ async function handleLogout() {
                 <div class="sticky bottom-0 grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50 text-center dark:divide-gray-700/50 dark:bg-gray-800">
                     <a v-for="item in callsToAction" :key="item.name" :href="item.href"
                         class="p-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-700">
-                        {{ item.name }}
+                        {{ t(item.name) }}
                     </a>
                 </div>
             </DialogPanel>

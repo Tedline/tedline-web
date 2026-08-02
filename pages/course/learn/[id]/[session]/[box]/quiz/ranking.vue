@@ -34,7 +34,7 @@
         <!-- Podium Section -->
         <div class="mt-6 flex justify-center items-end gap-8">
           <!-- 2nd Place -->
-          <div class="flex flex-col items-center relative mt-8">
+          <div v-if="data.ranking[1]" class="flex flex-col items-center relative mt-8">
             <div class="relative">
               <UAvatar
                 :src="data.ranking[1].user.image"
@@ -54,7 +54,7 @@
           </div>
 
           <!-- 1st Place -->
-          <div class="flex flex-col items-center relative">
+          <div v-if="data.ranking[0]" class="flex flex-col items-center relative">
             <div class="relative">
               <UAvatar
                 :src="data.ranking[0].user.image"
@@ -74,7 +74,7 @@
           </div>
 
           <!-- 3rd Place -->
-          <div class="flex flex-col items-center relative mt-8">
+          <div v-if="data.ranking[2]" class="flex flex-col items-center relative mt-8">
             <div class="relative">
               <UAvatar
                 :src="data.ranking[2].user.image"
@@ -98,7 +98,7 @@
           <div class="space-y-2">
             <div
               v-for="item in data.ranking"
-              :key="item.id + '-rank'"
+              :key="item.user.id + '-rank'"
               class="flex items-center w-full relative p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <!-- Sidebar indicator for 3rd place -->
@@ -131,6 +131,7 @@
 
     <!-- User Rank Card (Fixed Position) -->
     <UCard
+      v-if="!loading && data.user_rank"
       dir="rtl"
       class="fixed bottom-0 right-0 w-full sm:w-80 z-10 m-4 sm:m-6"
     >
@@ -214,4 +215,3 @@ onBeforeUnmount(() => {
   window.removeEventListener("resize", onResize)
 })
 </script>
-  

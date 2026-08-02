@@ -7,9 +7,7 @@
             <div class="max-w-lg">
               <div class="mt-24 sm:mt-32 lg:mt-10">
                 <a href="#" class="inline-flex space-x-6 rtl:space-x-reverse">
-                  <span
-                    class="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10 dark:bg-indigo-400/10 dark:text-indigo-300 dark:ring-indigo-400/20">What's
-                    new</span>
+            
 
                   <span
                     class="inline-flex items-center space-x-2 rtl:space-x-reverse text-sm font-medium leading-6 text-gray-600 dark:text-gray-300">

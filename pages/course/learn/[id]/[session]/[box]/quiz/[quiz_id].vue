@@ -21,10 +21,10 @@
             <v-card elevation="0" class=" bg-transparent ma-3 rounded-xl  ">
     
               <div class="d-flex flex-wrap">
-                <div class="  pa-3" v-for="item in questions" :key="item.id">
-                  <v-btn @click="navigationPanel(item.id)" rounded="pill" size="small" icon=""
-                    :variant="currentQuestion + 1 == item.id ? 'flat' : 'tonal'" color="white"
-                    class=" font-weight-bold text-body-2 ">{{ item.id }}</v-btn>
+                <div class="pa-3" v-for="(item, index) in questions" :key="item.id">
+                  <v-btn @click="navigationPanel(index)" rounded="pill" size="small" icon=""
+                    :variant="currentQuestion === index ? 'flat' : 'tonal'" color="white"
+                    class="font-weight-bold text-body-2">{{ index + 1 }}</v-btn>
                 </div>
     
               </div>
@@ -73,10 +73,12 @@
             <v-container class="pt-0">
     
     
-              <div v-for="(item, index) in questions" v-show="index === currentQuestion" :key="item + index">
-                <SectionCourseDetailLearnBoxQuizTimer ref="Testcard" @current-question-plus-one="plusCurrentQuestion"
-                  @current-question-minus-one="minusCurrentQuestion" @selected-option-id="handleRadioSelected"
-                  :question="item" />
+              <div v-for="(item, index) in questions" v-show="index === currentQuestion" :key="item.id">
+                <SectionCourseDetailLearnBoxQuizTestcard ref="testCards" @current-question-plus-one="plusCurrentQuestion"
+                  @current-question-minus-one="minusCurrentQuestion"
+                  :question="item" :quiz-report-id="data.id"
+                  :saved-option-id="savedOptionFor(item.id)"
+                  :saved-blank-answers="savedBlanksFor(item.id)" />
               </div>
             </v-container>
           </v-main>
@@ -88,11 +90,14 @@
 </template>
 <script>
 
-import axios from "axios";
 import { IconHomeMove, IconArrowLeft } from '@tabler/icons-vue';
 
 export default {
   components:{IconHomeMove,IconArrowLeft},
+  setup() {
+    definePageMeta({ layout: 'learn-dashboard' })
+    return { api: useApi() }
+  },
   data() {
     return {
       currentQuestion: 0,
@@ -123,77 +128,56 @@ export default {
         console.log("شما درحال حاضر در ابتدای سوالات هستید");
       }
     },
-    navigationPanel(id) {
-      this.currentQuestion = id - 1;
+    async navigationPanel(index) {
+      if (index === this.currentQuestion) return;
+      try {
+        const currentCard = this.$refs.testCards?.[this.currentQuestion];
+        if (currentCard) await currentCard.saveAnswer();
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+      this.currentQuestion = index;
       this.percentageOfProgress =
         (this.currentQuestion / this.questions.length) * 100;
     },
-    handleRadioSelected(selectedId) {
-      // this.selectedOption[this.currentQuestion] = selectedId;
-      console.log("Selected Options:", selectedId);
+    savedOptionFor(questionId) {
+      return this.data?.user_answer?.find(answer => answer.question?.id === questionId)?.answer ?? null;
+    },
+    savedBlanksFor(questionId) {
+      return this.data?.blank_answers?.filter(answer => answer.question_id === questionId) ?? [];
     },
     async finishQuizRequest() {
       this.loadingBtn = true;
-      const testCardComponent = this.$refs.Testcard[this.currentQuestion];
-      if (testCardComponent.selectedOption !== null) {
-        await testCardComponent.sendUserAnswer();
-      } else {
-        await testCardComponent.sendBlankAnswer();
+      try {
+        const testCardComponent = this.$refs.testCards?.[this.currentQuestion];
+        if (testCardComponent) await testCardComponent.saveAnswer();
+        await this.endQuiz();
+      } catch (error) {
+        console.error(error);
+        this.loadingBtn = false;
       }
-      this.endQuiz();
     },
-    getData() {
+    async getData() {
       this.loading = true;
-      axios
-        .get(
-          `https://tedline.org/api/quiz/start-quiz/${this.$route.params.quiz_id}/`,
-          {
-            headers: {
-              Authorization: this.$store.state.token != ''
-                ? `Token ${this.$store.state.token}`
-                : ''
-            },
-          }
-        )
-        .then((response) => {
-          this.questions = response.data.questions;
-          this.data = response.data;
-          this.loading = false;
-          console.log(this.data);
-        })
-        .catch((error) => {
-          console.error("error: ", error);
-        });
+      try {
+        const response = await this.api(`quiz/start-quiz/${this.$route.params.quiz_id}/`);
+        this.questions = response.questions;
+        this.data = response;
+      } catch (error) {
+        console.error("error: ", error);
+      } finally {
+        this.loading = false;
+      }
     },
-    endQuiz() {
-      axios
-        .post(
-          `https://tedline.org/api/quiz/end-quiz/${this.data.id}/`,
-          {},
-          {
-            headers: {
-              Authorization: this.$store.state.token != ''
-                ? `Token ${this.$store.state.token}`
-                : ''
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response);
-          if (response.status == 200) {
-            this.loadingBtn = false;
-            this.$router.push("/result/" + this.data.id);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    async endQuiz() {
+      await this.api(`quiz/end-quiz/${this.data.id}/`, { method: 'POST' });
+      this.loadingBtn = false;
+      await this.$router.push("/result/" + this.data.id);
     },
   },
   async mounted() {
-    await this.$store.commit('onStart')
-  
-    this.getData();
+    await this.getData();
   },
 };
 </script>

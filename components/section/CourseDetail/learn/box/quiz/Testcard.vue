@@ -16,17 +16,29 @@
     <UCard class="mt-8" dir="rtl">
       <div class="p-5">
         <!-- Question Header -->
-        <div class="flex items-center gap-4 mb-6">
+        <div class="flex items-start gap-4 mb-6">
           <UAvatar size="xl" color="primary" variant="soft">
             <UIcon name="i-heroicons-question-mark-circle" class="w-6 h-6" />
           </UAvatar>
-          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ question.title }}
-          </h3>
+          <div v-if="!isFillInTheBlank" class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            {{ question.text || question.title }}
+          </div>
+          <div v-else class="flex flex-wrap items-center gap-2 text-lg leading-10 text-gray-900 dark:text-gray-100">
+            <template v-for="(segment, index) in questionSegments" :key="index">
+              <span v-if="segment.type === 'text'">{{ segment.value }}</span>
+              <input
+                v-else
+                v-model="blankValues[segment.position]"
+                :aria-label="`پاسخ جای خالی ${segment.position + 1}`"
+                class="min-w-32 max-w-56 rounded-lg border border-gray-300 bg-white px-3 py-2 text-base outline-none focus:border-blue-500 dark:border-gray-600 dark:bg-gray-800"
+                type="text"
+              />
+            </template>
+          </div>
         </div>
 
         <!-- Options -->
-        <div class="mt-6">
+        <div v-if="!isFillInTheBlank" class="mt-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div
               v-for="(item, index) in question.options"
@@ -53,7 +65,7 @@
                     class="w-2 h-2 rounded-full bg-white"
                   ></div>
                 </div>
-                <span class="text-sm font-medium">{{ item.title }}</span>
+                <span class="text-sm font-medium">{{ item.text || item.title }}</span>
               </div>
             </div>
           </div>
@@ -91,6 +103,18 @@ const props = defineProps({
   question: {
     type: Object,
     required: true
+  },
+  quizReportId: {
+    type: [Number, String],
+    required: true
+  },
+  savedOptionId: {
+    type: [Number, String],
+    default: null
+  },
+  savedBlankAnswers: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -99,12 +123,34 @@ const emit = defineEmits(['currentQuestionPlusOne', 'currentQuestionMinusOne', '
 const selectedOptionId = ref(null)
 const selectedOption = ref(null)
 const loading = ref(false)
+const blankValues = reactive({})
 
 const api = useApi()
 
+const isFillInTheBlank = computed(() => props.question.question_type === 'FLB')
+const questionSegments = computed(() => {
+  const parts = String(props.question.text || '').split('[[blank]]')
+  const segments = []
+  parts.forEach((value, index) => {
+    if (value) segments.push({ type: 'text', value })
+    if (index < parts.length - 1) {
+      const position = props.question.blanks?.[index]?.position ?? index
+      segments.push({ type: 'blank', position })
+    }
+  })
+  return segments
+})
+
+const restoreAnswers = () => {
+  selectedOptionId.value = props.savedOptionId ?? null
+  selectedOption.value = props.savedOptionId ?? null
+  for (const blank of props.question.blanks || []) blankValues[blank.position] = ''
+  for (const answer of props.savedBlankAnswers) blankValues[answer.position] = answer.text || ''
+}
+
 const sendUserAnswer = async () => {
   try {
-    const response = await api(`quiz/answer/${props.question.id}/${selectedOptionId.value}/`, {
+    const response = await api(`quiz/answer/${props.quizReportId}/${props.question.id}/${selectedOptionId.value}/`, {
       method: 'POST'
     })
     return response
@@ -116,8 +162,13 @@ const sendUserAnswer = async () => {
 
 const sendBlankAnswer = async () => {
   try {
-    const response = await api(`quiz/answer/${props.question.id}/`, {
-      method: 'POST'
+    const answers = (props.question.blanks || []).map(({ position }) => ({
+      position,
+      text: blankValues[position] || ''
+    }))
+    const response = await api(`quiz/blank-answer/${props.quizReportId}/${props.question.id}/`, {
+      method: 'PUT',
+      body: { answers }
     })
     return response
   } catch (error) {
@@ -126,15 +177,21 @@ const sendBlankAnswer = async () => {
   }
 }
 
+const clearMcqAnswer = () => api(`quiz/answer/${props.quizReportId}/${props.question.id}/`, {
+  method: 'DELETE'
+})
+
 const plusCurrentQuestion = async () => {
   loading.value = true
   try {
     let response
 
-    if (selectedOption.value !== null) {
+    if (isFillInTheBlank.value) {
+      response = await sendBlankAnswer()
+    } else if (selectedOption.value !== null) {
       response = await sendUserAnswer()
     } else {
-      response = await sendBlankAnswer()
+      response = await clearMcqAnswer()
     }
     
     if (response) {
@@ -162,5 +219,19 @@ const selectedId = (id) => {
 watch(selectedOptionId, (newVal) => {
   selectedOption.value = newVal || null
 })
-</script>
 
+watch(() => [props.question.id, props.savedOptionId, props.savedBlankAnswers], restoreAnswers, { immediate: true, deep: true })
+
+defineExpose({
+  isFillInTheBlank,
+  selectedOption,
+  sendUserAnswer,
+  sendBlankAnswer,
+  clearMcqAnswer,
+  saveAnswer: async () => isFillInTheBlank.value
+    ? sendBlankAnswer()
+    : selectedOption.value !== null
+      ? sendUserAnswer()
+      : clearMcqAnswer()
+})
+</script>

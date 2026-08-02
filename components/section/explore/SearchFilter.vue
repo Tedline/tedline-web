@@ -161,24 +161,7 @@
       </div>
     </div>
     <USeparator />
-    <div class="space-y-4 my-5">
-      <UInput
-        v-model="categorySlug"
-        :placeholder="t('explore.categorySlug')"
-        leading-icon="i-heroicons-tag"
-        size="lg"
-        :ui="{ base: 'rounded-xl' }"
-        @update:model-value="emitFilters"
-      />
-      <UInput
-        v-model="excludeCategorySlug"
-        :placeholder="t('explore.excludeCategorySlug')"
-        leading-icon="i-heroicons-no-symbol"
-        size="lg"
-        :ui="{ base: 'rounded-xl' }"
-        @update:model-value="emitFilters"
-      />
-    </div>
+   
     <!-- <UInputMenu v-model="value" :avatar="value?.avatar" :items="items" /> -->
   </div>
 </template>

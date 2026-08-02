@@ -179,7 +179,7 @@ const resources = computed(() => [
 
 const legalLinks = computed(() => [
   { name: t('footer.privacy'), href: '/contact' },
-  { name: t('footer.terms'), href: '/contact' },
+  { name: t('footer.terms'), href: '/terms' },
   { name: t('footer.cookies'), href: '/contact' },
 ]);
 </script>

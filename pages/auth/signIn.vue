@@ -143,7 +143,7 @@ function onLoginSmsSent() {
 }
 
 function onCodeChecked() {
-    const redirectPath = route.query.next?.toString() || '/'
+    const redirectPath = route.query.redirect?.toString() || route.query.next?.toString() || '/'
     router.push(redirectPath)
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-    class="p-4 rounded-lg ring ring-inset ring-accented/30 "
+    class="p-4 rounded-lg ring ring-inset ring-accented/30 my-4"
       :class="[
         'transition-all duration-200 bg-elevated/50  hover:bg-stone-100  dark:hover:bg-stone-800',
         disable ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'

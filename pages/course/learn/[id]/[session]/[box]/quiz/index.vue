@@ -4,7 +4,7 @@
       <v-card style="height: 188px" class="d-flex justify-center align-center" v-if="loading == true">
         <v-progress-circular color="primary" indeterminate :size="87" :width="7"></v-progress-circular>
       </v-card>
-      <v-card v-else elevation="0" class=" py-5 px-3 px-md-5 rtl" color="transparent">
+      <v-card v-else-if="examInformation" elevation="0" class=" py-5 px-3 px-md-5 rtl" color="transparent">
         <div class="d-flex align-center">
           <v-avatar size="x-large" rounded="lg" color="blue" variant="tonal">
             <v-icon size="20"> fad fa-question</v-icon>
@@ -70,6 +70,13 @@
           </v-bottom-sheet>
         </div>
       </v-card>
+      <v-alert v-else type="error" variant="tonal" class="rtl text-right">
+        {{ errorMessage || 'دریافت اطلاعات آزمون ناموفق بود.' }}
+      </v-alert>
+
+      <v-alert v-if="errorMessage && examInformation" type="error" variant="tonal" class="mt-4 rtl text-right">
+        {{ errorMessage }}
+      </v-alert>
 
     </div>
 
@@ -78,7 +85,6 @@
 </template>
 <script>
 
-import axios from "axios";
 import { IconHistoryToggle } from '@tabler/icons-vue';
 
 
@@ -89,6 +95,7 @@ export default {
     definePageMeta({
       layout: "learn-dashboard",
     })
+    return { api: useApi() }
   },
   data() {
     return {
@@ -99,26 +106,18 @@ export default {
       loadingBtn: false,
       id: null,
       data: null,
+      errorMessage: '',
     };
   },
   methods: {
-    getListQuiz() {
-      axios
-        .get(`https://tedline.org/api/quiz/list-quiz-report/${this.$route.params.box}`, {
-          headers: {
-            Authorization: this.$store.state.token != ''
-              ? `Token ${this.$store.state.token}`
-              : ''
-          },
-        })
-        .then((response) => {
-          this.list_quiz = response.data;
-          this.loading_list_quiz = false;
-
-        })
-        .catch((error) => {
-          console.error("error", error);
-        });
+    async getListQuiz() {
+      try {
+        this.list_quiz = await this.api(`quiz/list-quiz-report/${this.$route.params.box}/`);
+      } catch (error) {
+        console.error("error", error);
+      } finally {
+        this.loading_list_quiz = false;
+      }
     },
     watchResult(id) {
       if (this.list_quiz.length > 0) {
@@ -127,59 +126,36 @@ export default {
         console.log("The operation failed :(");
       }
     },
-    getData() {
+    async getData() {
       this.loading = true;
-      axios
-        .get(`https://tedline.org/api/quiz/retrieve-quiz/${this.$route.params.box}/`, {
-          headers: {
-            Authorization: this.$store.state.token != ''
-              ? `Token ${this.$store.state.token}`
-              : ''
-          },
-        })
-        .then((response) => {
-          this.examInformation = response.data;
-          this.id = this.examInformation.id;
-          this.loading = false;
-          console.log(this.examInformation);
-        })
-        .catch((error) => {
-          console.error("error: ", error);
-        });
+      this.errorMessage = '';
+      try {
+        this.examInformation = await this.api(`quiz/retrieve-quiz/${this.$route.params.box}/`);
+        this.id = this.examInformation.id;
+      } catch (error) {
+        console.error("error: ", error);
+        this.errorMessage = error?.data?.detail || 'دریافت اطلاعات آزمون ناموفق بود.';
+      } finally {
+        this.loading = false;
+      }
     },
-    sendId() {
+    async sendId() {
       this.loadingBtn = true;
-      axios
-        .post(
-          `https://tedline.org/api/quiz/signup-quiz/${this.$route.params.box}/`,
-          { id: this.id },
-          {
-            headers: {
-              Authorization: this.$store.state.token != ''
-                ? `Token ${this.$store.state.token}`
-                : ''
-            },
-          }
-        )
-        .then((response) => {
-          if (response.status == 200) {
-            this.data = response.data.data;
-          }
-          if (this.data !== null) {
-            this.loadingBtn = false;
-            this.$router.push(`${this.data}`);
-          }
-          console.log(response.status, this.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      this.errorMessage = '';
+      try {
+        const response = await this.api(`quiz/signup-quiz/${this.$route.params.box}/`, { method: 'POST' });
+        this.data = response.data;
+        if (this.data !== null) await this.$router.push(`${this.data}`);
+      } catch (error) {
+        console.error(error);
+        this.errorMessage = error?.data?.detail || 'شروع آزمون ناموفق بود.';
+      } finally {
+        this.loadingBtn = false;
+      }
     },
   },
   async mounted() {
-    await this.$store.commit('onStart')
-    this.getListQuiz();
-    this.getData();
+    await Promise.all([this.getListQuiz(), this.getData()]);
   },
 };
 </script>

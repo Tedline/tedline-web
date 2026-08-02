@@ -4,6 +4,7 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
   const refreshToken = useCookie('refresh_token')
   const router = useRouter()
   const nuxtApp = useNuxtApp()
+  let refreshPromise = null
 
   const getLocale = () => {
     const locale = nuxtApp.$i18n?.locale
@@ -25,23 +26,30 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
 
   const tryRefreshToken = async () => {
     if (!refreshToken.value) return false
-    try {
-      const { access_token } = await $fetch('/auth/refresh', {
-        baseURL: useRuntimeConfig().public.apiUrl + suffixUrl,
-        method: 'POST',
-        headers: {
-          'Accept-Language': getLocale(),
-        },
-        body: { refresh_token: refreshToken.value },
-      })
-      token.value = access_token
-      return true
-    } catch {
-      return false
+    if (!refreshPromise) {
+      refreshPromise = $fetch('/account/token/refresh/', {
+          baseURL: useRuntimeConfig().public.apiUrl + suffixUrl,
+          method: 'POST',
+          headers: {
+            'Accept-Language': getLocale(),
+          },
+          body: { refresh: refreshToken.value },
+        })
+        .then((response) => {
+          token.value = response.access
+          if (response.refresh) refreshToken.value = response.refresh
+          return true
+        })
+        .catch(() => false)
+        .finally(() => {
+          refreshPromise = null
+        })
     }
+
+    return refreshPromise
   }
 
-  const api = $fetch.create({
+  const apiClient = $fetch.create({
     baseURL: useRuntimeConfig().public.apiUrl + suffixUrl,
 
     onRequest({ options }) {
@@ -54,18 +62,26 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
       }
     },
 
-    async onResponseError({ response }) {
-      if (response.status === 401) {
-        const refreshed = await tryRefreshToken()
-        if (refreshed) return // retry logic could go here
-
-        token.value = null
-        refreshToken.value = null
-        const localePath = useLocalePath()
-        if (requireAuth) router.push(localePath(`/auth/signIn?redirect=${router.currentRoute.value.fullPath}`))
-      }
-    },
   })
+
+  const api = async (request, options = {}) => {
+    try {
+      return await apiClient(request, options)
+    } catch (error) {
+      if (error?.response?.status !== 401) throw error
+
+      const refreshed = await tryRefreshToken()
+      if (refreshed) return apiClient(request, options)
+
+      token.value = null
+      refreshToken.value = null
+      if (requireAuth && import.meta.client) {
+        const localePath = useLocalePath()
+        await router.push(localePath(`/auth/signIn?redirect=${router.currentRoute.value.fullPath}`))
+      }
+      throw error
+    }
+  }
 
   return api
 }

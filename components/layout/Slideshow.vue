@@ -1,3 +1,33 @@
+<script setup>
+import { ref } from 'vue'
+import {
+    CalendarIcon,
+    ChartPieIcon,
+    DocumentDuplicateIcon,
+    FolderIcon,
+    HomeIcon,
+    MagnifyingGlassIcon,
+    ArrowLeftStartOnRectangleIcon
+} from '@heroicons/vue/24/outline'
+const userStore = useUserStore()
+
+const navigation = [
+    { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
+    { name: 'Explore', href: '/explore', icon: MagnifyingGlassIcon, current: false },
+    { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+    { name: 'Calendar', href: '/calendar', icon: CalendarIcon, current: false },
+    { name: 'Help desk', href: '/helpdesk', icon: DocumentDuplicateIcon, current: false },
+    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+]
+
+function handleLogout() {
+    userStore.logout();
+    navigateTo('/');
+}
+
+const sidebarOpen = ref(false)
+</script>
+
 <template>
 <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:block lg:w-18 lg:overflow-y-auto lg:bg-gray-900 dark:bg-gradient-to-t dark:from-[#110c2c] dark:from-70% dark:to-[#141651]   lg:pb-4 ltr:left-0 rtl:right-0">
   <div class="flex h-full flex-col justify-between">
@@ -21,32 +51,12 @@
     <!-- Bottom button -->
     <div class="flex flex-col items-center pb-4 ltr:float-left rtl:float-right">
       <SharedLanguageToggle class="rounded-xl w-12 h-12 bg-gray-700/30 p-3 text-white hover:bg-gray-600 text-sm my-3" />
+      <button v-if="userStore.isAuthenticated" class="rounded-xl w-12 h-12 bg-gray-700/30 p-3 text-white hover:bg-gray-600 text-sm mb-3" @click="handleLogout">
+       <ArrowLeftStartOnRectangleIcon/>
+      </button>
       <SharedDarkMode class="rounded-xl bg-gray-700/30 p-3 text-white hover:bg-gray-600 text-sm" />
     </div>
 
   </div>
 </div>
 </template>
-<script setup>
-import { ref } from 'vue'
-import {
-    CalendarIcon,
-    ChartPieIcon,
-    DocumentDuplicateIcon,
-    FolderIcon,
-    HomeIcon,
-    UsersIcon,
-    MagnifyingGlassIcon
-} from '@heroicons/vue/24/outline'
-
-const navigation = [
-    { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
-    { name: 'Explore', href: '/explore', icon: MagnifyingGlassIcon, current: false },
-    { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-    { name: 'Calendar', href: '/calendar', icon: CalendarIcon, current: false },
-    { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
-]
-
-const sidebarOpen = ref(false)
-</script>

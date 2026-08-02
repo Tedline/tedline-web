@@ -3,14 +3,14 @@ export async function tryRefreshToken(): Promise<boolean> {
   const token = useCookie('access_token')
 
   try {
-    const response = await $fetch('/auth/refresh', {
+    const response = await $fetch('/account/token/refresh/', {
       method: 'POST',
-      baseURL:  process.env.API_URL ,
-      body: { refresh_token: refreshToken.value },
+      baseURL:  process.env.API_URL || useRuntimeConfig().public.apiUrl + '/api/' ,
+      body: { refresh: refreshToken.value },
     })
 
-    token.value = response.access_token
-    refreshToken.value = response.refresh_token
+    token.value = response.access
+    if (response.refresh) refreshToken.value = response.refresh
     return true
   } catch (err) {
     return false
