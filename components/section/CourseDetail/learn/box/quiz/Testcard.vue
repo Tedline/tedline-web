@@ -181,24 +181,23 @@ const clearMcqAnswer = () => api(`quiz/answer/${props.quizReportId}/${props.ques
   method: 'DELETE'
 })
 
+const handleSaveAnswer = async () => {
+  if (isFillInTheBlank.value) {
+    return await sendBlankAnswer()
+  } else if (selectedOption.value !== null) {
+    return await sendUserAnswer()
+  } else if (props.savedOptionId !== null) {
+    return await clearMcqAnswer()
+  }
+  return null
+}
+
 const plusCurrentQuestion = async () => {
   loading.value = true
   try {
-    let response
-
-    if (isFillInTheBlank.value) {
-      response = await sendBlankAnswer()
-    } else if (selectedOption.value !== null) {
-      response = await sendUserAnswer()
-    } else {
-      response = await clearMcqAnswer()
-    }
-    
-    if (response) {
-      console.log("Answer submitted successfully")
-      loading.value = false
-      emit("currentQuestionPlusOne")
-    }
+    await handleSaveAnswer()
+    loading.value = false
+    emit("currentQuestionPlusOne")
   } catch (error) {
     console.error(error)
     loading.value = false
@@ -210,9 +209,15 @@ const minusCurrentQuestion = () => {
 }
 
 const selectedId = (id) => {
-  selectedOption.value = id
-  selectedOptionId.value = id
-  emit("selectedId", id)
+  if (selectedOption.value === id) {
+    // Deselect if clicking already selected option
+    selectedOption.value = null
+    selectedOptionId.value = null
+  } else {
+    selectedOption.value = id
+    selectedOptionId.value = id
+  }
+  emit("selectedId", selectedOption.value)
 }
 
 // Watch for changes in selectedOptionId
@@ -228,10 +233,6 @@ defineExpose({
   sendUserAnswer,
   sendBlankAnswer,
   clearMcqAnswer,
-  saveAnswer: async () => isFillInTheBlank.value
-    ? sendBlankAnswer()
-    : selectedOption.value !== null
-      ? sendUserAnswer()
-      : clearMcqAnswer()
+  saveAnswer: handleSaveAnswer
 })
 </script>

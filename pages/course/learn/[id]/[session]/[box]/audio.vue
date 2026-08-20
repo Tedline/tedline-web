@@ -51,7 +51,7 @@
           >
             <UCard class="bg-black/80 backdrop-blur-sm px-4 py-2 flex items-center gap-3">
               <UAvatar color="primary" variant="soft" size="sm">
-                <IconUser size="15" />
+                <UIcon name="i-heroicons-user" class="w-4 h-4" />
               </UAvatar>
               <span class="text-sm text-white font-medium">{{ username }}</span>
             </UCard>
@@ -93,7 +93,6 @@
 
 <script setup>
 import QuizMovie from "~/components/section/QuizMovie.vue"
-import { IconUser } from '@tabler/icons-vue'
 
 definePageMeta({
   layout: "course-dashboard",

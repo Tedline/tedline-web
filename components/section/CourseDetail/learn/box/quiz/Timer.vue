@@ -74,7 +74,9 @@ const totalSeconds = ref(0)
 const circumference = 2 * Math.PI * 35 // radius = 35
 
 const progress = computed(() => {
-  return (timeLeft.value / (props.examTime * 60)) * 100
+  const maxSec = props.examTime * 60
+  if (maxSec <= 0) return 0
+  return Math.max(0, Math.min(100, (timeLeft.value / maxSec) * 100))
 })
 
 const strokeDashoffset = computed(() => {
@@ -82,28 +84,46 @@ const strokeDashoffset = computed(() => {
 })
 
 const formattedTime = computed(() => {
-  const minutes = Math.floor(timeLeft.value / 60)
-  const seconds = timeLeft.value % 60
+  const currentLeft = Math.max(0, timeLeft.value)
+  const minutes = Math.floor(currentLeft / 60)
+  const seconds = currentLeft % 60
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
 })
 
 const timeToSeconds = (timeString) => {
   if (timeString) {
-    const [hours, minutes, seconds] = timeString.split(":")
-    totalSeconds.value = parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds.split(".")[0])
-  } else {
-    console.log("error")
+    try {
+      const parts = timeString.split(":")
+      let sec = 0
+      if (parts.length === 3) {
+        sec = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + Math.floor(parseFloat(parts[2]))
+      } else if (parts.length === 2) {
+        sec = parseInt(parts[0]) * 60 + Math.floor(parseFloat(parts[1]))
+      }
+      totalSeconds.value = sec
+    } catch (e) {
+      console.error("Failed to parse time string", e)
+    }
   }
+  timeLeft.value = Math.max(0, props.examTime * 60 - totalSeconds.value)
 }
 
 const startTimer = () => {
   if (timer.value) {
     clearInterval(timer.value)
   }
+  if (timeLeft.value <= 0) {
+    emit("timeUp")
+    return
+  }
   timer.value = setInterval(() => {
     if (timeLeft.value > 0) {
       totalSeconds.value++
-      timeLeft.value = props.examTime * 60 - totalSeconds.value
+      timeLeft.value = Math.max(0, props.examTime * 60 - totalSeconds.value)
+      if (timeLeft.value <= 0) {
+        clearInterval(timer.value)
+        emit("timeUp")
+      }
     } else {
       clearInterval(timer.value)
       emit("timeUp")

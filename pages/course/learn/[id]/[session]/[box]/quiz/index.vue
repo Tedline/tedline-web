@@ -14,35 +14,41 @@
         </div>
         <div class="mt-10 d-flex flex-wrap">
           <div class="px-5 mx-2 py-1 rounded-pill border mt-3">
-            <p class="irsa text-right   font-weight-light text-body-2">
-              دفعات مجاز شرکت در ازمون :
-              <span class="font-weight-black text-body-1 ">{{
-                examInformation.max_attempts
-              }}</span>
+            <p class="irsa text-right font-weight-light text-body-2">
+              تعداد شرکت‌های شما:
+              <span class="font-weight-black text-body-1">{{ examInformation.quiz_repeat || 0 }} از {{ examInformation.max_attempts }}</span>
             </p>
           </div>
           <div class="px-5 mx-2 py-1 rounded-pill border mt-3">
             <p class="irsa text-right   font-weight-light text-body-2">
-              مدت زمان ازمون :
+              مدت زمان آزمون :
               <span class="font-weight-black text-body-1">{{
                 examInformation.quiz_time
               }}</span><span> دقیقه</span>
             </p>
           </div>
         </div>
-        <div class=" mb-3 d-flex  mt-16">
+        <div class=" mb-3 d-flex align-center flex-wrap gap-2 mt-16">
         
           <v-btn class="px-10" color="blue" elevation="0" rounded="lg" @click="sendId" :loading="loadingBtn">
             {{ examInformation.partnership_status == 'In Progress' ? ' ادامه آزمون' : examInformation.partnership_status
               == 'Again' ? 'دوباره' : ' ثبت نام' }}
           </v-btn>
+
+          <v-btn class="mx-2" variant="tonal" rounded="lg" color="amber-darken-2" :to="`/course/learn/${$route.params.id}/${$route.params.session}/${$route.params.box}/quiz/ranking`">
+            رتبه‌بندی
+            <template v-slot:append>
+              <UIcon name="i-heroicons-trophy" class="w-4 h-4" />
+            </template>
+          </v-btn>
+
           <v-bottom-sheet inset>
             <template v-slot:activator="{ props }">
               <v-btn class=" mx-2" v-bind="props" variant="tonal" rounded="lg" color="blue" :loading="loading_list_quiz"
                 text="سوابق">
 
                 <template v-slot:append>
-                  <IconHistoryToggle size="16" />
+                  <UIcon name="i-heroicons-clock" class="w-4 h-4" />
                 </template>
               </v-btn>
             </template>
@@ -55,7 +61,7 @@
                     {{ item.quiz.title }}
                   </v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ item.final_score }}
+                    نمره: {{ item.final_score }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
                 <template v-slot:append>
@@ -64,7 +70,7 @@
                 </template>
               </v-list-item>
               <div v-if="list_quiz.length == 0" class="text-center py-10">
-                شما تا کنون در این آزمون را به اتمام نرسانده اید
+                شما تا کنون این آزمون را به اتمام نرسانده اید
               </div>
             </v-list>
           </v-bottom-sheet>
@@ -84,13 +90,7 @@
   </div>
 </template>
 <script>
-
-import { IconHistoryToggle } from '@tabler/icons-vue';
-
-
-
 export default {
-  components: { IconHistoryToggle },
   setup() {
     definePageMeta({
       layout: "learn-dashboard",

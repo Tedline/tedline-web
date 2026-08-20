@@ -34,6 +34,10 @@
             <div class="flex-1">
               <p class="font-medium">{{ answer.question.text }}</p>
 
+              <div v-if="answer.question.image_url" class="my-3 max-w-md">
+                <img :src="answer.question.image_url" alt="تصویر سوال" class="rounded-lg border object-cover w-full max-h-64" />
+              </div>
+
               <div v-if="answer.question.question_type === 'FLB'" class="mt-4 space-y-3">
                 <div v-for="blank in answer.blanks" :key="blank.id" class="rounded-lg border p-3">
                   <div class="flex flex-wrap items-center justify-between gap-2">

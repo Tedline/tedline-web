@@ -1,15 +1,13 @@
 <template>
   <div class="container mx-auto px-4 relative">
     <!-- Header Section -->
-    <div class="flex justify-center">
+    <div class="flex justify-center pt-4">
       <div class="w-full max-w-4xl">
-        <div dir="rtl" class="mb-6">
-          <h1 class="text-2xl font-bold mb-3 text-gray-900 dark:text-gray-100">رویداد های ما</h1>
-          <img
-            class="w-full h-48 object-cover rounded-lg"
-            src="https://img.freepik.com/free-vector/recruitment-isometric-composition-with-images-different-office-rooms-infographic-text-captions-available-editing-illustration_1284-29101.jpg?t=st=1726852469~exp=1726856069~hmac=dfb3bc638720500c1bd509703fd7f1fbd59ca8a42df530aa35fd11ccc37b449e&w=1380"
-            alt="Events"
-          />
+        <div dir="rtl" class="mb-6 flex items-center justify-between">
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">جدول رتبه‌بندی آزمون</h1>
+          <UButton color="gray" variant="soft" icon="i-heroicons-arrow-right" @click="$router.back()">
+            بازگشت
+          </UButton>
         </div>
       </div>
     </div>
