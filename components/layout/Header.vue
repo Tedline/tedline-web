@@ -40,13 +40,13 @@ const products = [
     {
         name: "header.products.courses.name",
         description: "header.products.courses.description",
-        href: "#",
+        href: "/explore?tab=courses",
         icon: AcademicCapIcon,
     },
     {
         name: "header.products.webinars.name",
         description: "header.products.webinars.description",
-        href: "#",
+        href: "/webinars",
         icon: PlayCircleIcon,
     },
     {
@@ -64,7 +64,7 @@ const products = [
     {
         name: "header.products.categories.name",
         description: "header.products.categories.description",
-        href: "#",
+        href: "/explore?tab=courses",
         icon: SquaresPlusIcon,
     },
 ];
@@ -146,6 +146,7 @@ async function handleLogout() {
                         leave-active-class="transition ease-in duration-150"
                         leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
                         <PopoverPanel
+                            v-slot="{ close }"
                             class="absolute top-full z-10 mt-3 w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ltr:left-0 rtl:right-0 dark:bg-stone-900/70">
                             <div class="p-4 backdrop-blur-lg ">
                                 <div v-for="item in products" :key="item.name"
@@ -157,10 +158,10 @@ async function handleLogout() {
                                             aria-hidden="true" />
                                     </div>
                                     <div class="flex-auto">
-                                        <a :href="item.href" class="block font-semibold text-gray-900 dark:text-gray-100 relative">
+                                        <NuxtLinkLocale :to="item.href" @click="close()" class="block font-semibold text-gray-900 dark:text-gray-100 relative">
                                             {{ t(item.name) }}
                                             <span class="absolute inset-0"></span>
-                                        </a>
+                                        </NuxtLinkLocale>
                                         <p class="mt-1 text-gray-600 dark:text-gray-300">{{ t(item.description) }}</p>
                                     </div>
                                 </div>
@@ -169,7 +170,7 @@ async function handleLogout() {
                     </Transition>
                 </Popover>
 
-                <NuxtLinkLocale to="/blogs"
+                <NuxtLinkLocale to="/explore?tab=blogs"
                 active-class="text-[#0379e7] dark:text-blue-400"
                 :class="[
                     'text-sm  leading-6','text-gray-900 dark:text-gray-100',
@@ -237,7 +238,8 @@ async function handleLogout() {
                     <div class="mt-6 flow-root">
                         <div class="-my-6 divide-y divide-gray-500/10 dark:divide-gray-700/50">
                             <div class="space-y-2 py-6">
-                                <a v-for="item in products" :key="item.name" :href="item.href"
+                                <NuxtLinkLocale v-for="item in products" :key="item.name" :to="item.href"
+                                    @click="mobileMenuOpen = false"
                                     class="group -mx-3 flex items-center gap-x-6 rounded-lg p-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
                                     <div
                                         class="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white dark:bg-gray-800 dark:group-hover:bg-gray-900">
@@ -246,13 +248,28 @@ async function handleLogout() {
                                             aria-hidden="true" />
                                     </div>
                                     {{ t(item.name) }}
-                                </a>
+                                </NuxtLinkLocale>
                             </div>
                             <div class="space-y-2 py-6">
+                                <NuxtLinkLocale to="/explore?tab=blogs"
+                                    @click="mobileMenuOpen = false"
+                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    {{ t('header.blog') }}
+                                </NuxtLinkLocale>
                                 <NuxtLinkLocale to="/terms"
                                     @click="mobileMenuOpen = false"
                                     class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
                                     {{ t('footer.terms') }}
+                                </NuxtLinkLocale>
+                                <NuxtLinkLocale to="/contact"
+                                    @click="mobileMenuOpen = false"
+                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    {{ t('header.contact') }}
+                                </NuxtLinkLocale>
+                                <NuxtLinkLocale to="/"
+                                    @click="mobileMenuOpen = false"
+                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    {{ t('header.home') }}
                                 </NuxtLinkLocale>
                             </div>
                             <div class="py-6">

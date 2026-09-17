@@ -171,7 +171,7 @@ const quickLinks = computed(() => [
 ]);
 
 const resources = computed(() => [
-  { name: t('explore.blogs'), href: '/blogs' },
+  { name: t('explore.blogs'), href: '/explore?tab=blogs' },
   { name: t('footer.helpCenter'), href: '/contact' },
   { name: t('footer.faq'), href: '/contact' },
   { name: t('footer.support'), href: '/contact' },

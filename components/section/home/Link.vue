@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-10 mb-20 mx-auto max-w-2xl xs:px-6 lg:max-w-7xl lg:px-8">
+    <div class="mt-10 mb-20 mx-auto max-w-2xl md:px-6 px-3 lg:max-w-7xl lg:px-8">
         <div class="relative isolate overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 dark:from-blue-700 dark:via-blue-600 dark:to-indigo-700 px-6 py-10 sm:px-12 lg:px-24 md:rounded-3xl shadow-2xl ">
             <!-- Animated Background Elements -->
             <div class="absolute left-20 top-1/2 z-0 -translate-y-1/2 sm:left-1/2 sm:-translate-x-1/2 opacity-80">

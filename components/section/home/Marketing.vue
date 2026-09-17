@@ -1,6 +1,6 @@
 <template>
   <div class=" pb-24 sm:pb-24 ">
-    <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8 ">
+    <div class="mx-auto max-w-2xl md:px-6 px-3 lg:max-w-7xl lg:px-8 ">
       <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-2 lg:grid-rows-2">
         <div class="relative min-w-0">
           <div class="absolute inset-px rounded-lg  bg-white max-lg:rounded-t-4xl lg:rounded-ss-4xl dark:bg-stone-900/50 " />

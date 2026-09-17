@@ -110,10 +110,27 @@
     "instituteTitle": "For Institutes",
     "instituteDesc": "Empower your team and build a culture of learning. Continuous improvement and knowledge sharing drive organizational success."
   },
+  "homeCategory": {
+    "badge": "Most Popular",
+    "title": "Most Popular",
+    "titleHighlight": "Categories",
+    "description": "Explore popular and trending categories"
+  },
   "coursesList": {
     "bestSeller": "Best Seller",
     "mostPopular": "Most Popular",
-    "discounted": "Discounted"
+    "discounted": "Discounted",
+    "skill": "Skill Courses"
+  },
+  "webinarsPage": {
+    "metaTitle": "Online Webinars",
+    "eyebrow": "Live & Interactive Learning",
+    "title": "Educational Webinars",
+    "subtitle": "Join live interactive sessions and webinars on Tedline to learn and connect with instructors.",
+    "noWebinarsTitle": "No Webinars Currently Available",
+    "noWebinarsDesc": "New live webinars will be announced soon. In the meantime, feel free to explore our existing courses.",
+    "exploreCourses": "Explore Courses",
+    "backHome": "Back to Home"
   },
   "calendar": {
     "badge": "Online Course Events",

@@ -251,14 +251,33 @@ const filters = ref({
 
 // Initial route params setup (SSR-safe)
 const route = useRoute();
+const router = useRouter();
+
+const setTabFromQuery = (tab: any) => {
+  if (tab === "blogs" || tab === "blog") {
+    activeTab.value = "blogs";
+  } else if (tab === "courses" || tab === "course" || tab === "cource" || tab === "cources") {
+    activeTab.value = "courses";
+  }
+};
+
 if (route.query.search) searchQuery.value = route.query.search as string;
-if (route.query.tab) activeTab.value = route.query.tab as "courses" | "blogs";
+if (route.query.tab) setTabFromQuery(route.query.tab);
 if (route.query.category) {
   const categoryId = parseInt(route.query.category as string);
   if (!isNaN(categoryId)) {
     filters.value.selectedCategoryIds = [categoryId];
   }
 }
+
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    if (newTab) {
+      setTabFromQuery(newTab);
+    }
+  }
+);
 
 const currentLocale = computed(() =>
   locales.value.find((l) => l.code === locale.value)

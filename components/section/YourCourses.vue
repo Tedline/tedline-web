@@ -1,5 +1,5 @@
 <template>
-  <div class=" mx-auto grid max-w-7xl px-6 mt-6 mb-20">
+  <div class=" mx-auto grid max-w-7xl md:px-6 px-3 mt-6 mb-20">
     <div v-if="showTitle" class="flex justify-between items-center mb-4">
       <h3 class="font-semibold text-lg text-gray-900 dark:text-gray-100">
         {{ title || $t('yourCourses.title') }}

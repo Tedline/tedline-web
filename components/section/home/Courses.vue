@@ -1,6 +1,6 @@
 <template>
   <section id="resources" class=" scroll-mt-14 sm:scroll-mt-32 sm:py-5" v-if="pending == false">
-    <div class="flex justify-between items-center mx-10">
+    <div class="flex justify-between items-center md:px-10 px-3">
       <h3 class="font-semibold flex text-gray-900 dark:text-gray-100">   
         {{ title }}  
       </h3>

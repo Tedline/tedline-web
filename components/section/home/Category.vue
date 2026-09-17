@@ -2,9 +2,12 @@
 import type { Category } from "~/types/course";
 
 const api = useApi(false)
+const { locale } = useI18n()
 
-const { data : categories, pending:loading, error } = await useLazyAsyncData<Category[]>('getCategoryData', () => 
-  api('/course/course-category-popular/').then((res: any) => res),
+const { data : categories, pending:loading, error } = await useLazyAsyncData<Category[]>(
+  () => `getCategoryData-${locale.value}`,
+  () => api('/course/course-category-popular/').then((res: any) => res),
+  { watch: [locale] }
 )
 
 // Generate random colors for category badges
@@ -39,17 +42,17 @@ const getCategoryColor = (index: number) => {
      <div class="relative container mx-auto  sm:px-6 lg:px-8 py-12">
        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 items-center">
          <!-- Title Section -->
-         <div class="md:col-span-1 text-right space-y-3 px-5 sm:px-0">
+         <div class="md:col-span-1 rtl:text-right ltr:text-left space-y-3 px-5 sm:px-0">
            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
              <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-yellow-300" />
-             <span class="text-xs font-medium text-white/90">محبوب ترین</span>
+             <span class="text-xs font-medium text-white/90">{{ $t('homeCategory.badge') }}</span>
            </div>
            <h2 class="font-extrabold text-2xl md:text-3xl text-white leading-tight">
-             پر طرفدار ترین<br />
-             <span class="text-blue-100 dark:text-blue-200">دسته بندی ها</span>
+             {{ $t('homeCategory.title') }}<br />
+             <span class="text-blue-100 dark:text-blue-200">{{ $t('homeCategory.titleHighlight') }}</span>
            </h2>
            <p class="text-sm text-white/80 font-light leading-relaxed">
-             دسته بندی های محبوب و پرطرفدار را کاوش کنید
+             {{ $t('homeCategory.description') }}
            </p>
          </div>
          
@@ -92,7 +95,7 @@ const getCategoryColor = (index: number) => {
                  <div class="relative flex items-center justify-center w-6 h-6 rounded-full bg-white/20 dark:bg-white/10 group-hover:bg-white/30 dark:group-hover:bg-white/20 transition-all duration-300 ">
                    <UIcon 
                      name="i-heroicons-arrow-left" 
-                     class="w-3.5 h-3.5 text-white/80 group-hover:text-white group-hover:scale-110 transition-all duration-300" 
+                     class="w-3.5 h-3.5 text-white/80 group-hover:text-white group-hover:scale-110 transition-all duration-300 rtl:rotate-0 ltr:rotate-180" 
                    />
                  </div>
                  
