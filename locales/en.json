@@ -267,7 +267,8 @@
     "profile": "Profile"
   },
   "header": {
-    "tools": "Tools",
+    "services": "Services",
+    "tools": "Services",
     "blog": "Blog",
     "contact": "Contact us",
     "home": "Home",
@@ -292,9 +293,9 @@
         "name": "Resource library",
         "description": "Read educational books and articles"
       },
-      "instructors": {
-        "name": "Instructors",
-        "description": "Meet course teachers and instructors"
+      "helpdesk": {
+        "name": "Helpdesk",
+        "description": "Submit and track support requests"
       },
       "categories": {
         "name": "Categories",

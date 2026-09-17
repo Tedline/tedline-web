@@ -15,7 +15,7 @@ import {
     AcademicCapIcon,
     BookOpenIcon,
     PlayCircleIcon,
-    UserGroupIcon,
+    LifebuoyIcon,
     PhoneIcon,
 } from "@heroicons/vue/24/outline";
 import {
@@ -50,16 +50,10 @@ const products = [
         icon: PlayCircleIcon,
     },
     {
-        name: "header.products.library.name",
-        description: "header.products.library.description",
-        href: "#",
-        icon: BookOpenIcon,
-    },
-    {
-        name: "header.products.instructors.name",
-        description: "header.products.instructors.description",
-        href: "#",
-        icon: UserGroupIcon,
+        name: "header.products.helpdesk.name",
+        description: "header.products.helpdesk.description",
+        href: "/helpdesk",
+        icon: LifebuoyIcon,
     },
     {
         name: "header.products.categories.name",
@@ -137,7 +131,7 @@ async function handleLogout() {
                 <Popover class="relative">
                     <PopoverButton
                         class="flex items-center gap-x-1 text-sm leading-6 focus:ring-0 focus:border-0 focus:outline-none text-gray-900 dark:text-gray-100">
-                        {{ t('header.tools') }}
+                        {{ t('header.services') }}
                         <ChevronDownIcon class="h-5 w-5 flex-none text-gray-400 dark:text-gray-200" aria-hidden="true" />
                     </PopoverButton>
 
