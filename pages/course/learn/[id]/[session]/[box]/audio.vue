@@ -29,7 +29,7 @@
     <UCard class="rounded-xl overflow-hidden">
       <video-player
         @seeking="seeking"
-        :src="`${audioUrl}/${$route.params.id}/${$route.params.box}/?token=${$store.state.token}#.mp3`"
+        :src="`${audioUrl}/${$route.params.id}/${$route.params.box}/?token=${userStore.accessToken || ''}#.mp3`"
         controls
         :audioOnlyMode="true"
         oncontextmenu="return false;"
@@ -96,6 +96,7 @@ import QuizMovie from "~/components/section/QuizMovie.vue"
 
 definePageMeta({
   layout: "course-dashboard",
+  middleware: "auth",
 })
 
 const route = useRoute()

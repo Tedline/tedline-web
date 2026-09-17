@@ -148,8 +148,8 @@
           <!-- Course Content -->
           <div v-else>
             <!-- Student Courses -->
-            <SharedCourseHorizontalCard v-if="data?.status === 's'" :progress="false" variant="flat"
-              :username="$route.params.username" />
+            <SectionYourCourses v-if="data?.status === 's'" :progress="false" variant="flat"
+              :username="$route.params.username" :show-title="false" />
 
             <!-- Teacher Courses -->
             <SectionProfileTab v-if="data?.status === 't'" :username="$route.params.username" />

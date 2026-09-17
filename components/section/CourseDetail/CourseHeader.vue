@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <!-- Hero Image with Space Theme -->
-    <div class="relative h-80 md:h-96 lg:h-[390px]overflow-hidden ">
+    <div class="relative h-96 lg:h-[390px] overflow-hidden">
       <img 
         :src="course.image" 
         :alt="course.title"
@@ -16,7 +16,7 @@
 
       
       <!-- Content Overlay -->
-      <div class="max-w-7xl mx-auto absolute bottom-0 left-0 right-0 p-6 md:p-8 md:pb-15">
+      <div class="max-w-7xl mx-auto absolute bottom-0 left-0 right-0 p-6  md:p-8 md:pb-15">
         <div class="max-w-7xl mx-auto">
           <!-- Main Content Grid -->
           <div class="grid lg:grid-cols-4 gap-6 items-end">
@@ -24,7 +24,7 @@
             <div class="lg:col-span-3 md:space-y-4">
               <!-- Course Title -->
               <div class="space-y-3">
-                <h1 class="text-xl  lg:text-3xl font-bold text-center md:text-start text-black dark:text-white leading-tight">
+                <h1 class="py-10 md:py-0 text-xl  lg:text-3xl font-bold text-center md:text-start text-black dark:text-white leading-tight">
                   {{ course.title }}
                 </h1>
                 <p v-if="course.description" class="text-sm  text-gray-700 text-center md:text-start dark:text-gray-200 max-w-2xl line-clamp-1 leading-relaxed">
@@ -49,7 +49,7 @@
               </div>
 
               <!-- Action Buttons -->
-              <div class="flex gap-3 pt-2 justify-center md:justify-start">
+              <div class="flex flex-wrap md:flex-nowrap gap-2 sm:gap-3 md:gap-3 pt-2 justify-center md:justify-start">
                 <!-- Register Button -->
                 <UButton
                   v-if="!course.registered && course.session.length > 0"
@@ -83,7 +83,7 @@
                   variant="ghost"
                   class="rounded-full"
                 >
-                  <UIcon name="i-heroicons-play" class="w-5 h-5 mr-2" />
+                  <UIcon name="i-heroicons-play" class="w-5 h-5 me-2" />
                   {{ $t('courseDetail.viewLessons') }}
                 </UButton>
 
@@ -94,7 +94,7 @@
                   variant="ghost"
                   class="rounded-full"
                 >
-                  <UIcon name="i-heroicons-share" class="w-5 h-5 mr-2" />
+                  <UIcon name="i-heroicons-share" class="w-5 h-5 me-2" />
                   {{ $t('courseDetail.share') }}
                 </UButton>
               </div>

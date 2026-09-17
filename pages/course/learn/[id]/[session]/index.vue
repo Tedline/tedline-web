@@ -108,6 +108,7 @@
 
 definePageMeta({
   layout: "course-dashboard",
+  middleware: "auth",
 })
 
 
@@ -130,23 +131,50 @@ const api = useApi()
 const data = ref(null)
 const loading = ref(true)
 
-const token = computed(() => userStore.accessToken)
-const username = computed(() => userStore.username)
+const token = ref(null)
+const videoUsername = ref(null)
+const username = computed(() => videoUsername.value || userStore.username)
 
+const fetchVideoToken = async () => {
+  if (!userStore.accessToken) {
+    token.value = null
+    return
+  }
 
+  const hasAccessibleVideo = data.value?.boxes?.some(section =>
+    section.box?.some(box => box.video && (!box.is_locked || data.value?.is_signed))
+  )
+
+  if (hasAccessibleVideo) {
+    try {
+      const response = await api('box/video/generate-token/')
+      if (response?.token) {
+        token.value = response.token
+      }
+      if (response?.username) {
+        videoUsername.value = response.username
+      }
+    } catch (error) {
+      console.error('Error fetching video token:', error)
+      token.value = null
+    }
+  }
+}
 
 const getData = async () => {
   try {
     const response = await api(`course/RetrieveSession/${route.params.session}/`)
     loading.value = false
     data.value = response
+    await fetchVideoToken()
   } catch (error) {
-    console.error($t('learning.errorFetchingSession'), error)
+    console.error('Error fetching session:', error)
     loading.value = false
   }
 }
 
 onMounted(async () => {
+  userStore.initialize()
   await getData()
 })
 </script>

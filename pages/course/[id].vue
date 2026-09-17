@@ -34,7 +34,7 @@
   </div>
 
   <!-- Course Content -->
-  <div v-else class="min-h-screen ">
+  <div v-else class="min-h-screen overflow-x-clip">
     <SectionCourseDetailCourseHeader :course="course!" @register="() => {handleRegister()}" />
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:pt-8">
 
@@ -108,7 +108,7 @@
             </div>
           </div>
         </div>
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-2 min-w-0 max-w-full">
           <UTabs :dir="currentLocale?.dir" variant="link" :items="tabs.map(tab => ({ ...tab, label: $t(tab.label) }))"
             class="w-full">
             <template #details="{ item }">
@@ -155,6 +155,7 @@ function formatPrice(amount: number) {
 }
 
 const api = useApi(false)
+const apiAuth = useApi(true)
 
 // Get i18n instance
 const { t } = useI18n()
@@ -287,19 +288,15 @@ const handleRegistration = async (discountCode: string | null) => {
 }
 
 const registerFreeCourse = async () => {
-  const response = await api(`/course/RegisterCourseFree/${courseId}/`) as any
+  const response = await apiAuth(`/course/RegisterCourseFree/${courseId}/`) as any
 
   // Redirect to first lesson
   navigateTo(`/course/learn/${course.value!.id}/${course.value!.session[0].id}`)
 }
 
 const registerPaidCourse = async (discountCode: string | null) => {
-  const response = await $fetch('https://tedline.org/api/wallet/increase-money/', {
+  const response = await apiAuth('/wallet/increase-money/', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
     body: {
       course_id: courseId,
       discount_code: discountCode
@@ -307,17 +304,15 @@ const registerPaidCourse = async (discountCode: string | null) => {
   }) as any
 
   // Redirect to payment gateway
-  window.location.href = response.result
+  if (response?.result) {
+    window.location.href = response.result
+  }
 }
 
 const checkDiscountCode = async (code: string) => {
   try {
-    const response = await $fetch(`https://tedline.org/api/course/check-valid-product-discount/${code}/${courseId}/`, {
+    const response = await api(`/course/check-valid-product-discount/${code}/${courseId}/`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
     }) as any
 
     if (response.valid) {

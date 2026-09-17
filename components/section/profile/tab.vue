@@ -115,12 +115,12 @@ const tabs = [
   }
 ]
 
-const api = useApi(false)
+const api = useApi(false, '/api/v2/')
 
 const getData = async () => {
   try {
     const res = await api(`/course/TeacherUnfinishedCourse/${props.username}/`)
-    data.value = res
+    data.value = res?.results || res || []
   } finally {
     loadingUnfinished.value = false
   }
@@ -129,7 +129,7 @@ const getData = async () => {
 const getDataFinished = async () => {
   try {
     const res = await api(`/course/TeacherFinishedCourse/${props.username}/`)
-    dataFinished.value = res
+    dataFinished.value = res?.results || res || []
   } finally {
     loadingFinished.value = false
   }

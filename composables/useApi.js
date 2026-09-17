@@ -38,6 +38,10 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
         .then((response) => {
           token.value = response.access
           if (response.refresh) refreshToken.value = response.refresh
+          try {
+            const userStore = useUserStore()
+            userStore.accessToken = response.access
+          } catch (_) {}
           return true
         })
         .catch(() => false)
@@ -75,6 +79,10 @@ export const useApi = (requireAuth = true,suffixUrl = '/api/') => {
 
       token.value = null
       refreshToken.value = null
+      try {
+        const userStore = useUserStore()
+        userStore.accessToken = null
+      } catch (_) {}
       if (requireAuth && import.meta.client) {
         const localePath = useLocalePath()
         await router.push(localePath(`/auth/signIn?redirect=${router.currentRoute.value.fullPath}`))

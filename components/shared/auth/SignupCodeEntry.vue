@@ -36,9 +36,9 @@ export default {
       const toast = useToast();
       
       if (this.code) {
-        const api = useApi();
+        const api = useApi(false);
         this.$emit('update:loading', true);
-        api('/api/account/code-check-sign-up/', {
+        api('/account/code-check-sign-up/', {
           method: 'POST',
           body: { number: this.phoneNumber, code: this.code },
         })

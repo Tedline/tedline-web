@@ -90,6 +90,7 @@
     "betterUnderstanding": "درک بهتر مفاهیم پیشرفته",
     "fullPreparation": "آمادگی کامل برای یادگیری",
     "fasterProgress": "پیشرفت سریع‌تر در دوره",
+    "progress": "پیشرفت",
     "reducedLearningIssues": "کاهش مشکلات یادگیری",
     "registrationTitle": "ثبت نام در دوره",
     "applyDiscountCode": "اعمال کد تخفیف",
@@ -237,6 +238,14 @@
     "ongoingCoursesCount": "دوره تمام نشده",
     "courses": "دوره",
     "loading": "در حال بارگذاری..."
+  },
+  "yourCourses": {
+    "title": "دوره‌های شما",
+    "learning": "در حال یادگیری",
+    "completed": "به اتمام رسیده",
+    "noCourses": "دوره ای وجود ندارد",
+    "noLearningCourses": "شما هیچ دوره ای برای یادگیری ندارید",
+    "noCompletedCourses": "شما هیچ دوره ای را به اتمام نرسانده اید"
   },
   "navigation": {
     "home": "خانه",

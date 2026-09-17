@@ -67,6 +67,7 @@ import { useLocalePath } from '#i18n'
 
 definePageMeta({
   layout: "course-dashboard",
+  middleware: "auth",
 })
 
 const localePath = useLocalePath()

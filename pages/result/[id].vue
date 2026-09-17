@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-definePageMeta({ layout: 'dashboard' })
+definePageMeta({ layout: 'dashboard', middleware: 'auth' })
 
 const route = useRoute()
 const api = useApi()

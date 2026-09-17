@@ -14,7 +14,7 @@
            <div class="-z-10 absolute  inset-0 ltr:bg-gradient-to-l rtl:bg-gradient-to-r   dark:from-black/50 to-transparent"></div>
 
          <!-- Course Image -->
-         <div class="relative h-40 md:w-1/3 overflow-hidden">
+         <div class="relative h-40 md:h-40 md:w-1/3 overflow-hidden">
            <NuxtImg
            preset="thumbnail"
              :src="course.image"
@@ -69,7 +69,7 @@
                  v-if="course.price === 0"
                  color="neutral"
                  variant="soft"
-                 class="text-xs bg-white/70 dark:bg-black/50 dark:backdrop-blur-md"
+                 class="text-xs bg-white/70 dark:bg-black/50 backdrop-blur-md"
                >
                {{ t('free') }}
              </UBadge>
@@ -77,7 +77,7 @@
                v-else-if="course.discount && course.discount > 0"
                color="neutral"
                variant="soft"
-               class="text-xs bg-white/70 dark:bg-black/50 dark:backdrop-blur-md rounded-full"
+               class="text-xs bg-white/70 dark:bg-black/50 backdrop-blur-md rounded-full"
              >
                {{ course.discount }}% {{ t('courseDetail.discount') }}
              </UBadge>
@@ -106,24 +106,7 @@
                <span>{{ course.teacher?.username || course.institute?.username }}</span>
              </div>
            </div>
-           
-           <!-- Progress Status (if exists) -->
-           <div v-if="progress !== false" class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-             <div class="flex items-center justify-between">
-               <div class="flex items-center gap-2">
-                 <UIcon name="i-heroicons-play-circle" class="w-4 h-4 text-blue-500" />
-                 <span class="text-xs text-gray-600 dark:text-gray-400">
-                   {{ t('courseDetail.progress') }}: {{ progressValue }}%
-                 </span>
-               </div>
-               <div v-if="course.is_finished" class="flex items-center gap-1">
-                 <UIcon name="i-heroicons-check-circle" class="w-4 h-4 text-green-500" />
-                 <span class="text-xs text-green-600 dark:text-green-400 font-medium">
-                   {{ t('courseDetail.completed') }}
-                 </span>
-               </div>
-             </div>
-           </div>
+          
            
            <!-- Price -->
            <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
@@ -134,11 +117,11 @@
                <div v-else class="text-sm font-semibold text-gray-900 dark:text-white">
                  {{ formatPrice(course.price) }} {{ t('explore.currency') }}
                </div>
-               <div v-if="course.discount && course.discount > 0" class="text-sm font-semibold text-green-600 dark:text-green-400">
+               <div v-if="course.discount && course.discount > 0" class="text-sm font-semibold text-blue-600 dark:text-blue-400">
                  {{ formatPrice(calculateFinalPrice()) }} {{ t('explore.currency') }}
                </div>
              </div>
-             <div v-else class="text-sm font-semibold text-green-600 dark:text-green-400">
+             <div v-else class="text-sm font-semibold text-blue-600 dark:text-blue-400">
                {{ t('free') }}
              </div>
            </div>

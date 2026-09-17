@@ -126,7 +126,7 @@
 <script>
 export default {
   setup() {
-    definePageMeta({ layout: 'learn-dashboard' })
+    definePageMeta({ layout: 'learn-dashboard', middleware: 'auth' })
     return { api: useApi() }
   },
   data() {

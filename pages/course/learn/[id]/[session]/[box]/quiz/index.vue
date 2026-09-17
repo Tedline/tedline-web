@@ -94,6 +94,7 @@ export default {
   setup() {
     definePageMeta({
       layout: "learn-dashboard",
+      middleware: "auth",
     })
     return { api: useApi() }
   },

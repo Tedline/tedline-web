@@ -236,6 +236,14 @@
     "courses": "courses",
     "loading": "Loading..."
   },
+  "yourCourses": {
+    "title": "Your Courses",
+    "learning": "In Progress",
+    "completed": "Completed",
+    "noCourses": "No courses available",
+    "noLearningCourses": "You don't have any ongoing courses to learn",
+    "noCompletedCourses": "You have not completed any courses yet"
+  },
   "navigation": {
     "home": "Home",
     "explore": "Explore",
