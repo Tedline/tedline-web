@@ -440,5 +440,66 @@
     "error": "Failed to load terms & conditions. Please try again.",
     "retry": "Retry",
     "loading": "Loading terms..."
+  },
+  "reports": {
+    "badge": "Learning Analytics",
+    "title": "Learning Progress Report",
+    "subtitle": "Comprehensive analysis of your study consistency, progress, and learning velocity across all courses",
+    "timeframes": {
+      "days30": "Last 30 Days",
+      "days90": "Last 3 Months",
+      "days180": "Last 6 Months",
+      "days365": "Last 1 Year"
+    },
+    "overall": {
+      "title": "Overall Course Completion",
+      "subtitle": "Average of completed lessons across all enrolled courses",
+      "finishedCourses": "Completed Courses",
+      "inProgressCourses": "In-Progress Courses",
+      "totalBoxes": "Total Lessons",
+      "completedBoxes": "Completed Lessons",
+      "coursesRatio": "{completed} of {total} courses",
+      "boxesRatio": "{completed} of {total} lessons"
+    },
+    "contentType": {
+      "title": "Content-Type Distribution",
+      "subtitle": "Detailed breakdown of completed learning media",
+      "video": "Videos",
+      "audio": "Audios",
+      "file": "Files & Docs",
+      "quiz": "Quizzes & Tests",
+      "completedRatio": "{completed} of {total}"
+    },
+    "heatmap": {
+      "title": "Study Activity Heatmap",
+      "subtitle": "Daily lesson completions and study momentum",
+      "tooltip": "{count} activities completed on {date}",
+      "less": "Less",
+      "more": "More",
+      "weekdays": {
+        "sat": "Sat",
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri"
+      }
+    },
+    "velocity": {
+      "title": "Learning Velocity Over Time",
+      "subtitle": "Cumulative completed lessons and daily study momentum",
+      "cumulative": "Cumulative Completed",
+      "daily": "Daily Completed"
+    },
+    "empty": {
+      "title": "No learning stats available yet",
+      "description": "Start completing your course lessons to unlock your comprehensive progress analytics and velocity trends.",
+      "cta": "Explore Courses"
+    },
+    "error": {
+      "title": "Failed to load learning statistics",
+      "retry": "Try Again"
+    }
   }
 }
