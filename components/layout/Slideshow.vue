@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import {
     CalendarIcon,
     ChartPieIcon,
@@ -9,7 +9,10 @@ import {
     MagnifyingGlassIcon,
     ArrowLeftStartOnRectangleIcon
 } from '@heroicons/vue/24/outline'
+import NotificationBell from '~/components/notifications/NotificationBell.vue'
+
 const userStore = useUserStore()
+const notificationStore = useNotificationStore()
 
 const navigation = [
     { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
@@ -20,7 +23,22 @@ const navigation = [
     { name: 'Reports', href: '/dashboard/reports', icon: ChartPieIcon, current: false },
 ]
 
+onMounted(() => {
+    if (userStore.isAuthenticated) {
+        notificationStore.startPolling()
+    }
+})
+
+watch(() => userStore.isAuthenticated, (isAuth) => {
+    if (isAuth) {
+        notificationStore.startPolling()
+    } else {
+        notificationStore.stopPolling()
+    }
+})
+
 function handleLogout() {
+    notificationStore.stopPolling()
     userStore.logout();
     navigateTo('/');
 }
@@ -29,7 +47,7 @@ const sidebarOpen = ref(false)
 </script>
 
 <template>
-<div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:block lg:w-18 lg:overflow-y-auto lg:bg-gray-900 dark:bg-gradient-to-t dark:from-[#110c2c] dark:from-70% dark:to-[#141651]   lg:pb-4 ltr:left-0 rtl:right-0">
+<div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:block lg:w-18 lg:overflow-visible lg:bg-gray-900 dark:bg-gradient-to-t dark:from-[#110c2c] dark:from-70% dark:to-[#141651] lg:pb-4 ltr:left-0 rtl:right-0">
   <div class="flex h-full flex-col justify-between">
     
     <!-- Top section (nav buttons) -->
@@ -44,6 +62,14 @@ const sidebarOpen = ref(false)
             <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
             <span class="sr-only">{{ item.name }}</span>
           </NuxtLinkLocale>
+        </li>
+
+        <!-- Desktop Hover Notification Bell -->
+        <li v-if="userStore.isAuthenticated" class="pt-1">
+          <NotificationBell
+            mode="hover"
+            placement="sidebar"
+          />
         </li>
       </ul>
     </nav>
