@@ -23,8 +23,10 @@ import {
 
 } from "@heroicons/vue/20/solid";
 import { useRoute, useRouter } from "vue-router";
+import NotificationBell from '~/components/notifications/NotificationBell.vue'
 
 const userStore = useUserStore()
+const notificationStore = useNotificationStore()
 const { t } = useI18n()
 
 // Props
@@ -82,6 +84,9 @@ const handleScroll = () => {
 
 onMounted(() => {
     window.addEventListener("scroll", handleScroll);
+    if (userStore.isAuthenticated) {
+        notificationStore.startPolling()
+    }
 });
 
 onUnmounted(() => {
@@ -112,14 +117,19 @@ async function handleLogout() {
             : hideUntilScroll ? 'sr-only border-gray-50/10 dark:border-gray-900/10' : 'border-gray-50 dark:border-gray-900/10',
     ]">
         <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 py-3 lg:px-8" :aria-label="t('header.globalNavigation')">
-            <div v-if="!userStore.isAuthenticated" class="flex lg:flex-1 rtl:float-left ltr:float-right">
+            <div class="flex lg:flex-1 rtl:float-left ltr:float-right" :class="{ 'lg:hidden': userStore.isAuthenticated }">
                 <a href="#" class="-m-1.5 p-1.5">
                     <span class="sr-only">{{ t('header.company') }}</span>
                     <img class="h-8 w-auto" src="/images/icon2.png" alt="" />
                 </a>
             </div>
 
-            <div class="flex lg:hidden rtl:float-left ltr:float-right">
+            <div class="flex items-center gap-3 lg:hidden rtl:float-left ltr:float-right">
+                <NotificationBell
+                    v-if="userStore.isAuthenticated"
+                    mode="click"
+                    placement="header"
+                />
                 <button type="button"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200"
                     @click="mobileMenuOpen = true">
