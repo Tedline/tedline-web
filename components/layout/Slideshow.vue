@@ -17,7 +17,7 @@ const navigation = [
     { name: 'Projects', href: '#', icon: FolderIcon, current: false },
     { name: 'Calendar', href: '/calendar', icon: CalendarIcon, current: false },
     { name: 'Help desk', href: '/helpdesk', icon: DocumentDuplicateIcon, current: false },
-    { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+    { name: 'Reports', href: '/dashboard/reports', icon: ChartPieIcon, current: false },
 ]
 
 function handleLogout() {
