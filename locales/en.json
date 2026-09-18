@@ -505,5 +505,44 @@
       "description": "An error occurred while communicating with the server. Please try again.",
       "retry": "Try Again"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "View and manage your updates and alerts",
+    "badge": "New Notification",
+    "unreadCount": "{count} unread notifications",
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "read": "Read"
+    },
+    "types": {
+      "course": "Course",
+      "quiz": "Quiz",
+      "comment": "Comment",
+      "wallet": "Wallet",
+      "ticket": "Ticket",
+      "system": "System"
+    },
+    "actions": {
+      "viewAll": "View All",
+      "markAsRead": "Mark as read",
+      "markAllRead": "Mark all as read",
+      "viewDetails": "View details"
+    },
+    "empty": {
+      "title": "No notifications yet",
+      "description": "You do not have any notifications at the moment."
+    },
+    "emptyTitle": "No notifications yet",
+    "emptyDescription": "You do not have any notifications at the moment.",
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "yesterday": "Yesterday",
+      "daysAgo": "{count}d ago"
+    }
   }
 }
+
