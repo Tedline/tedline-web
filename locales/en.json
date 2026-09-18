@@ -502,6 +502,7 @@
     },
     "error": {
       "title": "Failed to load learning statistics",
+      "description": "An error occurred while communicating with the server. Please try again.",
       "retry": "Try Again"
     }
   }

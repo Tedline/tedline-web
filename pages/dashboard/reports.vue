@@ -47,7 +47,7 @@
           {{ $t('reports.error.title') }}
         </h2>
         <p class="text-sm text-gray-600 dark:text-gray-300 max-w-md mx-auto mb-6">
-          {{ error }}
+          {{ error || $t('reports.error.description') }}
         </p>
         <button
           type="button"
@@ -185,7 +185,7 @@ const fetchStats = async (isTimeframeChange = false) => {
     stats.value = response as LearningDashboardStatsResponse
   } catch (err: any) {
     console.error('Failed to load learning stats:', err)
-    error.value = err?.data?.message || err?.message || 'Error loading learning stats'
+    error.value = err?.userMessage || err?.data?.detail || err?.data?.message || err?.message || ''
   } finally {
     loading.value = false
     isTimeframeLoading.value = false
