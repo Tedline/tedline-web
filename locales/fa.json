@@ -40,7 +40,13 @@
     "maxDuration": "حداکثر مدت زمان",
     "minDiscount": "حداقل تخفیف",
     "categorySlug": "اسلاگ دسته‌بندی",
-    "excludeCategorySlug": "حذف اسلاگ دسته‌بندی"
+    "excludeCategorySlug": "حذف اسلاگ دسته‌بندی",
+    "titleAsc": "عنوان (الف-ی)",
+    "blogCategories": "دسته‌بندی‌های وبلاگ",
+    "filterBlogsDesc": "نتایج مقالات وبلاگ را فیلتر کنید",
+    "ordering": "مرتب‌سازی",
+    "clearFilters": "پاک کردن فیلترها",
+    "searchCategories": "جستجوی دسته‌بندی‌ها..."
   },
   "courseDetail": {
     "skillsTitle": "مهارت‌های کسب شده",

@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="mt-6 rounded-2xl border border-gray-200 bg-white p-4 dark:border-white/10 dark:bg-stone-900/50">
+      <div class="calendar-wrapper mt-6 rounded-2xl border border-gray-200 bg-white p-2 sm:p-4 dark:border-white/10 dark:bg-stone-900/50">
         <FullCalendar :options="calendarOptions" />
       </div>
     </div>
@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import momentPlugin from '@fullcalendar/moment'
@@ -45,6 +46,23 @@ definePageMeta({
 const { locale, locales } = useI18n()
 const currentLocale = computed(() => locales.value.find((l) => l.code === locale.value))
 const isFa = computed(() => locale.value === 'fa')
+
+const isMobile = ref(false)
+
+const updateIsMobile = () => {
+  if (typeof window !== 'undefined') {
+    isMobile.value = window.innerWidth < 640
+  }
+}
+
+onMounted(() => {
+  updateIsMobile()
+  window.addEventListener('resize', updateIsMobile)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateIsMobile)
+})
 
 const remainingDays = ref(18)
 const progress = ref(0.66)
@@ -62,16 +80,25 @@ moment.loadPersian({ usePersianDigits: false, dialect: 'persian-modern' })
 const calendarOptions = computed(() => ({
   plugins: [dayGridPlugin, momentPlugin],
   initialView: 'dayGridMonth',
-  headerToolbar: {
-    left: 'prev,next today',
-    center: 'title',
-    right: 'dayGridMonth',
-  },
+  headerToolbar: isMobile.value
+    ? {
+        left: 'prev,next',
+        center: 'title',
+        right: 'today',
+      }
+    : {
+        left: 'prev,next today',
+        center: 'title',
+        right: '',
+      },
+  dayHeaderFormat: isMobile.value ? { weekday: 'narrow' } : { weekday: 'short' },
   locale: isFa.value ? faLocale : 'en',
   direction: currentLocale.value?.dir || 'rtl',
   titleFormat: isFa.value ? 'jYYYY jMMMM' : 'MMMM YYYY',
   fixedWeekCount: false,
   showNonCurrentDates: true,
+  contentHeight: 'auto',
+  handleWindowResize: true,
 
   // Read-only: no adding or editing events
   editable: false,
@@ -86,3 +113,47 @@ const calendarOptions = computed(() => ({
   events: [],
 }))
 </script>
+
+<style scoped>
+/* Only target borders within FullCalendar */
+.calendar-wrapper :deep(.fc) {
+  --fc-border-color: #e5e7eb;
+}
+
+.calendar-wrapper :deep(.fc) {
+  --fc-border-color: rgba(255, 255, 255, 0.1);
+}
+
+.calendar-wrapper :deep(.fc-theme-standard td),
+.calendar-wrapper :deep(.fc-theme-standard th),
+.calendar-wrapper :deep(.fc-theme-standard .fc-scrollgrid) {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .calendar-wrapper :deep(.fc .fc-toolbar) {
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .calendar-wrapper :deep(.fc .fc-toolbar-title) {
+    font-size: 1.1rem;
+  }
+
+  .calendar-wrapper :deep(.fc .fc-button) {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .calendar-wrapper :deep(.fc .fc-col-header-cell-cushion) {
+    padding: 4px 2px;
+    font-size: 0.85rem;
+  }
+
+  .calendar-wrapper :deep(.fc .fc-daygrid-day-number) {
+    padding: 4px;
+    font-size: 0.85rem;
+  }
+}
+</style>

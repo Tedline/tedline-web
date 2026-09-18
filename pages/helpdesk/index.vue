@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50/70 pb-24 dark:bg-gray-950 lg:h-screen lg:overflow-hidden lg:pb-0">
+  <div class="min-h-screen pb-24 lg:h-screen lg:overflow-hidden lg:pb-0">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:flex lg:h-full lg:flex-col lg:px-8">
       <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -12,19 +12,19 @@
         </button>
       </header>
 
-      <div v-if="errorMessage" class="mt-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+      <div v-if="errorMessage" class="mt-6 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50/60 p-4 text-sm text-rose-700 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300">
         <ExclamationCircleIcon class="mt-0.5 size-5 shrink-0" />
         <span>{{ errorMessage }}</span>
       </div>
 
       <div class="mt-8 grid min-h-0 gap-6 lg:flex-1 lg:grid-cols-[340px_minmax(0,1fr)]">
-        <aside class="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900">
+        <aside class="flex min-h-0 flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-stone-900/50">
           <div class="border-b border-gray-200 p-4 dark:border-white/10">
             <UInput v-model="search" type="search" icon="i-heroicons-magnifying-glass" :placeholder="t('helpdesk.search')" size="lg" class="w-full" :ui="{ base: 'rounded-xl' }" @keyup.enter="loadTickets" />
           </div>
 
           <div v-if="loadingTickets" class="space-y-3 p-4">
-            <div v-for="item in 4" :key="item" class="h-24 animate-pulse rounded-xl bg-gray-100 dark:bg-white/5" />
+            <div v-for="item in 4" :key="item" class="h-24 animate-pulse rounded-2xl bg-gray-100 dark:bg-white/5" />
           </div>
           <div v-else-if="!tickets.length" class="p-8 text-center">
             <TicketIcon class="mx-auto size-10 text-gray-300 dark:text-gray-600" />
@@ -32,7 +32,7 @@
             <p class="mt-1 text-sm text-gray-500">{{ t('helpdesk.emptyText') }}</p>
           </div>
           <div v-else class="max-h-[40vh] min-h-0 divide-y divide-gray-100 overflow-y-auto dark:divide-white/5 lg:max-h-none lg:flex-1">
-            <button v-for="ticket in tickets" :key="ticket.id" type="button" class="block w-full p-4 text-start transition hover:bg-gray-50 dark:hover:bg-white/5" :class="selectedTicket?.id === ticket.id ? 'bg-blue-50 dark:bg-blue-950/30' : ''" @click="selectTicket(ticket)">
+            <button v-for="ticket in tickets" :key="ticket.id" type="button" class="block w-full p-4 text-start transition hover:bg-gray-50 dark:hover:bg-white/5" :class="selectedTicket?.id === ticket.id ? 'bg-blue-50/70 dark:bg-blue-500/10' : ''" @click="selectTicket(ticket)">
               <div class="flex items-center justify-between gap-3">
                 <span class="truncate text-sm font-semibold text-gray-900 dark:text-white">{{ ticket.subject }}</span>
                 <span class="shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium" :class="statusClass(ticket.status)">{{ statusLabel(ticket.status) }}</span>
@@ -45,7 +45,7 @@
           </div>
         </aside>
 
-        <main class="min-h-[520px] overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 lg:flex lg:min-h-0 lg:h-full lg:flex-col">
+        <main class="min-h-[520px] overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-white/10 dark:bg-stone-900/50 lg:flex lg:min-h-0 lg:h-full lg:flex-col">
           <div v-if="showComposer" class="min-h-0 overflow-y-auto p-5 sm:p-7 lg:flex-1">
             <div class="flex items-center justify-between">
               <div><h2 class="text-xl font-bold text-gray-950 dark:text-white">{{ t('helpdesk.createTitle') }}</h2><p class="mt-1 text-sm text-gray-500">{{ t('helpdesk.createText') }}</p></div>
@@ -60,7 +60,7 @@
               <UFormField :label="t('helpdesk.message')" class="sm:col-span-2"><UTextarea v-model.trim="form.message" required :rows="6" autoresize class="w-full" :ui="{ base: 'rounded-xl' }" /></UFormField>
               <UFormField :label="t('helpdesk.image')"><UInput type="file" accept="image/*" size="lg" class="w-full" :ui="{ base: 'rounded-xl file:me-3 file:cursor-pointer' }" @change="setFile($event, 'image')" /></UFormField>
               <UFormField :label="t('helpdesk.file')"><UInput type="file" size="lg" class="w-full" :ui="{ base: 'rounded-xl file:me-3 file:cursor-pointer' }" @change="setFile($event, 'file')" /></UFormField>
-              <div class="flex justify-end gap-3 sm:col-span-2"><button type="button" class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold dark:border-white/10" @click="showComposer = false">{{ t('helpdesk.cancel') }}</button><button type="submit" :disabled="submitting" class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{{ submitting ? t('helpdesk.sending') : t('helpdesk.submit') }}</button></div>
+              <div class="flex justify-end gap-3 sm:col-span-2"><button type="button" class="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:text-gray-200 dark:hover:bg-white/5" @click="showComposer = false">{{ t('helpdesk.cancel') }}</button><button type="submit" :disabled="submitting" class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{{ submitting ? t('helpdesk.sending') : t('helpdesk.submit') }}</button></div>
             </form>
           </div>
 
@@ -71,7 +71,7 @@
                 <button v-if="selectedTicket.status !== 'closed'" type="button" :disabled="closing" class="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-white/10 dark:text-gray-200 dark:hover:bg-white/5" @click="closeTicket">{{ t('helpdesk.closeTicket') }}</button>
               </div>
             </div>
-            <div ref="messagesContainer" class="min-h-0 flex-1 space-y-4 overflow-y-auto bg-gray-50/60 p-5 dark:bg-black/10">
+            <div ref="messagesContainer" class="min-h-0 flex-1 space-y-4 overflow-y-auto bg-gray-50/50 p-5 dark:bg-black/25">
               <div v-if="loadingMessages" class="text-center text-sm text-gray-500">{{ t('helpdesk.loading') }}</div>
               <div v-for="message in messages" :key="message.id" class="flex" :class="message.is_admin ? 'justify-start' : 'justify-end'">
                 <div class="max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm" :class="message.is_admin ? 'bg-white text-gray-800 dark:bg-white/10 dark:text-gray-100' : 'bg-blue-600 text-white'">
@@ -126,7 +126,12 @@ const readableError = (error: any) => error?.data?.detail || Object.values(error
 const formatDate = (value: string) => value ? new Intl.DateTimeFormat(locale.value, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)) : ''
 const statusLabel = (value: string) => t(`helpdesk.status.${value || 'open'}`)
 const priorityLabel = (value: string) => t(`helpdesk.priorities.${value || 'medium'}`)
-const statusClass = (status: string) => ({ open: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300', in_progress: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300', resolved: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300', closed: 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300' }[status] || 'bg-gray-100 text-gray-600')
+const statusClass = (status: string) => ({
+  open: 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/20',
+  in_progress: 'bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/20',
+  resolved: 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/20',
+  closed: 'bg-gray-100 text-gray-600 border border-gray-200 dark:bg-white/10 dark:text-gray-300 dark:border-white/10'
+}[status] || 'bg-gray-100 text-gray-600 border border-gray-200 dark:bg-white/10 dark:text-gray-300 dark:border-white/10')
 const scrollMessagesToBottom = async () => { await nextTick(); const el = messagesContainer.value; if (el) el.scrollTop = el.scrollHeight }
 
 async function loadTickets() { loadingTickets.value = true; errorMessage.value = ''; try { const data = await api('/helpdesk/conversation/', { query: search.value ? { search: search.value } : {} }); tickets.value = results(data) } catch (e) { errorMessage.value = readableError(e) } finally { loadingTickets.value = false } }

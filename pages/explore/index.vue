@@ -42,13 +42,12 @@
             </template>
           </UInput>
           <USelect
-            v-model="sortOption"
-            :items="sortOptions"
+            v-model="currentSortValue"
+            :items="currentSortOptions"
             size="md"
             :ui="{
               base: 'min-w-[140px] rounded-full py-3 px-3 md:block hidden',
             }"
-            @update:model-value="resetPage"
           />
           <UDrawer v-model:open="isFilterDrawerOpen" :modal="false">
             <UButton
@@ -62,10 +61,17 @@
             <template #content>
               <div class="p-6">
                 <SectionExploreSearchFilter
+                  v-if="activeTab === 'courses'"
                   :categories="categories"
                   v-model="filters"
                   :search-categories="searchCategories"
                   @update:filters="resetPage"
+                />
+                <SectionExploreBlogFilter
+                  v-else
+                  :categories="blogCategories"
+                  v-model="blogFilters"
+                  @update:filters="resetBlogPage"
                 />
               </div>
             </template>
@@ -75,9 +81,12 @@
     </div>
 
     <!-- Category Pills (Mobile and Desktop) -->
-    <div class=" border  dark:bg-black/20 border-gray-100 bg-white/30 dark:border-neutral-700/40 dark:shadow-xl backdrop-blur-sm">
+    <div
+      v-if="activeTab === 'courses'"
+      class="border dark:bg-black/20 border-gray-100 bg-white/30 dark:border-neutral-700/40 dark:shadow-xl backdrop-blur-sm"
+    >
       <div class="md:max-w-7xl md:mx-auto">
-        <div class="flex overflow-x-auto py-4 ">
+        <div class="flex overflow-x-auto py-4">
           <UBadge
             v-for="category in categories"
             :key="category.id"
@@ -113,10 +122,17 @@
             class="bg-white dark:bg-neutral-900 rounded-2xl border border-gray-200 dark:border-neutral-800 p-6 mb-6 sticky top-25"
           >
             <SectionExploreSearchFilter
+              v-if="activeTab === 'courses'"
               :categories="categories"
               v-model="filters"
               :search-categories="searchCategories"
               @update:filters="resetPage"
+            />
+            <SectionExploreBlogFilter
+              v-else
+              :categories="blogCategories"
+              v-model="blogFilters"
+              @update:filters="resetBlogPage"
             />
           </div>
         </div>
@@ -171,26 +187,48 @@
               </div>
             </template>
             <template #blogs="{ item }">
-              <div
-                v-if="blogs.length > 0"
-                class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10"
-              >
-                <SectionExploreBlogCard
-                  v-for="blog in blogs"
-                  :key="blog.id"
-                  :blog="blog"
-                />
-              </div>
+              <template v-if="blogsLoading == false">
+                <div
+                  v-if="blogs.length > 0"
+                  class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10"
+                >
+                  <SectionExploreBlogCard
+                    v-for="blog in blogs"
+                    :key="blog.id"
+                    :blog="blog"
+                  />
+                </div>
 
-              <UAlert
-                v-else
-                icon="i-heroicons-information-circle"
-                :title="$t('explore.noBlogsFound')"
-                color="neutral"
-                variant="soft"
-                class="rounded-2xl m-3"
-              >
-              </UAlert>
+                <UAlert
+                  v-else
+                  icon="i-heroicons-information-circle"
+                  :title="$t('explore.noBlogsFound')"
+                  color="neutral"
+                  variant="soft"
+                  class="rounded-2xl m-3"
+                >
+                </UAlert>
+
+                <!-- Blog Pagination -->
+                <div v-if="blogTotalPages > 1" class="flex justify-center mt-8">
+                  <UPagination
+                    v-model:page="blogPage"
+                    class="ltr"
+                    :items-per-page="12"
+                    :total="blogTotalPages * 12"
+                    size="sm"
+                  />
+                </div>
+              </template>
+              <template v-else>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+                  <USkeleton
+                    v-for="item in 6"
+                    :key="item"
+                    class="h-72 w-full rounded-3xl"
+                  />
+                </div>
+              </template>
             </template>
           </UTabs>
         </div>
@@ -212,8 +250,21 @@ definePageMeta({
 
 // State
 const searchQuery = ref("");
+const debouncedSearch = ref("");
+let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+watch(searchQuery, (newVal) => {
+  if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    debouncedSearch.value = newVal;
+    resetPage();
+    resetBlogPage();
+  }, 350);
+});
+
 const activeTab = ref<"courses" | "blogs">("courses");
 const page = ref(1);
+const blogPage = ref(1);
 const isFilterDrawerOpen = ref(false);
 defineShortcuts({
   o: () => (isFilterDrawerOpen.value = !isFilterDrawerOpen.value),
@@ -223,14 +274,17 @@ const courses = computed(() => coursesData.value?.results || []);
 const totalPages = computed(() => coursesData.value?.total_pages || 1);
 const loading = computed(() => coursesLoading.value || blogsLoading.value);
 const blogs = computed(() => blogsData.value?.results || []);
-const categories = ref<{ id: number; title: string }[]>([]);
 
+const categories = ref<{ id: number; title: string }[]>([]);
+const blogCategories = ref<{ id: number; title: string; position?: number }[]>([]);
+
+// Course sort options
 const sortOption = ref("newest");
-const sortOptions = [
+const courseSortOptions = computed(() => [
   { label: t("explore.newest"), value: "newest" },
   { label: t("explore.oldest"), value: "oldest" },
   { label: t("explore.mostLiked"), value: "most_liked" },
-];
+]);
 
 const sortOrderingMap: Record<string, string> = {
   newest: "-date_create",
@@ -238,6 +292,33 @@ const sortOrderingMap: Record<string, string> = {
   most_liked: "-student_count",
 };
 
+// Blog sort options
+const blogSortOptions = computed(() => [
+  { label: t("explore.newest"), value: "-created_at" },
+  { label: t("explore.oldest"), value: "created_at" },
+  { label: t("explore.titleAsc"), value: "title" },
+]);
+
+// Unified top sort options and active sort value
+const currentSortOptions = computed(() =>
+  activeTab.value === "courses" ? courseSortOptions.value : blogSortOptions.value
+);
+
+const currentSortValue = computed({
+  get: () =>
+    activeTab.value === "courses" ? sortOption.value : blogFilters.value.ordering,
+  set: (val: string) => {
+    if (activeTab.value === "courses") {
+      sortOption.value = val;
+      resetPage();
+    } else {
+      blogFilters.value.ordering = val;
+      resetBlogPage();
+    }
+  },
+});
+
+// Course Filters
 const filters = ref({
   selectedCategoryIds: [] as number[],
   isFree: false,
@@ -249,6 +330,14 @@ const filters = ref({
   excludeCategorySlug: "",
 });
 
+// Blog Filters
+const blogFilters = ref({
+  selectedCategoryIds: [] as number[],
+  ordering: "-created_at",
+});
+
+
+
 // Initial route params setup (SSR-safe)
 const route = useRoute();
 const router = useRouter();
@@ -256,17 +345,34 @@ const router = useRouter();
 const setTabFromQuery = (tab: any) => {
   if (tab === "blogs" || tab === "blog") {
     activeTab.value = "blogs";
-  } else if (tab === "courses" || tab === "course" || tab === "cource" || tab === "cources") {
+  } else if (
+    tab === "courses" ||
+    tab === "course" ||
+    tab === "cource" ||
+    tab === "cources"
+  ) {
     activeTab.value = "courses";
   }
 };
 
-if (route.query.search) searchQuery.value = route.query.search as string;
+if (route.query.search) {
+  searchQuery.value = route.query.search as string;
+  debouncedSearch.value = route.query.search as string;
+}
 if (route.query.tab) setTabFromQuery(route.query.tab);
 if (route.query.category) {
   const categoryId = parseInt(route.query.category as string);
   if (!isNaN(categoryId)) {
-    filters.value.selectedCategoryIds = [categoryId];
+    if (activeTab.value === "blogs") {
+      blogFilters.value.selectedCategoryIds = [categoryId];
+    } else {
+      filters.value.selectedCategoryIds = [categoryId];
+    }
+  }
+}
+if (route.query.ordering) {
+  if (activeTab.value === "blogs") {
+    blogFilters.value.ordering = route.query.ordering as string;
   }
 }
 
@@ -278,6 +384,15 @@ watch(
     }
   }
 );
+
+watch(activeTab, (newTab) => {
+  router.replace({
+    query: {
+      ...route.query,
+      tab: newTab,
+    },
+  });
+});
 
 const currentLocale = computed(() =>
   locales.value.find((l) => l.code === locale.value)
@@ -300,7 +415,7 @@ const tabItems = [
 
 const courseFetchKey = computed(
   () =>
-    `${page.value}-${searchQuery.value}-${filters.value.isFree}-${
+    `${page.value}-${debouncedSearch.value}-${filters.value.isFree}-${
       filters.value.hasDiscount
     }-${filters.value.priceRange.join(
       ","
@@ -310,11 +425,17 @@ const courseFetchKey = computed(
       ","
     )}-${sortOption.value}`
 );
-const blogFetchKey = computed(() => searchQuery.value);
+
+const blogFetchKey = computed(
+  () =>
+    `${blogPage.value}-${debouncedSearch.value}-${blogFilters.value.selectedCategoryIds.join(
+      ","
+    )}-${blogFilters.value.ordering}`
+);
+
 const api = useApi(false); // false = optional token, true = require token
 
-// Main fetch for courses/blogs
-// Courses
+// Courses fetch
 const {
   data: coursesData,
   pending: coursesLoading,
@@ -324,7 +445,9 @@ const {
   async () => {
     const params = new URLSearchParams();
     params.append("page", page.value.toString());
-    if (searchQuery.value) params.append("search", searchQuery.value);
+    if (debouncedSearch.value.trim()) {
+      params.append("search", debouncedSearch.value.trim());
+    }
     if (filters.value.isFree) params.append("is_free", "true");
     if (filters.value.hasDiscount) params.append("is_discount", "true");
     if (filters.value.priceRange[0] > 0) {
@@ -367,7 +490,7 @@ const {
   { immediate: true, watch: [courseFetchKey] }
 );
 
-// Blogs
+// Blogs fetch
 const {
   data: blogsData,
   pending: blogsLoading,
@@ -376,25 +499,44 @@ const {
   "explore-blogs",
   async () => {
     const params = new URLSearchParams();
-    if (searchQuery.value) params.append("search", searchQuery.value);
-    return await api<{ results: any[] }>(`/blog/?${params.toString()}`);
+    params.append("page", blogPage.value.toString());
+    if (debouncedSearch.value.trim()) {
+      params.append("search", debouncedSearch.value.trim());
+    }
+    if (blogFilters.value.selectedCategoryIds.length > 0) {
+      for (const catId of blogFilters.value.selectedCategoryIds) {
+        params.append("category", catId.toString());
+      }
+    }
+    if (blogFilters.value.ordering) {
+      params.append("ordering", blogFilters.value.ordering);
+    }
+    return await api<{
+      count?: number;
+      total_pages?: number;
+      results: any[];
+    }>(`/blog/?${params.toString()}`);
   },
   { immediate: true, watch: [blogFetchKey] }
 );
 
-async function refreshData() {
-  await nextTick();
-  if (activeTab.value === "courses") {
-    refreshCourses();
-  } else {
-    refreshBlogs();
+const blogTotalPages = computed(() => {
+  if (typeof blogsData.value?.total_pages === "number") {
+    return blogsData.value.total_pages;
   }
-}
+  const count = blogsData.value?.count || 0;
+  return Math.max(1, Math.ceil(count / 12));
+});
 
 function resetPage() {
   page.value = 1;
 }
-// Fetch categories (SSR)
+
+function resetBlogPage() {
+  blogPage.value = 1;
+}
+
+// Fetch Course categories (SSR)
 const { data: categoryData } = useAsyncData("categories", async () => {
   return await api<{ id: number; title: string }[]>(
     "/course/CourseCategoryPopular/"
@@ -404,7 +546,23 @@ watchEffect(() => {
   if (categoryData.value) categories.value = categoryData.value;
 });
 
-// Category search (client-side for autocomplete)
+// Fetch Blog categories (SSR)
+const { data: blogCategoryData } = useAsyncData("blog-categories", async () => {
+  try {
+    const res = await api<any[]>("/blog/List_category/");
+    return Array.isArray(res) ? res : [];
+  } catch (e) {
+    console.error("Error loading blog categories:", e);
+    return [];
+  }
+});
+watchEffect(() => {
+  if (blogCategoryData.value) {
+    blogCategories.value = blogCategoryData.value;
+  }
+});
+
+// Course category search (client-side for autocomplete)
 async function searchCategories(query: string) {
   try {
     if (query && query.trim() !== "") {
@@ -431,13 +589,13 @@ function toggleCategory(id: number) {
     filters.value.selectedCategoryIds.splice(index, 1);
   }
   resetPage();
-  refreshData();
 }
 
 function clearSearch() {
   searchQuery.value = "";
+  debouncedSearch.value = "";
   resetPage();
-  refreshData();
+  resetBlogPage();
 }
 
 function resetFilters() {
@@ -452,6 +610,5 @@ function resetFilters() {
     excludeCategorySlug: "",
   };
   resetPage();
-  refreshData();
 }
 </script>

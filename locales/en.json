@@ -40,7 +40,13 @@
     "maxDuration": "Max duration",
     "minDiscount": "Minimum discount",
     "categorySlug": "Category slug",
-    "excludeCategorySlug": "Exclude category slug"
+    "excludeCategorySlug": "Exclude category slug",
+    "titleAsc": "Title (A-Z)",
+    "blogCategories": "Blog Categories",
+    "filterBlogsDesc": "Filter blog post results",
+    "ordering": "Sort by",
+    "clearFilters": "Clear Filters",
+    "searchCategories": "Search categories..."
   },
   "courseDetail": {
     "skillsTitle": "Skills Acquired",
