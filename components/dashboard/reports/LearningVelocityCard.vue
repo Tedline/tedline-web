@@ -33,7 +33,7 @@
       </div>
 
       <!-- Peak Daily Pill -->
-      <div class="flex items-center gap-2.5 p-2.5 sm:px-3 sm:py-2 rounded-2xl bg-sky-50 text-sky-600 dark:bg-sky-500/10 dark:text-sky-400 flex items-center justify-center shrink-0">
+      <div class="flex items-center gap-2.5 p-2.5 sm:px-3 sm:py-2 rounded-2xl bg-gray-50/80 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5 transition-colors">
         <div class="w-7 h-7 rounded-xl bg-sky-50 text-sky-600 dark:bg-sky-500/10 dark:text-sky-400 flex items-center justify-center shrink-0">
           <span class="w-2.5 h-2.5 rounded-full bg-sky-500" aria-hidden="true" />
         </div>
@@ -181,30 +181,27 @@ const safeVelocity = computed<LearningVelocityItem[]>(() => {
 
 // KPI Metrics
 const totalCompleted = computed(() => {
-  if (!props.velocity || props.velocity.length === 0) return 0
-  const maxCum = Math.max(0, ...props.velocity.map((v) => Number(v.cumulative_completed) || 0))
-  const lastItem = props.velocity[props.velocity.length - 1]
-  const lastCum = Number(lastItem?.cumulative_completed) || 0
-  return Math.max(lastCum, maxCum)
+  if (!safeVelocity.value.length) return 0
+  return Math.max(...safeVelocity.value.map((v) => v.cumulative_completed), 0)
 })
 
 const peakDaily = computed(() => {
-  if (!props.velocity || props.velocity.length === 0) return 0
-  return Math.max(0, ...props.velocity.map((v) => Number(v.daily_completed) || 0))
+  if (!safeVelocity.value.length) return 0
+  return Math.max(...safeVelocity.value.map((v) => v.daily_completed), 0)
 })
 
 const dailyAverage = computed(() => {
   if (!props.velocity || props.velocity.length === 0) return 0
-  const sum = props.velocity.reduce((acc, v) => acc + (Number(v.daily_completed) || 0), 0)
-  return sum / props.velocity.length
+  const sum = safeVelocity.value.reduce((acc, v) => acc + v.daily_completed, 0)
+  return sum / safeVelocity.value.length
 })
 
 const isAllZero = computed(() => totalCompleted.value === 0 && peakDaily.value === 0)
 
 // Stat Labels
-const totalCompletedLabel = computed(() => (isFa.value ? 'مجموع کل' : 'Total Completed'))
-const peakDailyLabel = computed(() => (isFa.value ? 'اوج روزانه' : 'Peak Daily'))
-const dailyAverageLabel = computed(() => (isFa.value ? 'میانگین روزانه' : 'Daily Average'))
+const totalCompletedLabel = computed(() => t('reports.velocity.totalCompleted'))
+const peakDailyLabel = computed(() => t('reports.velocity.peakDaily'))
+const dailyAverageLabel = computed(() => t('reports.velocity.dailyAverage'))
 
 // Series names
 const cumulativeSeriesName = computed(() => t('reports.velocity.cumulative'))
@@ -259,13 +256,6 @@ const dailyChartType = computed<'column' | 'line'>(() => {
 
 const categories = computed(() => safeVelocity.value.map((item) => formatXAxisDate(item.date)))
 
-const maxCumulative = computed(() => {
-  return Math.max(...safeVelocity.value.map((v) => v.cumulative_completed), 0)
-})
-
-const maxDaily = computed(() => {
-  return Math.max(...safeVelocity.value.map((v) => v.daily_completed), 0)
-})
 
 const tickAmount = computed(() => {
   const len = safeVelocity.value.length
@@ -422,7 +412,7 @@ const chartOptions = computed(() => ({
       seriesName: cumulativeSeriesName.value,
       show: true,
       min: 0,
-      max: maxCumulative.value > 0 ? undefined : 5,
+      max: totalCompleted.value > 0 ? undefined : 5,
       forceNiceScale: true,
       labels: {
         formatter: (val: number) => {
@@ -441,7 +431,7 @@ const chartOptions = computed(() => ({
       seriesName: dailySeriesName.value,
       show: true,
       min: 0,
-      max: maxDaily.value > 0 ? undefined : 5,
+      max: peakDaily.value > 0 ? undefined : 5,
       forceNiceScale: true,
       labels: {
         formatter: (val: number) => {

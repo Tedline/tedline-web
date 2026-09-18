@@ -490,7 +490,10 @@
       "title": "Learning Velocity Over Time",
       "subtitle": "Cumulative completed lessons and daily study momentum",
       "cumulative": "Cumulative Completed",
-      "daily": "Daily Completed"
+      "daily": "Daily Completed",
+      "totalCompleted": "Total Completed",
+      "peakDaily": "Peak Daily",
+      "dailyAverage": "Daily Average"
     },
     "empty": {
       "title": "No learning stats available yet",
