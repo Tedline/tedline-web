@@ -15,7 +15,7 @@
       class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 cursor-pointer disabled:cursor-not-allowed select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
       :class="[
         modelValue === timeframe.value
-          ? 'bg-blue-600 text-white shadow-sm font-semibold'
+          ? 'bg-blue-600 text-white   font-semibold'
           : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/5'
       ]"
     >

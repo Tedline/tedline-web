@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6 shadow-sm">
+  <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6  ">
     <!-- Card Header -->
     <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-white/5">
       <div>
@@ -232,6 +232,7 @@ const chartSeries = computed(() => [
 const chartOptions = computed(() => ({
   chart: {
     type: 'radialBar' as const,
+    background: 'transparent',
     offsetY: -10,
     sparkline: {
       enabled: true

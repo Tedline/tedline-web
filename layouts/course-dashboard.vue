@@ -37,7 +37,7 @@
       <!-- Static sidebar for desktop -->
       <LayoutSlideshow />
   
-      <div class="lg:rtl:pr-18 lg:ltr:pl-18">
+      <div class="lg:rtl:pr-18 lg:ltr:pl-18 min-h-screen flex flex-col">
 
         <!-- Desktop sidebar -->
         <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
@@ -79,7 +79,7 @@
           </div>
         </div>
 
-        <main class="lg:ps-72">
+        <main class="lg:ps-72 flex-1">
           <div class=" md:px-4 py-6 sm:px-6 lg:px-8 pb-20">
             <slot/>
           </div>

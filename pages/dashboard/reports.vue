@@ -2,7 +2,7 @@
   <div class="min-h-screen pb-16">
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <!-- Top Hero / Header Card -->
-      <div class="relative overflow-hidden rounded-3xl border border-gray-200 bg-white px-6 py-6 dark:border-white/10 dark:bg-stone-900/50 sm:px-8 mb-6 shadow-sm">
+      <div class="relative overflow-hidden rounded-3xl border border-gray-200 bg-white px-6 py-6 dark:border-white/10 dark:bg-stone-900/50 sm:px-8 mb-6  ">
         <!-- Ambient Decorative Glows -->
         <div class="absolute -left-10 -top-16 h-40 w-40 rounded-full bg-emerald-400/15 blur-3xl dark:bg-emerald-500/10 pointer-events-none" />
         <div class="absolute -right-12 -bottom-16 h-48 w-48 rounded-full bg-blue-400/15 blur-3xl dark:bg-blue-500/10 pointer-events-none" />
@@ -62,7 +62,7 @@
       <!-- State 3: Empty State -->
       <div
         v-else-if="isEmpty"
-        class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-8 sm:p-14 text-center shadow-sm"
+        class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-8 sm:p-14 text-center  "
       >
         <div class="mx-auto w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 flex items-center justify-center mb-5">
           <AcademicCapIcon class="w-9 h-9" aria-hidden="true" />
@@ -75,7 +75,7 @@
         </p>
         <NuxtLinkLocale
           to="/explore"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-semibold text-sm transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-semibold text-sm transition-colors   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <span>{{ $t('reports.empty.cta') }}</span>
           <ArrowTopRightOnSquareIcon class="w-4 h-4 rtl:rotate-180" aria-hidden="true" />

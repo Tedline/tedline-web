@@ -106,7 +106,7 @@ onBeforeUnmount(() => {
         customButtonClass
           ? customButtonClass
           : placement === 'sidebar'
-          ? 'relative flex items-center justify-center rounded-xl p-3 text-gray-400 hover:text-white hover:bg-gray-500/50 transition-colors'
+          ? 'sidebar-nav-btn relative flex items-center justify-center rounded-xl p-3 text-gray-400 hover:text-white hover:bg-gray-500/50 transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer select-none'
           : 'relative inline-flex items-center justify-center rounded-xl p-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors',
       ]"
       :aria-expanded="isOpen"
@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
       :aria-label="t('notifications.title')"
       @click="handleClick"
     >
-      <BellIcon class="h-6 w-6 shrink-0" aria-hidden="true" />
+      <BellIcon class="h-6 w-6 shrink-0 transition-transform duration-200 ease-out" aria-hidden="true" />
       <span class="sr-only">{{ t('notifications.title') }}</span>
 
       <!-- Unread Count Badge -->

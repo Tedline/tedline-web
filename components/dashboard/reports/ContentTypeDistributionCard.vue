@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6 shadow-sm flex flex-col justify-between">
+  <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6   flex flex-col justify-between">
     <!-- Card Header -->
     <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-white/5">
       <div>
@@ -191,6 +191,7 @@ const chartSeries = computed(() => [
 const chartOptions = computed(() => ({
   chart: {
     type: 'donut' as const,
+    background: 'transparent',
     fontFamily: 'inherit',
     animations: {
       enabled: !isAllZero.value,

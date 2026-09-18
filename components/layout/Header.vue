@@ -17,6 +17,13 @@ import {
     PlayCircleIcon,
     LifebuoyIcon,
     PhoneIcon,
+    CalendarIcon,
+    ChartPieIcon,
+    ArrowLeftStartOnRectangleIcon,
+    ArrowRightEndOnRectangleIcon,
+    UserPlusIcon,
+    HomeIcon,
+    DocumentTextIcon,
 } from "@heroicons/vue/24/outline";
 import {
     ChevronDownIcon,
@@ -67,7 +74,6 @@ const products = [
 
 const callsToAction = [
     { name: "header.support", href: "#", icon: PhoneIcon },
-    { name: "header.viewDemo", href: "#", icon: PlayCircleIcon },
 ];
 
 const mobileMenuOpen = ref(false);
@@ -101,9 +107,9 @@ function closeLogin() {
 }
 
 async function handleLogout() {
-    // Assuming your userStore has a logout action
+    mobileMenuOpen.value = false;
+    notificationStore.stopPolling();
     await userStore.logout();
-    // Optional: redirect to home or login page
     navigateTo('/');
 }
 </script>
@@ -113,7 +119,7 @@ async function handleLogout() {
     :class="[
         'fixed transition-all duration-500 z-50 w-full',
         isScrolled
-            ? 'bg-white border-b-1 border-gray-100  dark:backdrop-blur-lg dark:bg-black/60 dark:border-neutral-700/20 dark:shadow-xl'
+            ? 'bg-white border-b-1 border-gray-100  dark:backdrop-blur-lg dark:bg-black/60 dark:border-neutral-700/40 dark:shadow-xl'
             : hideUntilScroll ? 'sr-only border-gray-50/10 dark:border-gray-900/10' : 'border-gray-50 dark:border-gray-900/10',
     ]">
         <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 py-3 lg:px-8" :aria-label="t('header.globalNavigation')">
@@ -151,8 +157,8 @@ async function handleLogout() {
                         leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
                         <PopoverPanel
                             v-slot="{ close }"
-                            class="absolute top-full z-10 mt-3 w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ltr:left-0 rtl:right-0 dark:bg-stone-900/70">
-                            <div class="p-4 backdrop-blur-lg ">
+                            class="absolute top-full z-10 mt-3 w-[calc(100vw-2rem)]  max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ltr:left-0 rtl:right-0 dark:bg-stone-900">
+                            <div class="p-4 ">
                                 <div v-for="item in products" :key="item.name"
                                     class="group relative flex gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50 dark:hover:bg-black/10 ">
                                     <div
@@ -228,16 +234,19 @@ async function handleLogout() {
                 class="fixed inset-y-0 right-0 z-10 flex w-full flex-col justify-between overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:ring-gray-700/50 rtl:left-0 rtl:right-auto ltr:right-0">
                 <div class="p-6">
                     <div class="flex items-center justify-between">
-                        <a href="#" class="-m-1.5 p-1.5">
+                        <NuxtLinkLocale to="/" class="-m-1.5 p-1.5" @click="mobileMenuOpen = false">
                             <span class="sr-only">{{ t('header.company') }}</span>
-                            <img class="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
-                        </a>
-                        <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-200"
-                            @click="mobileMenuOpen = false">
-                            <span class="sr-only">{{ t('header.closeMenu') }}</span>
-                            <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                        </button>
+                            <img class="h-8 w-auto" src="/images/icon2.png" alt="Tedline" />
+                        </NuxtLinkLocale>
+                        <div class="flex items-center gap-2">
+                            <SharedLanguageToggle class="rounded-xl px-2.5 py-1 text-xs font-semibold bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200/60 dark:border-gray-700/60 transition-colors" />
+                            <SharedDarkMode class="rounded-xl p-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200/60 dark:border-gray-700/60 transition-colors flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" />
+                            <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-200"
+                                @click="mobileMenuOpen = false">
+                                <span class="sr-only">{{ t('header.closeMenu') }}</span>
+                                <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                            </button>
+                        </div>
                     </div>
                     <div class="mt-6 flow-root">
                         <div class="-my-6 divide-y divide-gray-500/10 dark:divide-gray-700/50">
@@ -255,41 +264,77 @@ async function handleLogout() {
                                 </NuxtLinkLocale>
                             </div>
                             <div class="space-y-2 py-6">
+                                <NuxtLinkLocale to="/"
+                                    @click="mobileMenuOpen = false"
+                                    class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    <HomeIcon class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                                    <span>{{ t('header.home') }}</span>
+                                </NuxtLinkLocale>
+                                <NuxtLinkLocale to="/calendar"
+                                    @click="mobileMenuOpen = false"
+                                    class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    <CalendarIcon class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                                    <span>{{ t('header.calendar') }}</span>
+                                </NuxtLinkLocale>
+                                <NuxtLinkLocale to="/dashboard/reports"
+                                    @click="mobileMenuOpen = false"
+                                    class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    <ChartPieIcon class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                                    <span>{{ t('header.reports') }}</span>
+                                </NuxtLinkLocale>
                                 <NuxtLinkLocale to="/explore?tab=blogs"
                                     @click="mobileMenuOpen = false"
-                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    {{ t('header.blog') }}
+                                    class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    <BookOpenIcon class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                                    <span>{{ t('header.blog') }}</span>
                                 </NuxtLinkLocale>
                                 <NuxtLinkLocale to="/terms"
                                     @click="mobileMenuOpen = false"
-                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    {{ t('footer.terms') }}
+                                    class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    <DocumentTextIcon class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                                    <span>{{ t('footer.terms') }}</span>
                                 </NuxtLinkLocale>
                                 <NuxtLinkLocale to="/contact"
                                     @click="mobileMenuOpen = false"
-                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    {{ t('header.contact') }}
-                                </NuxtLinkLocale>
-                                <NuxtLinkLocale to="/"
-                                    @click="mobileMenuOpen = false"
-                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    {{ t('header.home') }}
+                                    class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                    <PhoneIcon class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                                    <span>{{ t('header.contact') }}</span>
                                 </NuxtLinkLocale>
                             </div>
-                            <div class="py-6">
-                                <a href="#"
-                                    class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
-                                    {{ t('auth.login.pageTitle') }}
-                                </a>
+                            <div class="py-6 space-y-2">
+                                <template v-if="!userStore.isAuthenticated">
+                                    <NuxtLinkLocale to="/auth/signIn"
+                                        @click="mobileMenuOpen = false"
+                                        class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800">
+                                        <ArrowRightEndOnRectangleIcon class="h-5 w-5 text-gray-500 dark:text-gray-400 rtl:rotate-180" aria-hidden="true" />
+                                        <span>{{ t('auth.login.pageTitle') }}</span>
+                                    </NuxtLinkLocale>
+                                    <NuxtLinkLocale to="/auth/signUp"
+                                        @click="mobileMenuOpen = false"
+                                        class="-mx-3 flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-blue-600 hover:bg-gray-50 dark:text-blue-400 dark:hover:bg-gray-800">
+                                        <UserPlusIcon class="h-5 w-5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                                        <span>{{ t('auth.signup.pageTitle') }}</span>
+                                    </NuxtLinkLocale>
+                                </template>
+                                <template v-else>
+                                    <button
+                                        type="button"
+                                        @click="handleLogout"
+                                        class="-mx-3 flex w-full items-center gap-x-3 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30">
+                                        <ArrowLeftStartOnRectangleIcon class="h-5 w-5 rtl:rotate-180" aria-hidden="true" />
+                                        <span>{{ t('header.logout') }}</span>
+                                    </button>
+                                </template>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="sticky bottom-0 grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50 text-center dark:divide-gray-700/50 dark:bg-gray-800">
+                <div class="sticky bottom-0 border-t border-gray-200/50 bg-gray-50 text-center dark:border-gray-700/50 dark:bg-gray-800">
                     <a v-for="item in callsToAction" :key="item.name" :href="item.href"
-                        class="p-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-700">
-                        {{ t(item.name) }}
+                        class="flex items-center justify-center gap-x-2 p-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-700">
+                        <component :is="item.icon" class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                        <span>{{ t(item.name) }}</span>
                     </a>
                 </div>
             </DialogPanel>

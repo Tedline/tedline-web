@@ -29,7 +29,7 @@
     <!-- 2x2 Grid Skeleton -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- 1. Overall Completion Card Skeleton -->
-      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6 shadow-sm flex flex-col justify-between">
+      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6   flex flex-col justify-between">
         <!-- Card Header -->
         <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-white/5">
           <div class="space-y-1.5">
@@ -70,7 +70,7 @@
       </div>
 
       <!-- 2. Content-Type Distribution Card Skeleton -->
-      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6 shadow-sm flex flex-col justify-between">
+      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6   flex flex-col justify-between">
         <!-- Card Header -->
         <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-white/5">
           <div class="space-y-1.5">
@@ -115,7 +115,7 @@
       </div>
 
       <!-- 3. Study Activity Heatmap Skeleton -->
-      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6 shadow-sm flex flex-col justify-between">
+      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6   flex flex-col justify-between">
         <!-- Card Header -->
         <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-white/5">
           <div class="space-y-1.5">
@@ -192,7 +192,7 @@
       </div>
 
       <!-- 4. Learning Velocity Card Skeleton -->
-      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6 shadow-sm flex flex-col justify-between">
+      <div class="rounded-3xl border border-gray-200 bg-white dark:border-white/10 dark:bg-stone-900/50 p-6   flex flex-col justify-between">
         <!-- Card Header -->
         <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-white/5">
           <div class="space-y-1.5">

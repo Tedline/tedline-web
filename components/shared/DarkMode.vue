@@ -1,10 +1,10 @@
 <template>
-  <button @click="toggleMode" :class="class_data" >
+  <button @click="toggleMode" :class="props.class" >
     <template v-if="colorMode.value === 'dark'">
-      <MoonIcon class="w-6 h-6 inline" />
+      <MoonIcon class="w-6 h-6 inline transition-transform duration-200 ease-out" />
     </template>
     <template v-else>
-      <SunIcon class="w-6 h-6 inline" />
+      <SunIcon class="w-6 h-6 inline transition-transform duration-200 ease-out" />
     </template>
   </button>
 </template>
@@ -22,7 +22,6 @@ const props = defineProps({
     default: ''
   }
 })
-const class_data = props.class
 const toggleMode = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }

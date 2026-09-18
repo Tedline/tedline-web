@@ -27,9 +27,9 @@
       <!-- Static sidebar for desktop -->
       <LayoutSlideshow />
   
-      <div class="lg:rtl:pr-18 lg:ltr:pl-18">
+      <div class="lg:rtl:pr-18 lg:ltr:pl-18 min-h-screen flex flex-col">
           
-          <main>
+          <main class="flex-1">
               <div>
             <slot/>
           </div>

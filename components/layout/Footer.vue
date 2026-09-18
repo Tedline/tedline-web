@@ -166,7 +166,7 @@ const { t } = useI18n();
 const quickLinks = computed(() => [
   { name: t('home'), href: '/' },
   { name: t('explore.title'), href: '/explore' },
-  { name: t('navigation.home'), href: '/home' },
+  { name: t('navigation.home'), href: '/' },
   { name: t('navigation.explore'), href: '/explore' },
 ]);
 
